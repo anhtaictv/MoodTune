@@ -1,0 +1,791 @@
+
+===== \index.html =====
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoodTune — AI Cảm Xúc Tự Xây</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--surface:#10101e;--card:#14142a;--border:rgba(255,255,255,0.06);
+  --accent:#1db954;--accent2:#1ed760;--accent3:#7c6af7;
+  --green:#1db954;--gold:#f59e0b;--red:#f87171;
+  --text:#dde4f0;--muted:#586080;--glow:rgba(29,185,84,0.15);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 55% 45% at 15% 10%,rgba(29,185,84,.06) 0%,transparent 65%),
+             radial-gradient(ellipse 45% 55% at 85% 90%,rgba(124,106,247,.05) 0%,transparent 65%)}
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:28px 18px}
+
+header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px}
+.logo{font-family:'Cormorant Garamond',serif;font-size:34px;line-height:1;
+  background:linear-gradient(135deg,#1ed760 0%,#1db954 50%,#7c6af7 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo em{font-style:italic}
+.sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;margin-top:4px}
+.model-badge{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:7px 14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+.stat-row{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap}
+.stat-pill{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:7px;color:var(--muted)}
+.stat-pill .val{color:var(--accent2);font-weight:500}
+
+/* SPOTIFY LOGIN BANNER */
+.sp-login-banner{background:linear-gradient(135deg,#0d2b1a,#1a3d26);border:1px solid rgba(29,185,84,.3);border-radius:16px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.sp-login-banner.hidden{display:none}
+.sp-login-text{font-size:13px;color:var(--text)}
+.sp-login-text strong{color:var(--accent2);display:block;margin-bottom:4px;font-size:15px}
+.sp-login-btn{background:var(--accent);border:none;border-radius:25px;padding:11px 24px;color:#000;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;transition:all .2s;text-decoration:none}
+.sp-login-btn:hover{background:var(--accent2);transform:scale(1.03)}
+.sp-login-btn svg{width:18px;height:18px;flex-shrink:0}
+.sp-logged-in{background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.2);border-radius:16px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--accent2);font-family:'DM Mono',monospace}
+.sp-logged-in.hidden{display:none}
+
+.grid{display:grid;grid-template-columns:5fr 7fr;gap:16px;margin-bottom:16px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.card-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.card-title::before{content:'';width:3px;height:13px;background:var(--accent);border-radius:2px}
+
+.emo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.emo-btn{background:var(--surface);border:1.5px solid transparent;border-radius:14px;padding:12px 4px;cursor:pointer;transition:all .2s;text-align:center}
+.emo-btn:hover{border-color:rgba(29,185,84,.4);transform:translateY(-2px)}
+.emo-btn.active{border-color:var(--accent);background:rgba(29,185,84,.08);box-shadow:0 0 18px var(--glow)}
+.emo-icon{font-size:24px;display:block;margin-bottom:5px}
+.emo-label{font-size:9px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.05em}
+.emo-btn.active .emo-label{color:var(--accent2)}
+
+textarea.mood-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;resize:none;transition:border-color .2s;margin-bottom:12px;line-height:1.6}
+textarea.mood-input:focus{outline:none;border-color:var(--accent)}
+textarea.mood-input::placeholder{color:var(--muted)}
+
+.row-controls{display:flex;gap:10px;margin-bottom:14px;align-items:center}
+.intensity-wrap{flex:1}
+.int-label{font-size:11px;color:var(--muted);margin-bottom:5px}
+input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:var(--surface);border-radius:2px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--glow)}
+
+.genre-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.genre-chip{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 11px;font-family:'DM Mono',monospace;font-size:9.5px;cursor:pointer;transition:all .15s;color:var(--muted);letter-spacing:.04em}
+.genre-chip.active,.genre-chip:hover{background:rgba(29,185,84,.08);border-color:var(--accent);color:var(--accent2)}
+
+.analyze-btn{width:100%;background:linear-gradient(135deg,#1db954,#1ed760);border:none;border-radius:12px;padding:13px;color:#000;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.analyze-btn:hover:not(:disabled){opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(29,185,84,.3)}
+.analyze-btn:disabled{opacity:.45;cursor:not-allowed}
+
+.result-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:14px;display:none}
+.result-box.show{display:block}
+.result-main{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.result-emoji{font-size:44px}
+.result-label{font-family:'Cormorant Garamond',serif;font-size:26px}
+.result-conf{font-family:'DM Mono',monospace;font-size:11px;color:var(--green);margin-top:2px}
+.score-bars{display:flex;flex-direction:column;gap:6px}
+.score-row{display:flex;align-items:center;gap:8px}
+.score-name{font-size:11px;color:var(--muted);width:80px;flex-shrink:0}
+.score-bar-wrap{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s cubic-bezier(.4,0,.2,1)}
+.score-val{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);width:32px;text-align:right}
+.model-info-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.info-chip{background:rgba(29,185,84,.07);border:1px solid rgba(29,185,84,.15);border-radius:20px;padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--accent2)}
+
+.song-list{display:flex;flex-direction:column;gap:10px;max-height:560px;overflow-y:auto;padding-right:4px}
+.song-list::-webkit-scrollbar{width:6px}.song-list::-webkit-scrollbar-thumb{background:var(--surface);border-radius:3px}
+.song-item{background:var(--surface);border:1.5px solid transparent;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.song-item::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);border-radius:0 2px 2px 0;transform:scaleY(0);transition:transform .2s}
+.song-item:hover{border-color:rgba(29,185,84,.3);transform:translateX(3px)}
+.song-item:hover::after,.song-item.playing::after{transform:scaleY(1)}
+.song-item.playing{border-color:rgba(29,185,84,.4);background:rgba(29,185,84,.05)}
+.song-thumb{width:54px;height:54px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--card)}
+.song-thumb-ph{width:54px;height:54px;border-radius:10px;background:linear-gradient(135deg,#0d3320,#1a5c38);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.song-info{flex:1;min-width:0}
+.song-title{font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.song-artist{font-size:11px;color:var(--muted);margin-top:2px}
+.song-album{font-size:9.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.7}
+.song-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.preview-badge{font-size:8px;background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--accent);border-radius:8px;padding:2px 6px;font-family:'DM Mono',monospace}
+.song-play{width:38px;height:38px;border-radius:50%;background:rgba(29,185,84,.12);border:1.5px solid rgba(29,185,84,.3);color:var(--accent2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .18s}
+.song-item:hover .song-play{background:var(--accent);color:#000;border-color:var(--accent)}
+.song-item.playing .song-play{background:var(--accent);color:#000;border-color:var(--accent)}
+
+.player-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:16px}
+.player-top{display:flex;gap:18px;margin-bottom:16px;align-items:center}
+.player-cover{width:80px;height:80px;border-radius:12px;object-fit:cover;flex-shrink:0;box-shadow:0 6px 24px rgba(29,185,84,.15);background:var(--surface)}
+.player-cover-ph{width:80px;height:80px;border-radius:12px;background:linear-gradient(135deg,#0d3320,#155c35);display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
+.now-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;margin-bottom:6px}
+.player-title{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1.2}
+.player-artist{color:var(--muted);font-size:12px;margin-top:3px}
+.player-album{color:var(--muted);font-size:10px;margin-top:2px;opacity:.7}
+
+#sp-frame{width:100%;border-radius:12px;border:none;height:152px;display:none;margin:12px 0}
+#sp-frame.show{display:block}
+
+.preview-player{background:var(--surface);border:1px solid rgba(29,185,84,.15);border-radius:12px;padding:16px 18px;margin:14px 0;display:none}
+.preview-player.show{display:block}
+.preview-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2);margin-bottom:10px;letter-spacing:.08em}
+audio{width:100%;height:40px}
+
+.open-sp-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:#000;border:none;border-radius:25px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;margin-top:10px}
+.open-sp-btn:hover{background:var(--accent2);transform:scale(1.02)}
+.open-sp-btn svg{width:16px;height:16px}
+
+.ctrl-row{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:18px}
+.ctrl{width:46px;height:46px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.ctrl:hover{color:var(--accent2);border-color:var(--accent);background:rgba(29,185,84,.08)}
+.ctrl.stop:hover{color:var(--red);border-color:var(--red);background:rgba(248,113,113,.08)}
+.play-btn{width:62px;height:62px;border-radius:50%;background:var(--accent);border:none;color:#000;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(29,185,84,.4);transition:all .2s}
+.play-btn:hover{transform:scale(1.06);background:var(--accent2)}
+
+.fb-row{display:flex;gap:10px;margin-top:14px}
+.fb-btn{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:11px;padding:9px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);transition:all .2s}
+.fb-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.fb-btn.liked{border-color:var(--green);color:var(--green);background:rgba(29,185,84,.07)}
+.fb-btn.disliked{border-color:var(--red);color:var(--red);background:rgba(248,113,113,.07)}
+
+.search-row{display:flex;gap:8px;margin-bottom:12px}
+.search-input{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px}
+.search-input:focus{outline:none;border-color:var(--accent)}
+.search-btn{background:var(--accent);border:none;border-radius:10px;padding:9px 14px;color:#000;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.search-btn:hover{background:var(--accent2)}
+.recommend-btn{flex:1;background:linear-gradient(135deg,rgba(124,106,247,.15),rgba(29,185,84,.12));border:1.5px solid rgba(124,106,247,.35);border-radius:10px;padding:10px;color:var(--accent3);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.recommend-btn:hover{border-color:var(--accent3);background:rgba(124,106,247,.18);transform:translateY(-1px)}
+.loadmore-btn{width:100%;margin-top:12px;background:var(--surface);border:1.5px solid var(--border);border-radius:11px;padding:11px;color:var(--accent2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Mono',monospace;letter-spacing:.05em}
+.loadmore-btn:hover{border-color:var(--accent);background:rgba(29,185,84,.06)}
+.loadmore-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.learn-panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:16px}
+.correct-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}
+.correct-btn{background:var(--surface);border:1.5px solid transparent;border-radius:10px;padding:8px 4px;cursor:pointer;font-size:11px;text-align:center;transition:all .15s;color:var(--muted)}
+.correct-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.correct-btn .icon{font-size:18px;display:block;margin-bottom:3px}
+#learn-status{font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-top:10px;min-height:15px}
+
+.history-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.hist-item{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--border);font-size:11px}
+.hist-item:last-child{border-bottom:none}
+.hist-emo-icon{font-size:20px}
+.hist-text{flex:1;min-width:0}
+.hist-main{font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.hist-meta{color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace;font-size:9px}
+
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite}
+.spin-green{border-color:rgba(29,185,84,.2);border-top-color:var(--accent)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid rgba(29,185,84,.3);color:var(--text);padding:9px 20px;border-radius:30px;font-size:12px;z-index:9999;opacity:0;transition:opacity .3s;font-family:'DM Mono',monospace;pointer-events:none}
+.loading-songs{text-align:center;padding:30px;color:var(--muted);font-size:12px}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,185,84,.3)}50%{box-shadow:0 0 0 8px rgba(29,185,84,0)}}
+.playing .song-thumb,.playing .song-thumb-ph{animation:pulse 2s ease infinite}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <div class="logo">Mood<em>Tune</em></div>
+    <div class="sub">// AI CẢM XÚC TỰ XÂY · JAMENDO</div>
+  </div>
+  <div class="model-badge"><span class="dot"></span>MLP · Rule Hybrid · Jamendo Free</div>
+</header>
+
+<div class="stat-row">
+  <div class="stat-pill">Vocab <span class="val">198 từ</span></div>
+  <div class="stat-pill">Classes <span class="val">12 cảm xúc</span></div>
+  <div class="stat-pill">Layers <span class="val">Input→32→12</span></div>
+  <div class="stat-pill">Feedback <span class="val" id="stat-feedback">0</span> lần</div>
+  <div class="stat-pill">Alpha <span class="val" id="stat-alpha">0.85</span></div>
+</div>
+
+<!-- INFO BANNER -->
+<div style="background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.2);border-radius:16px;padding:14px 20px;margin-bottom:12px;font-size:12px;color:var(--accent2);text-align:center">
+  🎵 Sử dụng Jamendo API miễn phí - Không cần đăng nhập - Nghe nhạc đầy đủ
+</div>
+<!-- TIME-BASED TIP -->
+<div id="time-tip" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:center;margin-bottom:20px;letter-spacing:.03em"></div>
+
+<div class="grid">
+  <div class="card">
+    <div class="card-title">Nhập cảm xúc</div>
+    <div class="emo-grid">
+      <button class="emo-btn" data-emotion="vui vẻ hôm nay" onclick="selectEmo(this)"><span class="emo-icon">😄</span><span class="emo-label">Vui vẻ</span></button>
+      <button class="emo-btn" data-emotion="buồn bã không muốn làm gì" onclick="selectEmo(this)"><span class="emo-icon">😢</span><span class="emo-label">Buồn bã</span></button>
+      <button class="emo-btn" data-emotion="yêu đương lãng mạn nhớ nhung" onclick="selectEmo(this)"><span class="emo-icon">🥰</span><span class="emo-label">Lãng mạn</span></button>
+      <button class="emo-btn" data-emotion="năng động phấn khích hứng khởi" onclick="selectEmo(this)"><span class="emo-icon">⚡</span><span class="emo-label">Năng động</span></button>
+      <button class="emo-btn" data-emotion="thư giãn bình yên nhẹ nhàng" onclick="selectEmo(this)"><span class="emo-icon">🌿</span><span class="emo-label">Thư giãn</span></button>
+      <button class="emo-btn" data-emotion="cô đơn một mình đêm khuya" onclick="selectEmo(this)"><span class="emo-icon">🌙</span><span class="emo-label">Cô đơn</span></button>
+      <button class="emo-btn" data-emotion="căng thẳng stress áp lực" onclick="selectEmo(this)"><span class="emo-icon">🔥</span><span class="emo-label">Căng thẳng</span></button>
+      <button class="emo-btn" data-emotion="tập trung học làm việc" onclick="selectEmo(this)"><span class="emo-icon">🎯</span><span class="emo-label">Tập trung</span></button>
+      <button class="emo-btn" data-emotion="hoài niệm nhớ về kỷ niệm ngày xưa" onclick="selectEmo(this)"><span class="emo-icon">🍂</span><span class="emo-label">Hoài niệm</span></button>
+      <button class="emo-btn" data-emotion="phiêu lưu khám phá mạo hiểm" onclick="selectEmo(this)"><span class="emo-icon">⚔️</span><span class="emo-label">Phiêu lưu</span></button>
+      <button class="emo-btn" data-emotion="bí ẩn huyền bí ma mị" onclick="selectEmo(this)"><span class="emo-icon">🔮</span><span class="emo-label">Bí ẩn</span></button>
+      <button class="emo-btn" data-emotion="vui nhộn hài hước tếu táo" onclick="selectEmo(this)"><span class="emo-icon">🤪</span><span class="emo-label">Vui nhộn</span></button>
+    </div>
+    <textarea class="mood-input" id="mood-text" rows="3" placeholder="Hoặc mô tả cảm xúc... VD: 'Hôm nay mệt mỏi, muốn nghe gì nhẹ nhàng'"></textarea>
+    <div class="row-controls">
+      <div class="intensity-wrap">
+        <div class="int-label">Cường độ: <span id="int-val">5</span>/10</div>
+        <input type="range" min="1" max="10" value="5" id="int-slider" oninput="document.getElementById('int-val').textContent=this.value">
+      </div>
+    </div>
+    <div class="genre-row">
+      <div class="genre-chip active" data-g="all" onclick="pickGenre(this)">Tất cả</div>
+      <div class="genre-chip" data-g="vpop" onclick="pickGenre(this)">V-Pop</div>
+      <div class="genre-chip" data-g="ballad" onclick="pickGenre(this)">Ballad</div>
+      <div class="genre-chip" data-g="lofi" onclick="pickGenre(this)">Lo-fi</div>
+      <div class="genre-chip" data-g="edm" onclick="pickGenre(this)">EDM</div>
+      <div class="genre-chip" data-g="acoustic" onclick="pickGenre(this)">Acoustic</div>
+    </div>
+    <button class="analyze-btn" id="analyze-btn" onclick="analyze()">✦ Phân tích & tìm nhạc</button>
+    <div class="result-box" id="result-box">
+      <div class="result-main">
+        <span class="result-emoji" id="r-emoji">😄</span>
+        <div>
+          <div class="result-label" id="r-label">—</div>
+          <div class="result-conf" id="r-conf">—</div>
+        </div>
+      </div>
+      <div class="score-bars" id="score-bars"></div>
+      <div class="model-info-row" id="model-info"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Gợi ý nhạc</div>
+    <div class="search-row">
+      <input class="search-input" id="search-input" placeholder="Tìm bài hát..." onkeydown="if(event.key==='Enter')manualSearch()">
+      <button class="search-btn" onclick="manualSearch()">Tìm</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button class="recommend-btn" onclick="loadRecommend()">✨ Gợi ý cho bạn</button>
+    </div>
+    <div class="song-list" id="song-list">
+      <div style="color:var(--muted);font-size:12px;text-align:center;padding:32px 0;">
+        ✦ Phân tích cảm xúc để nhận gợi ý nhạc
+      </div>
+    </div>
+    <button class="loadmore-btn" id="loadmore-btn" onclick="loadMore()" style="display:none">⬇ Xem thêm bài</button>
+  </div>
+</div>
+
+<!-- PLAYER -->
+<div class="player-card">
+  <div class="card-title">Now Playing</div>
+  <div class="player-top">
+    <div id="p-cover-wrap">
+      <div class="player-cover-ph" id="p-cover-ph">🎵</div>
+      <img class="player-cover" id="p-cover" style="display:none" src="" alt="">
+    </div>
+    <div style="flex:1;min-width:0">
+      <div class="now-label">ĐANG PHÁT</div>
+      <div class="player-title" id="p-title">Chưa chọn bài</div>
+      <div class="player-artist" id="p-artist">—</div>
+      <div class="player-album" id="p-album"></div>
+    </div>
+  </div>
+  <iframe id="sp-frame" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="display:none"></iframe>
+  <div class="preview-player" id="preview-player">
+    <div class="preview-label">🎵 NGHE NHẠC ĐẦY ĐỦ — Jamendo Free Music</div>
+    <audio id="preview-audio" controls></audio>
+  </div>
+  <a class="open-sp-btn" id="open-sp" href="#" target="_blank" style="display:none">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13H9v6l5.25 3.15.75-1.23-4-2.42z"/></svg>
+    Mở trong Jamendo
+  </a>
+  <div class="ctrl-row">
+    <button class="ctrl" onclick="prevSong()" title="Bài trước">⏮</button>
+    <button class="play-btn" id="play-btn" onclick="togglePreview()" title="Phát / Tạm dừng">▶</button>
+    <button class="ctrl stop" onclick="stopSong()" title="Dừng hẳn">⏹</button>
+    <button class="ctrl" onclick="nextSong()" title="Bài tiếp">⏭</button>
+  </div>
+  <div class="fb-row" id="fb-row" style="display:none">
+    <button class="fb-btn" id="fb-like" onclick="feedback('like')">👍 Phù hợp</button>
+    <button class="fb-btn" id="fb-dislike" onclick="feedback('dislike')">👎 Không phù hợp</button>
+  </div>
+</div>
+
+<!-- LEARNING -->
+<div class="learn-panel">
+  <div class="card-title">Dạy AI — Sửa kết quả sai</div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Nếu AI đoán sai, bấm cảm xúc đúng để model tự học:</div>
+  <div id="learn-text-display" style="font-size:12px;color:var(--accent2);min-height:18px;margin-bottom:8px;font-style:italic;"></div>
+  <div class="correct-row">
+    <button class="correct-btn" data-e="vui_ve" onclick="teach(this)"><span class="icon">😄</span>Vui vẻ</button>
+    <button class="correct-btn" data-e="buon_ba" onclick="teach(this)"><span class="icon">😢</span>Buồn bã</button>
+    <button class="correct-btn" data-e="lang_man" onclick="teach(this)"><span class="icon">🥰</span>Lãng mạn</button>
+    <button class="correct-btn" data-e="nang_dong" onclick="teach(this)"><span class="icon">⚡</span>Năng động</button>
+    <button class="correct-btn" data-e="thu_gian" onclick="teach(this)"><span class="icon">🌿</span>Thư giãn</button>
+    <button class="correct-btn" data-e="co_don" onclick="teach(this)"><span class="icon">🌙</span>Cô đơn</button>
+    <button class="correct-btn" data-e="cang_thang" onclick="teach(this)"><span class="icon">🔥</span>Căng thẳng</button>
+    <button class="correct-btn" data-e="tap_trung" onclick="teach(this)"><span class="icon">🎯</span>Tập trung</button>
+    <button class="correct-btn" data-e="hoai_niem" onclick="teach(this)"><span class="icon">🍂</span>Hoài niệm</button>
+    <button class="correct-btn" data-e="phieu_luu" onclick="teach(this)"><span class="icon">⚔️</span>Phiêu lưu</button>
+    <button class="correct-btn" data-e="bi_an" onclick="teach(this)"><span class="icon">🔮</span>Bí ẩn</button>
+    <button class="correct-btn" data-e="vui_nhon" onclick="teach(this)"><span class="icon">🤪</span>Vui nhộn</button>
+  </div>
+  <div id="learn-status"></div>
+</div>
+
+<div class="history-card">
+  <div class="card-title">Lịch sử phân tích</div>
+  <div id="history-list"><div style="color:var(--muted);font-size:11px;text-align:center;padding:16px;">Chưa có lịch sử</div></div>
+</div>
+</div>
+<div id="toast"></div>
+
+<script>
+const API = "https://anhtaictv.me/api";
+
+// State
+let currentText = "";
+let currentSongs = [];
+let currentIdx = -1;
+let genre = "all";
+let userFeedback = JSON.parse(localStorage.getItem("mt_fb") || "{}");
+let history = JSON.parse(localStorage.getItem("mt_hist") || "[]");
+let previewPlaying = false;
+
+// Phân trang "Xem thêm"
+let searchMode = null;     // {kind:'emotion'|'query', value:'...'}
+let currentOffset = 0;
+const PAGE_SIZE = 30;
+let loadingMore = false;
+
+// Hành vi cá nhân để gợi ý thông minh (đếm theo nghệ sĩ / tag)
+let likedArtists = JSON.parse(localStorage.getItem("mt_artists") || "{}");
+let likedTags    = JSON.parse(localStorage.getItem("mt_tags") || "{}");
+
+// Map giờ → cảm xúc (khớp với time_to_emotion bên backend)
+function emotionByHour(h) {
+  if (h >= 5  && h < 11) return {emo:"nang_dong", text:"năng động phấn khích hứng khởi", msg:"☀️ Buổi sáng — gợi ý nhạc năng động cho bạn"};
+  if (h >= 11 && h < 14) return {emo:"tap_trung", text:"tập trung học làm việc",          msg:"🎯 Giờ trưa — nhạc giúp tập trung"};
+  if (h >= 14 && h < 18) return {emo:"vui_ve",    text:"vui vẻ hôm nay",                   msg:"🌤️ Buổi chiều — nhạc vui vẻ"};
+  if (h >= 18 && h < 22) return {emo:"thu_gian",  text:"thư giãn bình yên nhẹ nhàng",      msg:"🌆 Buổi tối — nhạc thư giãn"};
+  return {emo:"thu_gian", text:"thư giãn bình yên nhẹ nhàng", msg:"🌙 Đêm khuya — nhạc chill nhẹ nhàng"};
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+(function init() {
+  renderHistory();
+  loadStats();
+
+  // Đồng bộ trạng thái khi phát/dừng từ thanh audio gốc
+  const audio = document.getElementById('preview-audio');
+  audio.addEventListener('play',  () => { previewPlaying = true;  syncPlayIcons(); });
+  audio.addEventListener('pause', () => { previewPlaying = false; syncPlayIcons(); });
+  // Hết bài → tự chuyển sang bài tiếp theo
+  audio.addEventListener('ended', () => { nextSong(); });
+
+  // Tự động chọn cảm xúc theo giờ máy người dùng
+  const sug = emotionByHour(new Date().getHours());
+  document.querySelectorAll('.emo-btn').forEach(b => {
+    if (b.dataset.emotion === sug.text) b.classList.add('active');
+  });
+  document.getElementById('mood-text').value = sug.text;
+  const tip = document.getElementById('time-tip');
+  if (tip) tip.textContent = sug.msg;
+})();
+
+// ── EMO / GENRE ───────────────────────────────────────────────────
+function selectEmo(btn) {
+  document.querySelectorAll('.emo-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('mood-text').value = btn.dataset.emotion;
+}
+function pickGenre(chip) {
+  document.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  genre = chip.dataset.g;
+}
+
+// ── ANALYZE ───────────────────────────────────────────────────────
+async function analyze() {
+  const text = document.getElementById('mood-text').value.trim();
+  if (!text) { toast("Vui lòng nhập cảm xúc hoặc chọn icon!"); return; }
+
+  const btn = document.getElementById('analyze-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Đang phân tích...';
+  currentText = text;
+  document.getElementById('learn-text-display').textContent = `"${text}"`;
+
+  try {
+    const res = await fetch(API + "/predict", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({text})
+    });
+    const data = await res.json();
+
+    document.getElementById('r-emoji').textContent = data.emoji;
+    document.getElementById('r-label').textContent = data.label;
+    document.getElementById('r-conf').textContent = `Độ chính xác: ${(data.confidence*100).toFixed(1)}%`;
+    document.getElementById('result-box').classList.add('show');
+    document.getElementById('score-bars').innerHTML = data.scores.slice(0,6).map(s=>`
+      <div class="score-row">
+        <span class="score-name">${s.emoji} ${s.label}</span>
+        <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${(s.score*100).toFixed(1)}%"></div></div>
+        <span class="score-val">${(s.score*100).toFixed(0)}%</span>
+      </div>`).join('');
+    document.getElementById('model-info').innerHTML = `
+      <span class="info-chip">Rule: ${(data.model_info.alpha_rule*100).toFixed(0)}%</span>
+      <span class="info-chip">MLP: ${(data.model_info.alpha_mlp*100).toFixed(0)}%</span>
+      <span class="info-chip">${data.model_info.feedback_count} feedbacks</span>`;
+    updateStats(data.model_info);
+    addHistory(text, data);
+    await loadMusicSongs(data.emotion);
+  } catch(e) {
+    console.error(e);
+    toast("⚠️ Lỗi kết nối server!");
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '✦ Phân tích & tìm nhạc';
+}
+
+// ── MUSIC SEARCH (JAMENDO - PHÂN TRANG) ───────────────────────────
+function buildSearchUrl(mode, offset) {
+  const base = `${API}/music/search?offset=${offset}&limit=${PAGE_SIZE}`;
+  return mode.kind === 'query'
+    ? `${base}&q=${encodeURIComponent(mode.value)}`
+    : `${base}&emotion=${mode.value}`;
+}
+
+// Tìm theo cảm xúc (gọi sau khi phân tích)
+async function loadMusicSongs(emotion) {
+  searchMode = {kind:'emotion', value:emotion};
+  currentOffset = 0;
+  const list = document.getElementById('song-list');
+  list.innerHTML = `<div class="loading-songs"><div class="spin spin-green" style="width:20px;height:20px;margin:0 auto 10px"></div><br>Đang tìm nhạc trên Jamendo...</div>`;
+  try {
+    const res = await fetch(buildSearchUrl(searchMode, 0));
+    const data = await res.json();
+    if (!data.tracks || data.tracks.length === 0) {
+      list.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:24px;">Không tìm thấy bài. Thử tìm thủ công!</div>';
+      toggleLoadMore(false); return;
+    }
+    currentSongs = data.tracks;
+    renderSongList(currentSongs);
+    toggleLoadMore(data.has_more);
+  } catch(e) {
+    list.innerHTML = '<div style="color:var(--red);font-size:12px;text-align:center;padding:24px;">⚠️ Lỗi tìm nhạc</div>';
+    toggleLoadMore(false);
+  }
+}
+
+// Tìm thủ công theo từ khóa
+async function manualSearch() {
+  const q = document.getElementById('search-input').value.trim();
+  if (!q) return;
+  searchMode = {kind:'query', value:q};
+  currentOffset = 0;
+  const list = document.getElementById('song-list');
+  list.innerHTML = `<div class="loading-songs"><div class="spin spin-green" style="width:20px;height:20px;margin:0 auto 10px"></div><br>Đang tìm "${q}"...</div>`;
+  try {
+    const res = await fetch(buildSearchUrl(searchMode, 0));
+    const data = await res.json();
+    if (!data.tracks || data.tracks.length === 0) {
+      list.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:24px;">Không tìm thấy kết quả</div>';
+      toggleLoadMore(false); return;
+    }
+    currentSongs = data.tracks;
+    renderSongList(currentSongs);
+    toggleLoadMore(data.has_more);
+  } catch {
+    list.innerHTML = '<div style="color:var(--red);font-size:12px;text-align:center;padding:24px;">⚠️ Lỗi tìm kiếm</div>';
+    toggleLoadMore(false);
+  }
+}
+
+// Nút "Xem thêm" — nối thêm nhạc vào danh sách hiện tại
+async function loadMore() {
+  if (!searchMode || loadingMore) return;
+  loadingMore = true;
+  const btn = document.getElementById('loadmore-btn');
+  btn.disabled = true; btn.textContent = '⏳ Đang tải...';
+  currentOffset += PAGE_SIZE;
+  try {
+    const res = await fetch(buildSearchUrl(searchMode, currentOffset));
+    const data = await res.json();
+    const newTracks = (data.tracks || []).filter(
+      t => !currentSongs.some(s => s.id === t.id)   // tránh trùng
+    );
+    currentSongs = currentSongs.concat(newTracks);
+    renderSongList(currentSongs);
+    toggleLoadMore(data.has_more && newTracks.length > 0);
+  } catch {
+    toast("⚠️ Lỗi tải thêm");
+    toggleLoadMore(true);
+  }
+  btn.textContent = '⬇ Xem thêm bài';
+  loadingMore = false;
+}
+
+function toggleLoadMore(show) {
+  const btn = document.getElementById('loadmore-btn');
+  btn.style.display = show ? 'block' : 'none';
+  btn.disabled = false;
+}
+
+// ── GỢI Ý THÔNG MINH ──────────────────────────────────────────────
+// Lấy top N key có giá trị đếm cao nhất từ object {key:count}
+function topKeys(obj, n) {
+  return Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n).map(e=>e[0]);
+}
+
+async function loadRecommend() {
+  searchMode = null;            // recommend không phân trang
+  currentOffset = 0;
+  const list = document.getElementById('song-list');
+  list.innerHTML = `<div class="loading-songs"><div class="spin spin-green" style="width:20px;height:20px;margin:0 auto 10px"></div><br>Đang tạo gợi ý riêng cho bạn...</div>`;
+  toggleLoadMore(false);
+  const artists = topKeys(likedArtists, 3).join(",");
+  const tags    = topKeys(likedTags, 3).join(",");
+  try {
+    const res = await fetch(`${API}/recommend?liked_artists=${encodeURIComponent(artists)}&liked_tags=${encodeURIComponent(tags)}`);
+    const data = await res.json();
+    if (!data.tracks || data.tracks.length === 0) {
+      list.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:24px;">Chưa đủ dữ liệu gợi ý. Hãy nghe và thích vài bài trước!</div>';
+      return;
+    }
+    currentSongs = data.tracks;
+    renderSongList(currentSongs);
+    toast(data.personalized ? "✨ Gợi ý dựa trên sở thích của bạn!" : "✨ Gợi ý theo thời điểm hiện tại");
+  } catch {
+    list.innerHTML = '<div style="color:var(--red);font-size:12px;text-align:center;padding:24px;">⚠️ Lỗi tạo gợi ý</div>';
+  }
+}
+
+// Ghi nhận hành vi: tăng đếm nghệ sĩ/tag + gửi server (fire-and-forget)
+function recordBehavior(song, type) {
+  if (song.artist) {
+    likedArtists[song.artist] = (likedArtists[song.artist] || 0) + (type==='like'?3:1);
+    localStorage.setItem("mt_artists", JSON.stringify(likedArtists));
+  }
+  (song.tags || []).forEach(tag => {
+    likedTags[tag] = (likedTags[tag] || 0) + (type==='like'?2:1);
+  });
+  localStorage.setItem("mt_tags", JSON.stringify(likedTags));
+  // gửi server để thống kê chung (không chặn UI)
+  fetch(`${API}/track/event`, {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({type, track_id:song.id, name:song.name,
+                          artist:song.artist, tags:song.tags||[]})
+  }).catch(()=>{});
+}
+
+function renderSongList(tracks) {
+  const list = document.getElementById('song-list');
+  list.innerHTML = tracks.map((t,i) => {
+    const fb = userFeedback[t.id];
+    const fbIcon = fb==='like'?' 👍':fb==='dislike'?' 👎':'';
+    const thumb = t.image
+      ? `<img class="song-thumb" src="${t.image}" alt="">`
+      : `<div class="song-thumb-ph">🎵</div>`;
+    return `<div class="song-item" id="si${i}" onclick="playSong(${i})">
+      ${thumb}
+      <div class="song-info">
+        <div class="song-title">${t.name}${fbIcon}</div>
+        <div class="song-artist">${t.artist}</div>
+        <div class="song-album">${t.album}</div>
+      </div>
+      <div class="song-right">
+        ${t.preview ? '<span class="preview-badge">FULL</span>' : ''}
+      </div>
+      <button class="song-play" id="play${i}" title="Phát / Tạm dừng" onclick="event.stopPropagation();clickSongPlay(${i})">▶</button>
+    </div>`;
+  }).join('');
+}
+
+// ── PLAYER ────────────────────────────────────────────────────────
+// Cập nhật icon nút ▶/⏸ ở player chính và trong từng item của list
+function syncPlayIcons() {
+  const icon = previewPlaying ? '⏸' : '▶';
+  document.getElementById('play-btn').textContent = icon;
+  document.querySelectorAll('.song-play').forEach((b,i) => {
+    b.textContent = (i === currentIdx) ? icon : '▶';
+  });
+}
+
+function playSong(idx) {
+  currentIdx = idx;
+  const s = currentSongs[idx];
+  document.querySelectorAll('.song-item').forEach((el,i) => el.classList.toggle('playing', i===idx));
+
+  document.getElementById('p-title').textContent  = s.name;
+  document.getElementById('p-artist').textContent = s.artist;
+  document.getElementById('p-album').textContent  = s.album;
+
+  const cover = document.getElementById('p-cover');
+  const ph    = document.getElementById('p-cover-ph');
+  if (s.image) { cover.src=s.image; cover.style.display='block'; ph.style.display='none'; }
+  else { cover.style.display='none'; ph.style.display='flex'; }
+
+  const audio = document.getElementById('preview-audio');
+  const pp    = document.getElementById('preview-player');
+  if (s.preview) {
+    audio.src = s.preview;
+    pp.classList.add('show');
+    audio.play();
+    previewPlaying = true;
+    recordBehavior(s, 'play');   // ghi nhận lượt nghe để gợi ý thông minh
+  } else {
+    pp.classList.remove('show');
+    audio.src = '';
+    previewPlaying = false;
+    toast("⚠️ Bài này không có file nhạc");
+  }
+  syncPlayIcons();
+
+  const openBtn = document.getElementById('open-sp');
+  openBtn.href = s.open_url;
+  openBtn.style.display = 'flex';
+
+  document.getElementById('fb-row').style.display = 'flex';
+  document.getElementById('fb-like').className    = 'fb-btn' + (userFeedback[s.id]==='like'?' liked':'');
+  document.getElementById('fb-dislike').className = 'fb-btn' + (userFeedback[s.id]==='dislike'?' disliked':'');
+}
+
+function togglePreview() {
+  const audio = document.getElementById('preview-audio');
+  if (!audio.src) {
+    // Chưa chọn bài nào → phát bài đầu tiên trong list
+    if (currentSongs.length) playSong(0);
+    return;
+  }
+  if (previewPlaying) { audio.pause(); previewPlaying=false; }
+  else { audio.play(); previewPlaying=true; }
+  syncPlayIcons();
+}
+
+function stopSong() {
+  const audio = document.getElementById('preview-audio');
+  audio.pause();
+  audio.currentTime = 0;
+  previewPlaying = false;
+  syncPlayIcons();
+  toast("⏹ Đã dừng");
+}
+
+// Bấm nút ▶ tròn trên một bài trong list
+function clickSongPlay(idx) {
+  if (idx === currentIdx) togglePreview();  // đang là bài này → play/pause
+  else playSong(idx);                        // bài khác → phát bài đó
+}
+
+function nextSong() { if (currentSongs.length) playSong((currentIdx+1)%currentSongs.length); }
+function prevSong() { if (currentSongs.length) playSong((currentIdx-1+currentSongs.length)%currentSongs.length); }
+
+// ── FEEDBACK ──────────────────────────────────────────────────────
+function feedback(type) {
+  if (currentIdx<0) return;
+  const s = currentSongs[currentIdx];
+  userFeedback[s.id] = type;
+  localStorage.setItem("mt_fb", JSON.stringify(userFeedback));
+  document.getElementById('fb-like').className    = 'fb-btn'+(type==='like'?' liked':'');
+  document.getElementById('fb-dislike').className = 'fb-btn'+(type==='dislike'?' disliked':'');
+  recordBehavior(s, type);   // like/dislike → cập nhật sở thích + gửi server
+  toast(type==='like'?'✅ Đã lưu!':'❌ Đã ghi nhận!');
+}
+
+// ── ONLINE LEARNING ───────────────────────────────────────────────
+async function teach(btn) {
+  if (!currentText) { toast("Phân tích cảm xúc trước!"); return; }
+  const emo = btn.dataset.e;
+  const statusEl = document.getElementById('learn-status');
+  statusEl.textContent = "⏳ Đang dạy model...";
+  try {
+    const res = await fetch(API+"/learn", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({text:currentText, correct_emotion:emo})
+    });
+    const d = await res.json();
+    statusEl.textContent = `✓ ${d.message} | Total: ${d.feedback_count} | Alpha: ${d.new_alpha.toFixed(2)}`;
+    document.getElementById('stat-feedback').textContent = d.feedback_count;
+    document.getElementById('stat-alpha').textContent = d.new_alpha.toFixed(2);
+    toast("🧠 Model đã học xong!");
+  } catch { statusEl.textContent = "⚠️ Không kết nối server."; }
+}
+
+// ── HISTORY ───────────────────────────────────────────────────────
+function addHistory(text, data) {
+  history.unshift({text, emoji:data.emoji, label:data.label, conf:(data.confidence*100).toFixed(0)+'%', time:new Date().toLocaleString('vi-VN')});
+  if (history.length>20) history.pop();
+  localStorage.setItem("mt_hist", JSON.stringify(history));
+  renderHistory();
+}
+function renderHistory() {
+  const el = document.getElementById('history-list');
+  if (!history.length) { el.innerHTML='<div style="color:var(--muted);font-size:11px;text-align:center;padding:16px;">Chưa có lịch sử</div>'; return; }
+  el.innerHTML = history.slice(0,8).map(h=>`
+    <div class="hist-item">
+      <span class="hist-emo-icon">${h.emoji}</span>
+      <div class="hist-text">
+        <div class="hist-main">"${h.text.slice(0,70)}${h.text.length>70?'...':''}"</div>
+        <div class="hist-meta">${h.label} · ${h.conf} · ${h.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+async function loadStats() {
+  try {
+    const r = await fetch(API+"/stats");
+    const d = await r.json();
+    document.getElementById('stat-feedback').textContent = d.feedback_count;
+    document.getElementById('stat-alpha').textContent = (d.model_alpha||0.85).toFixed(2);
+  } catch {}
+}
+function updateStats(info) {
+  document.getElementById('stat-feedback').textContent = info.feedback_count;
+  document.getElementById('stat-alpha').textContent = info.alpha_rule.toFixed(2);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.style.opacity='1';
+  setTimeout(()=>t.style.opacity='0', 2800);
+}
+</script>
+</body>
+</html>
+
+===== \web.config =====
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <system.webServer>
+    <httpProtocol>
+      <customHeaders>
+        <add name="Access-Control-Allow-Origin" value="*" />
+        <add name="Access-Control-Allow-Methods" value="GET, POST, PUT, DELETE, OPTIONS" />
+        <add name="Access-Control-Allow-Headers" value="Content-Type, Authorization" />
+        <add name="Access-Control-Allow-Credentials" value="true" />
+      </customHeaders>
+    </httpProtocol>
+    <rewrite>
+      <rules>
+        <rule name="API Proxy" stopProcessing="true">
+          <match url="^api/(.*)" />
+          <action type="Rewrite" url="http://127.0.0.1:5005/api/{R:1}" appendQueryString="true" />
+        </rule>
+        <rule name="SPA Fallback" stopProcessing="true">
+          <match url=".*" />
+          <conditions>
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="/index.html" appendQueryString="true" />
+        </rule>
+      </rules>
+    </rewrite>
+    <defaultDocument>
+      <files>
+        <clear />
+        <add value="index.html" />
+      </files>
+    </defaultDocument>
+  </system.webServer>
+</configuration>

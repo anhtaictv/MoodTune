@@ -1,0 +1,15 @@
+# Secrets - do not commit
+backend/spotify_tokens.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Claude Code local settings
+.claude/
+
+# Temp tooling used to set up this repo
+.tmp_gh/

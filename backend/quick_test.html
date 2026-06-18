@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Quick Test - Spotify Session</title>
+  <style>
+    body { font-family: sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; background: #1a1a1a; color: #fff; }
+    .box { background: #2a2a2a; padding: 20px; border-radius: 12px; margin: 16px 0; }
+    .success { color: #1db954; }
+    .error { color: #ff4444; }
+    button { background: #1db954; border: none; padding: 12px 24px; border-radius: 24px; color: #000; font-weight: bold; cursor: pointer; margin: 8px 4px; }
+    button:hover { background: #1ed760; }
+    .secondary { background: #333; color: #fff; }
+    .secondary:hover { background: #444; }
+  </style>
+</head>
+<body>
+  <h1>🎵 Quick Test - Spotify Session</h1>
+
+  <div class="box">
+    <h3>Session ID mới nhất:</h3>
+    <code style="background: #000; padding: 8px; display: block; border-radius: 4px;">TUXRAqElGMV8KhkgcNqQYA</code>
+  </div>
+
+  <div class="box">
+    <h3>Status:</h3>
+    <div id="status">Đang kiểm tra...</div>
+  </div>
+
+  <button onclick="testSession()">🔍 Test Session</button>
+  <button onclick="saveToStorage()" class="secondary">💾 Lưu vào localStorage</button>
+  <button onclick="checkStorage()" class="secondary">📋 Xem localStorage</button>
+
+  <div class="box" id="log" style="font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;"></div>
+
+  <script>
+    const API = "https://anhtaictv.me/api";
+    const SID = "TUXRAqElGMV8KhkgcNqQYA";
+
+    function log(msg, isError = false) {
+      const div = document.getElementById("log");
+      const time = new Date().toLocaleTimeString();
+      div.innerHTML += `<div style="color: ${isError ? '#ff4444' : '#1db954'}">[${time}] ${msg}</div>`;
+      div.scrollTop = div.scrollHeight;
+    }
+
+    async function testSession() {
+      log(`Testing session: ${SID.slice(0, 16)}...`);
+      try {
+        const r = await fetch(`${API}/spotify/status?sid=${SID}`);
+        const d = await r.json();
+        log(`Response: ${JSON.stringify(d)}`);
+
+        const statusDiv = document.getElementById("status");
+        if (d.logged_in) {
+          statusDiv.innerHTML = '<span class="success">✅ Session hợp lệ - Backend nhận ra token!</span>';
+          log("✅ Token hoạt động!");
+        } else {
+          statusDiv.innerHTML = '<span class="error">❌ Session không hợp lệ</span>';
+          log("❌ Backend không nhận ra token", true);
+        }
+      } catch (e) {
+        log(`Error: ${e.message}`, true);
+        document.getElementById("status").innerHTML = '<span class="error">❌ Lỗi kết nối</span>';
+      }
+    }
+
+    function saveToStorage() {
+      localStorage.setItem("sp_sid", SID);
+      log(`✅ Đã lưu sid vào localStorage`);
+      alert("Đã lưu! Giờ mở https://anhtaictv.me và refresh trang.");
+    }
+
+    function checkStorage() {
+      const stored = localStorage.getItem("sp_sid");
+      if (stored) {
+        log(`localStorage sp_sid: ${stored}`);
+        if (stored === SID) {
+          log("✅ Khớp với session mới nhất!");
+        } else {
+          log("⚠️ Khác với session mới nhất", true);
+        }
+      } else {
+        log("❌ localStorage trống", true);
+      }
+    }
+
+    // Auto-test on load
+    testSession();
+    checkStorage();
+  </script>
+</body>
+</html>

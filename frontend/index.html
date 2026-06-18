@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoodTune — AI Cảm Xúc Tự Xây</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--surface:#10101e;--card:#14142a;--border:rgba(255,255,255,0.06);
+  --accent:#1db954;--accent2:#1ed760;--accent3:#7c6af7;
+  --green:#1db954;--gold:#f59e0b;--red:#f87171;
+  --text:#dde4f0;--muted:#586080;--glow:rgba(29,185,84,0.15);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 55% 45% at 15% 10%,rgba(29,185,84,.06) 0%,transparent 65%),
+             radial-gradient(ellipse 45% 55% at 85% 90%,rgba(124,106,247,.05) 0%,transparent 65%)}
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:clamp(14px,4vw,28px) clamp(10px,3vw,18px)}
+
+header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:28px}
+.logo{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,7vw,34px);line-height:1;
+  background:linear-gradient(135deg,#1ed760 0%,#1db954 50%,#7c6af7 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo em{font-style:italic}
+.sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;margin-top:4px}
+.version-tag{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--accent2);background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.25);border-radius:8px;padding:2px 7px;vertical-align:middle;margin-left:8px;letter-spacing:.05em;cursor:pointer;transition:all .2s}
+.version-tag:hover{border-color:var(--accent);background:rgba(29,185,84,.2)}
+.version-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.version-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px}
+.version-item.current{border-color:rgba(29,185,84,.35)}
+.version-item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.version-name{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--text)}
+.version-tag-sm{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent2);background:rgba(29,185,84,.08);border-radius:8px;padding:2px 8px;white-space:nowrap}
+.version-desc{font-size:11.5px;color:var(--muted);line-height:1.6}
+.header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.about-btn{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:7px 14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);cursor:pointer;transition:all .2s}
+.about-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.model-badge{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:7px 14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s ease infinite}
+.dot.offline{background:var(--red);box-shadow:0 0 8px var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+.stat-row{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap}
+.stat-pill{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:7px;color:var(--muted)}
+.stat-pill .val{color:var(--accent2);font-weight:500}
+
+.grid{display:grid;grid-template-columns:5fr 7fr;gap:16px;margin-bottom:16px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
+@media(max-width:480px){
+  .emo-grid,.correct-row{grid-template-columns:repeat(3,1fr)}
+  .modal-box{padding:18px}
+  .player-top{gap:12px}
+  .stat-pill{font-size:9.5px;padding:6px 11px}
+}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;min-width:0}
+.card-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.card-title::before{content:'';width:3px;height:13px;background:var(--accent);border-radius:2px}
+
+.emo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.emo-btn{background:var(--surface);border:1.5px solid transparent;border-radius:14px;padding:12px 4px;cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:64px}
+.emo-btn:hover{border-color:rgba(29,185,84,.4);transform:translateY(-2px)}
+.emo-btn.active{border-color:var(--accent);background:rgba(29,185,84,.08);box-shadow:0 0 18px var(--glow)}
+.emo-icon{font-size:clamp(20px,5.5vw,24px);display:block}
+.emo-label{font-size:clamp(8px,2.4vw,9px);font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.05em;line-height:1.3}
+.emo-btn.active .emo-label{color:var(--accent2)}
+
+textarea.mood-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;resize:none;transition:border-color .2s;margin-bottom:12px;line-height:1.6}
+textarea.mood-input:focus{outline:none;border-color:var(--accent)}
+textarea.mood-input::placeholder{color:var(--muted)}
+
+.row-controls{display:flex;gap:10px;margin-bottom:14px;align-items:center}
+.intensity-wrap{flex:1}
+.int-label{font-size:11px;color:var(--muted);margin-bottom:5px;display:flex;justify-content:space-between}
+.int-label .hint{color:var(--accent2);font-family:'DM Mono',monospace;font-size:9px}
+input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:var(--surface);border-radius:2px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--glow)}
+
+
+
+.analyze-btn{width:100%;background:linear-gradient(135deg,#1db954,#1ed760);border:none;border-radius:12px;padding:13px;color:#000;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.analyze-btn:hover:not(:disabled){opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(29,185,84,.3)}
+.analyze-btn:disabled{opacity:.45;cursor:not-allowed}
+
+.result-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:14px;display:none}
+.result-box.show{display:block}
+.result-main{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.result-emoji{font-size:clamp(32px,9vw,44px)}
+.result-label{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,5.5vw,26px)}
+.result-conf{font-family:'DM Mono',monospace;font-size:11px;color:var(--green);margin-top:2px}
+.score-bars{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;padding-right:4px}
+.score-bars::-webkit-scrollbar{width:4px}
+.score-bars::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.score-row{display:flex;align-items:center;gap:8px}
+.score-name{font-size:clamp(9.5px,2.6vw,11px);color:var(--muted);width:clamp(58px,22vw,90px);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.score-bar-wrap{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s cubic-bezier(.4,0,.2,1)}
+.score-val{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);width:32px;text-align:right}
+.model-info-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.info-chip{background:rgba(29,185,84,.07);border:1px solid rgba(29,185,84,.15);border-radius:20px;padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--accent2)}
+.kg-wrap{margin-top:14px}
+.kg-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.kg-canvas{width:100%;height:220px;display:block;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid var(--border)}
+
+.song-list{display:flex;flex-direction:column;gap:10px;max-height:560px;overflow-y:auto;padding:4px 4px 0 0}
+.song-list::-webkit-scrollbar{width:6px}.song-list::-webkit-scrollbar-thumb{background:var(--surface);border-radius:3px}
+.song-item{background:var(--surface);border:1.5px solid transparent;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;position:relative}
+.song-item::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);border-radius:0 2px 2px 0;transform:scaleY(0);transition:transform .2s}
+.song-item:hover{border-color:rgba(29,185,84,.3);transform:translateX(3px)}
+.song-item:hover::after,.song-item.playing::after{transform:scaleY(1)}
+.song-item.playing{border-color:rgba(29,185,84,.4);background:rgba(29,185,84,.06)}
+.song-thumb{width:clamp(48px,14vw,62px);height:clamp(48px,14vw,62px);border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--card)}
+.song-thumb-ph{width:clamp(48px,14vw,62px);height:clamp(48px,14vw,62px);border-radius:10px;background:linear-gradient(135deg,#0d3320,#1a5c38);display:flex;align-items:center;justify-content:center;font-size:clamp(20px,5vw,26px);flex-shrink:0}
+.song-info{flex:1;min-width:0}
+.song-title{font-size:14px;font-weight:600;color:var(--text);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.song-artist{font-size:12px;color:#9aa8cc;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.song-meta{display:flex;align-items:center;gap:6px;margin-top:3px}
+.song-album{font-size:10.5px;color:#636e90;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;line-height:1.4}
+.preview-badge{font-size:8px;background:rgba(29,185,84,.12);border:1px solid rgba(29,185,84,.25);color:var(--accent);border-radius:8px;padding:2px 6px;font-family:'DM Mono',monospace;white-space:nowrap}
+.song-play{width:40px;height:40px;border-radius:50%;background:rgba(29,185,84,.12);border:1.5px solid rgba(29,185,84,.3);color:var(--accent2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .18s}
+.song-item:hover .song-play{background:var(--accent);color:#000;border-color:var(--accent)}
+.song-item.playing .song-play{background:var(--accent);color:#000;border-color:var(--accent)}
+
+.player-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:16px}
+.player-top{display:flex;gap:18px;margin-bottom:16px;align-items:center}
+.player-cover{width:clamp(56px,18vw,80px);height:clamp(56px,18vw,80px);border-radius:12px;object-fit:cover;flex-shrink:0;box-shadow:0 6px 24px rgba(29,185,84,.15);background:var(--surface)}
+.player-cover-ph{width:clamp(56px,18vw,80px);height:clamp(56px,18vw,80px);border-radius:12px;background:linear-gradient(135deg,#0d3320,#155c35);display:flex;align-items:center;justify-content:center;font-size:clamp(22px,7vw,30px);flex-shrink:0}
+.now-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;margin-bottom:6px}
+.player-title{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1.2}
+.player-artist{color:var(--muted);font-size:12px;margin-top:3px}
+.player-album{color:var(--muted);font-size:10px;margin-top:2px;opacity:.7}
+
+.preview-player{background:var(--surface);border:1px solid rgba(29,185,84,.15);border-radius:12px;padding:16px 18px;margin:14px 0;display:none}
+.preview-player.show{display:block}
+.preview-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2);margin-bottom:10px;letter-spacing:.08em}
+audio{width:100%;height:40px}
+
+
+
+.fb-row{display:flex;gap:10px;margin-top:14px}
+.fb-btn{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:11px;padding:9px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);transition:all .2s}
+.fb-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.fb-btn.liked{border-color:var(--green);color:var(--green);background:rgba(29,185,84,.07)}
+.fb-btn.disliked{border-color:var(--red);color:var(--red);background:rgba(248,113,113,.07)}
+
+.search-row{display:flex;gap:8px;margin-bottom:12px}
+.search-input{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px}
+.search-input:focus{outline:none;border-color:var(--accent)}
+.search-btn{background:var(--accent);border:none;border-radius:10px;padding:9px 14px;color:#000;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.search-btn:hover{background:var(--accent2)}
+.recommend-btn{flex:1;background:linear-gradient(135deg,rgba(124,106,247,.15),rgba(29,185,84,.12));border:1.5px solid rgba(124,106,247,.35);border-radius:10px;padding:10px;color:var(--accent3);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.recommend-btn:hover{border-color:var(--accent3);background:rgba(124,106,247,.18);transform:translateY(-1px)}
+.loadmore-btn{width:100%;margin-top:12px;background:var(--surface);border:1.5px solid var(--border);border-radius:11px;padding:11px;color:var(--accent2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Mono',monospace;letter-spacing:.05em}
+.loadmore-btn:hover{border-color:var(--accent);background:rgba(29,185,84,.06)}
+.loadmore-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.learn-panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:16px}
+.correct-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}
+.correct-btn{background:var(--surface);border:1.5px solid transparent;border-radius:10px;padding:8px 4px;cursor:pointer;font-size:clamp(9.5px,2.6vw,11px);text-align:center;transition:all .15s;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:50px}
+.correct-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.correct-btn .icon{font-size:clamp(15px,4.2vw,18px);display:block}
+#learn-status{font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-top:10px;min-height:15px}
+
+.history-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.hist-item{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--border);font-size:11px}
+.hist-item:last-child{border-bottom:none}
+.hist-emo-icon{font-size:20px}
+.hist-text{flex:1;min-width:0}
+.hist-main{font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.hist-meta{color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace;font-size:9px}
+
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite}
+.spin-green{border-color:rgba(29,185,84,.2);border-top-color:var(--accent)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid rgba(29,185,84,.3);color:var(--text);padding:9px 20px;border-radius:30px;font-size:12px;z-index:9999;opacity:0;transition:opacity .3s;font-family:'DM Mono',monospace;pointer-events:none;max-width:90vw;text-align:center}
+#toast.error{border-color:rgba(248,113,113,.4);color:var(--red)}
+.loading-songs{text-align:center;padding:30px;color:var(--muted);font-size:12px}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,185,84,.3)}50%{box-shadow:0 0 0 8px rgba(29,185,84,0)}}
+.playing .song-thumb,.playing .song-thumb-ph{animation:pulse 2s ease infinite}
+
+.local-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:16px}
+.preview-badge.local{background:rgba(124,106,247,.12);border-color:rgba(124,106,247,.3);color:var(--accent3)}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(4px);padding:18px}
+.modal-overlay.show{display:flex}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto}
+.modal-box h2{font-family:'Cormorant Garamond',serif;font-size:26px;margin-bottom:4px}
+.modal-box h2 em{font-style:italic;background:linear-gradient(135deg,#1ed760 0%,#1db954 50%,#7c6af7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.modal-version{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent2);margin-bottom:14px}
+.modal-box p{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.team-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.team-member{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px}
+.team-role{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent2);background:rgba(29,185,84,.08);border-radius:8px;padding:2px 8px;white-space:nowrap}
+.modal-close{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:11px;padding:10px;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;transition:all .2s}
+.modal-close:hover{border-color:var(--accent);color:var(--accent2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <div class="logo">Mood<em>Tune</em> <span class="version-tag" onclick="showVersions()" title="Xem lịch sử phiên bản">v3.5</span></div>
+    <div class="sub">// AI CẢM XÚC TỰ XÂY · SELF-ATTENTION · JAMENDO</div>
+  </div>
+  <div class="header-actions">
+    <button class="about-btn" onclick="showAbout()">ℹ️ About</button>
+    <div class="model-badge"><span class="dot" id="status-dot"></span><span id="status-text">Attention · Rule Hybrid · Jamendo Free</span></div>
+  </div>
+</header>
+
+<div class="modal-overlay" id="about-overlay" onclick="if(event.target===this) hideAbout()">
+  <div class="modal-box">
+    <h2>Mood<em>Tune</em></h2>
+    <div class="modal-version">Phiên bản v3.5 — 10 cảm xúc · RLUF Bandit · Knowledge Graph · Self-Attention · Jamendo</div>
+    <p>Nội dung giới thiệu chi tiết sẽ được cập nhật sau.</p>
+    <div class="team-list">
+      <div class="team-member"><span>Tạ Anh Tài</span><span class="team-role">Nhóm trưởng</span></div>
+      <div class="team-member"><span>Phan Trần Tâm</span><span class="team-role">Thành viên</span></div>
+      <div class="team-member"><span>Nguyễn Huy Hùng</span><span class="team-role">Thành viên</span></div>
+      <div class="team-member"><span>Đặng Thị Tiểu My</span><span class="team-role">Thành viên</span></div>
+    </div>
+    <button class="modal-close" onclick="hideAbout()">Đóng</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="version-overlay" onclick="if(event.target===this) hideVersions()">
+  <div class="modal-box">
+    <h2>Lịch sử <em>phiên bản</em></h2>
+    <div class="modal-version">MoodTune — Changelog</div>
+    <div class="version-list">
+      <div class="version-item current">
+        <div class="version-item-head"><span class="version-name">v3.5 — Chuẩn hoá cảm xúc theo Valence-Arousal</span><span class="version-tag-sm">hiện tại</span></div>
+        <div class="version-desc">Rút gọn từ <b>15 → 10 "cảm xúc đơn giản"</b>, loại bỏ các class trùng lặp/không phải cảm xúc thuần (Vui nhộn, Phiêu lưu, Bí ẩn, Tự tin, Biết ơn). Đổi tên class nội bộ sang tiếng Anh (happy, sad, romantic...), nhãn hiển thị vẫn giữ tiếng Việt. Áp dụng mô hình khoa học <b>Valence-Arousal (GEMS/Circumplex)</b>: thêm toạ độ Sắc thái/Năng lượng cho từng cảm xúc và cập nhật bộ tag Jamendo theo mô hình này. Cập nhật lại từ điển/vocab, dọn các nút cảm xúc trùng/dư ở khung "Nhập cảm xúc", model Self-Attention được train lại với kiến trúc đầu ra mới.</div>
+      </div>
+      <div class="version-item">
+        <div class="version-item-head"><span class="version-name">v3.1 — Thêm cảm xúc mới</span></div>
+        <div class="version-desc">Mở rộng từ điển cảm xúc và thêm <b>3 cảm xúc mới</b>: Tự tin 💪 (động lực, quyết tâm), Biết ơn 🙏 (mãn nguyện, bình yên nội tâm), Tức giận 😡 (giận dữ, phẫn nộ) — nâng tổng số lên <b>15 cảm xúc</b>. Model Self-Attention được train lại với kiến trúc đầu ra mới.</div>
+      </div>
+      <div class="version-item">
+        <div class="version-item-head"><span class="version-name">v3.0 — RLUF & Knowledge Graph</span></div>
+        <div class="version-desc">Tự cài đặt <b>Thompson Sampling Multi-Armed Bandit</b> (Beta-Bernoulli, NumPy thuần) để học gu nhạc người dùng từ Like/Dislike/Bỏ qua — tối ưu tỉ lệ trộn Online:Local và chọn bộ tag Jamendo phù hợp. Thêm <b>Sơ đồ tri thức cảm xúc tương tác</b> (Canvas 2D): các từ khoá trong câu phát "tia năng lượng" theo trọng số Attention bắn vào các bong bóng cảm xúc.</div>
+      </div>
+      <div class="version-item">
+        <div class="version-item-head"><span class="version-name">v2.5 — Adaptive Learning</span></div>
+        <div class="version-desc">Thay ReLU bằng <b>Leaky ReLU</b> (max(0.01x, x)) ở lớp ẩn để tránh "chết nơ-ron". Thêm <b>Adaptive L2</b>: hệ số weight decay tăng dần theo số lần feedback (chặn ở 5× giá trị gốc) giúp chống overfit khi học online nhiều lần.</div>
+      </div>
+      <div class="version-item">
+        <div class="version-item-head"><span class="version-name">v2.0 — Self-Attention</span></div>
+        <div class="version-desc">Thay Bag-of-Words bằng <b>Embedding Layer + Self-Attention (Q,K,V)</b> tự viết bằng NumPy, hiểu được câu đảo ngữ/phủ định. Thêm <b>Dynamic Vocab/Weight Expansion</b> (mở rộng từ điển runtime), <b>Audio Feature Engine</b> (BPM/Spectral Centroid/MFCC qua librosa) để re-rank nhạc, và <b>Kho nhạc Local</b> (Hybrid Online/Offline qua File System Access API).</div>
+      </div>
+      <div class="version-item">
+        <div class="version-item-head"><span class="version-name">v1.1 — Hoàn thiện giao diện</span></div>
+        <div class="version-desc">Hiển thị số phiên bản trên giao diện; hoàn thiện đầy đủ các chức năng: phân tích cảm xúc Hybrid AI (Bag-of-Words + MLP), gợi ý/nghe nhạc Jamendo, online learning, gợi ý cá nhân hoá, gợi ý theo giờ trong ngày, lịch sử phân tích.</div>
+      </div>
+      <div class="version-item">
+        <div class="version-item-head"><span class="version-name">v1.0 — Phiên bản nền tảng</span></div>
+        <div class="version-desc">Rule Scorer + MLP Hybrid Engine (NumPy thuần), tích hợp Jamendo API, feedback & online learning cơ bản.</div>
+      </div>
+    </div>
+    <button class="modal-close" onclick="hideVersions()">Đóng</button>
+  </div>
+</div>
+
+<div class="stat-row">
+  <div class="stat-pill">Vocab <span class="val" id="stat-vocab">—</span> token</div>
+  <div class="stat-pill">Classes <span class="val" id="stat-classes">10</span> emotion</div>
+  <div class="stat-pill">Layers <span class="val" id="stat-layers">—</span></div>
+  <div class="stat-pill">Feedback <span class="val" id="stat-feedback">0</span> times</div>
+  <div class="stat-pill">Alpha <span class="val" id="stat-alpha">0.85</span></div>
+  <button onclick="location.reload()" title="Tải lại trang" class="stat-pill" style="cursor:pointer;border-color:transparent;gap:5px;color:var(--muted);transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent2)'" onmouseout="this.style.borderColor='transparent';this.style.color='var(--muted)'">↺ Refresh</button>
+</div>
+
+<!-- INFO BANNER -->
+<div style="background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.2);border-radius:16px;padding:14px 20px;margin-bottom:12px;font-size:12px;color:var(--accent2);text-align:center">
+  🎵 Sử dụng Jamendo API miễn phí · Không cần đăng nhập · Nghe nhạc đầy đủ
+</div>
+<!-- TIME-BASED TIP -->
+<div id="time-tip" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:center;margin-bottom:20px;letter-spacing:.03em"></div>
+
+<div class="grid">
+  <div class="card">
+    <div class="card-title">Nhập cảm xúc</div>
+    <div class="emo-grid">
+      <button class="emo-btn" data-emotion="vui vẻ hôm nay" onclick="selectEmo(this)"><span class="emo-icon">😄</span><span class="emo-label">Vui vẻ</span></button>
+      <button class="emo-btn" data-emotion="buồn bã không muốn làm gì" onclick="selectEmo(this)"><span class="emo-icon">😢</span><span class="emo-label">Buồn bã</span></button>
+      <button class="emo-btn" data-emotion="yêu đương lãng mạn nhớ nhung" onclick="selectEmo(this)"><span class="emo-icon">🥰</span><span class="emo-label">Lãng mạn</span></button>
+      <button class="emo-btn" data-emotion="năng động phấn khích hứng khởi" onclick="selectEmo(this)"><span class="emo-icon">⚡</span><span class="emo-label">Năng động</span></button>
+      <button class="emo-btn" data-emotion="thư giãn bình yên nhẹ nhàng" onclick="selectEmo(this)"><span class="emo-icon">🌿</span><span class="emo-label">Thư giãn</span></button>
+      <button class="emo-btn" data-emotion="cô đơn một mình đêm khuya" onclick="selectEmo(this)"><span class="emo-icon">🌙</span><span class="emo-label">Cô đơn</span></button>
+      <button class="emo-btn" data-emotion="căng thẳng stress áp lực" onclick="selectEmo(this)"><span class="emo-icon">🔥</span><span class="emo-label">Căng thẳng</span></button>
+      <button class="emo-btn" data-emotion="tập trung học làm việc" onclick="selectEmo(this)"><span class="emo-icon">🎯</span><span class="emo-label">Tập trung</span></button>
+      <button class="emo-btn" data-emotion="hoài niệm nhớ về kỷ niệm ngày xưa" onclick="selectEmo(this)"><span class="emo-icon">🍂</span><span class="emo-label">Hoài niệm</span></button>
+      <button class="emo-btn" data-emotion="tức giận phẫn nộ bực bội" onclick="selectEmo(this)"><span class="emo-icon">😡</span><span class="emo-label">Tức giận</span></button>
+    </div>
+    <textarea class="mood-input" id="mood-text" rows="3" placeholder="Hoặc mô tả cảm xúc... VD: 'Hôm nay mệt mỏi, muốn nghe gì nhẹ nhàng'"></textarea>
+    <div class="row-controls">
+      <div class="intensity-wrap">
+        <div class="int-label">
+          <span>Cường độ: <span id="int-val">5</span>/10</span>
+          <span class="hint" id="int-hint">all-time hits</span>
+        </div>
+        <input type="range" min="1" max="10" value="5" id="int-slider" oninput="updateIntensity(this.value)">
+      </div>
+    </div>
+    <button class="analyze-btn" id="analyze-btn" onclick="analyze()">✦ Phân tích & tìm nhạc</button>
+    <div class="result-box" id="result-box">
+      <div class="result-main">
+        <span class="result-emoji" id="r-emoji">😄</span>
+        <div>
+          <div class="result-label" id="r-label">—</div>
+          <div class="result-conf" id="r-conf">—</div>
+        </div>
+      </div>
+      <div class="score-bars" id="score-bars"></div>
+      <div class="model-info-row" id="model-info"></div>
+      <div class="kg-wrap">
+        <div class="kg-title">🕸️ Sơ đồ tri thức AI</div>
+        <canvas id="kg-canvas" class="kg-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Gợi ý nhạc <span id="mix-hint" style="margin-left:auto;text-transform:none;letter-spacing:0;font-weight:400;color:var(--accent3)"></span></div>
+    <div class="search-row">
+      <input class="search-input" id="search-input" placeholder="Tìm bài hát..." onkeydown="if(event.key==='Enter')manualSearch()">
+      <button class="search-btn" onclick="manualSearch()">Tìm</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button class="recommend-btn" onclick="loadRecommend()">✨ Gợi ý cho bạn</button>
+    </div>
+    <div class="song-list" id="song-list">
+      <div style="color:var(--muted);font-size:12px;text-align:center;padding:32px 0;">
+        ✦ Phân tích cảm xúc để nhận gợi ý nhạc
+      </div>
+    </div>
+    <button class="loadmore-btn" id="loadmore-btn" onclick="loadMore()" style="display:none">⬇ Xem thêm bài</button>
+  </div>
+</div>
+
+<!-- KHO NHẠC LOCAL (Hybrid Online/Offline) -->
+<div class="local-card">
+  <div class="card-title">📁 Kho nhạc Local (Hybrid Online/Offline)</div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
+    Chọn thư mục nhạc trên máy — AI sẽ gắn tag cảm xúc cho từng bài và trộn cùng gợi ý online mỗi khi tìm nhạc.
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button class="search-btn" id="local-pick-btn" onclick="pickLocalFolder()">📁 Chọn thư mục nhạc</button>
+    <span id="local-status" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)"></span>
+  </div>
+</div>
+
+<!-- PLAYER -->
+<div class="player-card">
+  <div class="card-title">Now Playing</div>
+  <div class="player-top">
+    <div id="p-cover-wrap">
+      <div class="player-cover-ph" id="p-cover-ph">🎵</div>
+      <img class="player-cover" id="p-cover" style="display:none" src="" alt="">
+    </div>
+    <div style="flex:1;min-width:0">
+      <div class="now-label">ĐANG PHÁT</div>
+      <div class="player-title" id="p-title">Chưa chọn bài</div>
+      <div class="player-artist" id="p-artist">—</div>
+      <div class="player-album" id="p-album"></div>
+    </div>
+  </div>
+  <div class="preview-player" id="preview-player">
+    <div class="preview-label">🎵 NGHE NHẠC ĐẦY ĐỦ — Jamendo Free Music</div>
+    <audio id="preview-audio" controls></audio>
+  </div>
+  <div class="fb-row" id="fb-row" style="display:none">
+    <button class="fb-btn" id="fb-like" onclick="feedback('like')">👍 Like</button>
+    <button class="fb-btn" id="fb-dislike" onclick="feedback('dislike')">👎 Dislike</button>
+    <button class="fb-btn" id="fb-skip" onclick="skipSong()">⏭ Bỏ qua</button>
+  </div>
+</div>
+
+<!-- LEARNING -->
+<div class="learn-panel">
+  <div class="card-title">Dạy AI — Sửa kết quả sai</div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Nếu AI đoán sai, bấm cảm xúc đúng để model tự học:</div>
+  <div id="learn-text-display" style="font-size:12px;color:var(--accent2);min-height:18px;margin-bottom:8px;font-style:italic;"></div>
+  <div class="correct-row">
+    <button class="correct-btn" data-e="happy" onclick="teach(this)"><span class="icon">😄</span>Vui vẻ</button>
+    <button class="correct-btn" data-e="sad" onclick="teach(this)"><span class="icon">😢</span>Buồn bã</button>
+    <button class="correct-btn" data-e="romantic" onclick="teach(this)"><span class="icon">🥰</span>Lãng mạn</button>
+    <button class="correct-btn" data-e="energetic" onclick="teach(this)"><span class="icon">⚡</span>Năng động</button>
+    <button class="correct-btn" data-e="relaxed" onclick="teach(this)"><span class="icon">🌿</span>Thư giãn</button>
+    <button class="correct-btn" data-e="lonely" onclick="teach(this)"><span class="icon">🌙</span>Cô đơn</button>
+    <button class="correct-btn" data-e="stressed" onclick="teach(this)"><span class="icon">🔥</span>Căng thẳng</button>
+    <button class="correct-btn" data-e="focused" onclick="teach(this)"><span class="icon">🎯</span>Tập trung</button>
+    <button class="correct-btn" data-e="nostalgic" onclick="teach(this)"><span class="icon">🍂</span>Hoài niệm</button>
+    <button class="correct-btn" data-e="angry" onclick="teach(this)"><span class="icon">😡</span>Tức giận</button>
+  </div>
+  <div id="learn-status"></div>
+</div>
+
+<div class="history-card">
+  <div class="card-title">Lịch sử phân tích</div>
+  <div id="history-list"><div style="color:var(--muted);font-size:11px;text-align:center;padding:16px;">Chưa có lịch sử</div></div>
+</div>
+</div>
+<div id="toast"></div>
+
+<script>
+// ─── API ENDPOINT (tự nhận biết môi trường) ───────────────────────
+// Khi chạy file://localhost thì gọi backend trực tiếp.
+// Khi chạy production thì dùng relative path (đã được IIS/Nginx proxy).
+const API = (() => {
+  const h = location.hostname;
+  if (h === '' || h === 'localhost' || h === '127.0.0.1' || location.protocol === 'file:') {
+    return "http://localhost:5005/api";
+  }
+  return "/api";  // production: dùng relative để khỏi vướng CORS
+})();
+
+// State
+let currentText = "";
+let currentSongs = [];
+let currentIdx = -1;
+let intensity = 5;
+let userFeedback = JSON.parse(localStorage.getItem("mt_fb") || "{}");
+let history = JSON.parse(localStorage.getItem("mt_hist") || "[]");
+let previewPlaying = false;
+let currentEmotion = "";   // cảm xúc đoán gần nhất → gửi kèm khi log behavior
+let currentTagArm = null;  // RLUF (Ý tưởng 1): index cặp tag Jamendo đang dùng (bandit)
+let kgAnimFrame = null;    // Knowledge Graph (Ý tưởng 3): id animation frame đang chạy
+
+// Phân trang "Xem thêm"
+let searchMode = null;     // {kind:'emotion'|'query', value:'...'}
+let currentOffset = 0;
+const PAGE_SIZE = 12;
+let loadingMore = false;
+
+// Hành vi cá nhân để gợi ý thông minh (đếm theo nghệ sĩ / tag)
+let likedArtists = JSON.parse(localStorage.getItem("mt_artists") || "{}");
+let likedTags    = JSON.parse(localStorage.getItem("mt_tags") || "{}");
+
+// Kho nhạc Local (Ý tưởng 4 - Hybrid Online/Offline)
+const AUDIO_EXT = ['.mp3','.m4a','.flac','.wav','.ogg'];
+let localFiles = new Map();   // filename -> FileSystemFileHandle (chỉ tồn tại trong session)
+let localLibrary = JSON.parse(localStorage.getItem("mt_local_library") || "{}"); // filename -> {emotion,label,emoji}
+
+// ── ERROR HELPER ──────────────────────────────────────────────────
+// Phân biệt loại lỗi để báo cho user thay vì "Lỗi kết nối server" chung chung
+async function apiFetch(url, opts = {}) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 15000);
+  try {
+    const res = await fetch(url, { ...opts, signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const txt = await res.text().catch(()=> '');
+      const err = new Error(`HTTP ${res.status}`);
+      err.status = res.status;
+      err.body = txt;
+      throw err;
+    }
+    return await res.json();
+  } catch (e) {
+    clearTimeout(timer);
+    if (e.name === 'AbortError') {
+      e.userMsg = "⏱ Server quá lâu không phản hồi (15s).";
+    } else if (e.status === 502) {
+      e.userMsg = "🎵 Jamendo không kết nối được. Thử lại sau!";
+    } else if (e.status >= 500) {
+      e.userMsg = `⚠️ Server lỗi (${e.status})`;
+    } else if (e.status >= 400) {
+      e.userMsg = `⚠️ Yêu cầu sai (${e.status})`;
+    } else if (e.message && e.message.includes('Failed to fetch')) {
+      e.userMsg = "📡 Không tới được server — kiểm tra mạng/backend.";
+    } else {
+      e.userMsg = "⚠️ Lỗi không xác định.";
+    }
+    throw e;
+  }
+}
+
+// Map giờ → cảm xúc (khớp với time_to_emotion bên backend)
+function emotionByHour(h) {
+  if (h >= 5  && h < 11) return {emo:"energetic", text:"năng động phấn khích hứng khởi", msg:"☀️ Buổi sáng — gợi ý nhạc năng động cho bạn"};
+  if (h >= 11 && h < 14) return {emo:"focused",   text:"tập trung học làm việc",          msg:"🎯 Giờ trưa — nhạc giúp tập trung"};
+  if (h >= 14 && h < 18) return {emo:"happy",     text:"vui vẻ hôm nay",                   msg:"🌤️ Buổi chiều — nhạc vui vẻ"};
+  if (h >= 18 && h < 22) return {emo:"relaxed",   text:"thư giãn bình yên nhẹ nhàng",      msg:"🌆 Buổi tối — nhạc thư giãn"};
+  return {emo:"relaxed", text:"thư giãn bình yên nhẹ nhàng", msg:"🌙 Đêm khuya — nhạc chill nhẹ nhàng"};
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+(function init() {
+  renderHistory();
+  loadHealth();   // pull vocab/hidden/feedback từ server, đồng thời báo trạng thái
+  initLocalLibrary();
+
+  const audio = document.getElementById('preview-audio');
+  audio.addEventListener('play',  () => { previewPlaying = true;  syncPlayIcons(); });
+  audio.addEventListener('pause', () => { previewPlaying = false; syncPlayIcons(); });
+  audio.addEventListener('ended', () => { nextSong(); });
+
+  // Tự động chọn cảm xúc theo giờ máy người dùng
+  const sug = emotionByHour(new Date().getHours());
+  document.querySelectorAll('.emo-btn').forEach(b => {
+    if (b.dataset.emotion === sug.text) b.classList.add('active');
+  });
+  document.getElementById('mood-text').value = sug.text;
+  document.getElementById('time-tip').textContent = sug.msg;
+
+  // Auto-search nhạc ngay khi vào trang theo khung giờ
+  loadMusicSongs(sug.emo);
+})();
+
+// ── EMO / GENRE / INTENSITY ──────────────────────────────────────
+function selectEmo(btn) {
+  document.querySelectorAll('.emo-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('mood-text').value = btn.dataset.emotion;
+}
+
+
+function updateIntensity(v) {
+  intensity = parseInt(v, 10);
+  document.getElementById('int-val').textContent = intensity;
+  // Hint cho user biết slider làm gì
+  const hint = document.getElementById('int-hint');
+  if (intensity <= 3)      hint.textContent = 'mới · mellow';
+  else if (intensity >= 8) hint.textContent = 'trending · hot';
+  else                     hint.textContent = 'all-time hits';
+}
+
+// ── ANALYZE ───────────────────────────────────────────────────────
+async function analyze() {
+  const text = document.getElementById('mood-text').value.trim();
+  if (!text) { toast("Vui lòng nhập cảm xúc hoặc chọn icon!"); return; }
+
+  const btn = document.getElementById('analyze-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Đang phân tích...';
+  currentText = text;
+  document.getElementById('learn-text-display').textContent = `"${text}"`;
+
+  try {
+    const data = await apiFetch(API + "/predict", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({text})
+    });
+
+    currentEmotion = data.emotion;
+
+    document.getElementById('r-emoji').textContent = data.emoji;
+    document.getElementById('r-label').textContent = data.label;
+    document.getElementById('r-conf').textContent = `Độ chính xác: ${(data.confidence*100).toFixed(1)}%`;
+    document.getElementById('result-box').classList.add('show');
+
+    // Hiện đủ 12 cảm xúc (trước chỉ hiện 6 → mất nửa thông tin)
+    document.getElementById('score-bars').innerHTML = data.scores.map(s=>`
+      <div class="score-row">
+        <span class="score-name">${s.emoji} ${s.label}</span>
+        <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${(s.score*100).toFixed(1)}%"></div></div>
+        <span class="score-val">${(s.score*100).toFixed(0)}%</span>
+      </div>`).join('');
+
+    document.getElementById('model-info').innerHTML = `
+      <span class="info-chip">Rule: ${(data.model_info.alpha_rule*100).toFixed(0)}%</span>
+      <span class="info-chip">MLP: ${(data.model_info.alpha_mlp*100).toFixed(0)}%</span>
+      <span class="info-chip">${data.model_info.feedback_count} feedbacks</span>`;
+    renderKnowledgeGraph(data.graph || [], data.scores);
+    updateStats(data.model_info);
+    addHistory(text, data);
+    await loadMusicSongs(data.emotion);
+  } catch(e) {
+    console.error(e);
+    toast(e.userMsg || "⚠️ Lỗi kết nối server!", true);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '✦ Phân tích & tìm nhạc';
+}
+
+// ── MUSIC SEARCH (JAMENDO - PHÂN TRANG + INTENSITY) ──────────────
+function buildSearchUrl(mode, offset, limit=PAGE_SIZE) {
+  const params = new URLSearchParams({
+    offset:    offset,
+    limit:     limit,
+    intensity: intensity,
+  });
+  if (mode.kind === 'query') params.set('q', mode.value);
+  else                       params.set('emotion', mode.value);
+  return `${API}/music/search?${params.toString()}`;
+}
+
+async function loadMusicSongs(emotion) {
+  searchMode = {kind:'emotion', value:emotion};
+  currentOffset = 0;
+  const list = document.getElementById('song-list');
+  list.innerHTML = `<div class="loading-songs"><div class="spin spin-green" style="width:20px;height:20px;margin:0 auto 10px"></div><br>Đang tìm nhạc trên Jamendo...</div>`;
+
+  // RLUF (Ý tưởng 1): Thompson Sampling gợi ý tỉ lệ trộn Online:Local theo gu người dùng
+  let mix = {online: 6, local: 6};
+  try {
+    const mr = await apiFetch(`${API}/mix-ratio?emotion=${encodeURIComponent(emotion)}`);
+    if (typeof mr.online === 'number') mix = {online: mr.online, local: mr.local};
+    const hint = document.getElementById('mix-hint');
+    if (hint && mr.ratio) hint.textContent = `🎯 Gu của bạn: Online ${Math.round(mr.ratio.online*100)}% · Local ${Math.round(mr.ratio.local*100)}%`;
+  } catch (e) { /* fallback giữ tỉ lệ 6/6 mặc định */ }
+
+  // Mixer (Ý tưởng 4): nếu có nhạc local khớp cảm xúc, dành chỗ theo mix.local
+  const localTracks = getLocalTracksForEmotion(emotion, mix.local);
+  const onlineLimit = localTracks.length > 0 ? Math.max(PAGE_SIZE - localTracks.length, mix.online) : PAGE_SIZE;
+
+  try {
+    const data = await apiFetch(buildSearchUrl(searchMode, 0, onlineLimit));
+    currentTagArm = (typeof data.tag_arm === 'number') ? data.tag_arm : null;
+    if ((!data.tracks || data.tracks.length === 0) && localTracks.length === 0) {
+      list.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:24px;">Không tìm thấy bài. Thử từ khóa khác hoặc tìm thủ công!</div>';
+      toggleLoadMore(false); return;
+    }
+    currentSongs = [...localTracks, ...(data.tracks || [])];
+    renderSongList(currentSongs);
+    toggleLoadMore(data.has_more);
+  } catch(e) {
+    if (localTracks.length > 0) {
+      currentSongs = localTracks;
+      renderSongList(currentSongs);
+      toggleLoadMore(false);
+      toast("🎵 Hiện nhạc local (Jamendo lỗi kết nối)");
+    } else {
+      list.innerHTML = `<div style="color:var(--red);font-size:12px;text-align:center;padding:24px;">${e.userMsg || '⚠️ Lỗi tìm nhạc'}</div>`;
+      toggleLoadMore(false);
+    }
+  }
+}
+
+async function manualSearch() {
+  const q = document.getElementById('search-input').value.trim();
+  if (!q) return;
+  searchMode = {kind:'query', value:q};
+  currentOffset = 0;
+  const list = document.getElementById('song-list');
+  list.innerHTML = `<div class="loading-songs"><div class="spin spin-green" style="width:20px;height:20px;margin:0 auto 10px"></div><br>Đang tìm "${escapeHtml(q)}"...</div>`;
+  try {
+    const data = await apiFetch(buildSearchUrl(searchMode, 0));
+    currentTagArm = (typeof data.tag_arm === 'number') ? data.tag_arm : null;
+    if (!data.tracks || data.tracks.length === 0) {
+      list.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:24px;">Không tìm thấy kết quả</div>';
+      toggleLoadMore(false); return;
+    }
+    currentSongs = data.tracks;
+    renderSongList(currentSongs);
+    toggleLoadMore(data.has_more);
+  } catch (e) {
+    list.innerHTML = `<div style="color:var(--red);font-size:12px;text-align:center;padding:24px;">${e.userMsg || '⚠️ Lỗi tìm kiếm'}</div>`;
+    toggleLoadMore(false);
+  }
+}
+
+async function loadMore() {
+  if (!searchMode || loadingMore) return;
+  loadingMore = true;
+  const btn = document.getElementById('loadmore-btn');
+  btn.disabled = true; btn.textContent = '⏳ Đang tải...';
+  currentOffset += PAGE_SIZE;
+  try {
+    const data = await apiFetch(buildSearchUrl(searchMode, currentOffset));
+    currentTagArm = (typeof data.tag_arm === 'number') ? data.tag_arm : currentTagArm;
+    const newTracks = (data.tracks || []).filter(
+      t => !currentSongs.some(s => s.id === t.id)
+    );
+    currentSongs = currentSongs.concat(newTracks);
+    renderSongList(currentSongs);
+    toggleLoadMore(data.has_more && newTracks.length > 0);
+  } catch (e) {
+    toast(e.userMsg || "⚠️ Lỗi tải thêm", true);
+    toggleLoadMore(true);
+  }
+  btn.textContent = '⬇ Xem thêm bài';
+  loadingMore = false;
+}
+
+function toggleLoadMore(show) {
+  const btn = document.getElementById('loadmore-btn');
+  btn.style.display = show ? 'block' : 'none';
+  btn.disabled = false;
+}
+
+// ── KHO NHẠC LOCAL (Ý tưởng 4 - Hybrid Online/Offline) ────────────
+function initLocalLibrary() {
+  const btn    = document.getElementById('local-pick-btn');
+  const status = document.getElementById('local-status');
+  if (!('showDirectoryPicker' in window)) {
+    btn.disabled = true;
+    status.textContent = '⚠️ Trình duyệt không hỗ trợ (cần Chrome/Edge/Opera)';
+    return;
+  }
+  const count = Object.keys(localLibrary).length;
+  if (count > 0) status.textContent = `Đã ghi nhớ ${count} bài — chọn lại thư mục để nghe`;
+}
+
+async function pickLocalFolder() {
+  const status = document.getElementById('local-status');
+  try {
+    const dirHandle = await window.showDirectoryPicker();
+    status.textContent = '⏳ Đang đọc thư mục...';
+    localFiles.clear();
+    const newNames = [];
+    for await (const entry of dirHandle.values()) {
+      if (entry.kind !== 'file') continue;
+      const lower = entry.name.toLowerCase();
+      if (!AUDIO_EXT.some(ext => lower.endsWith(ext))) continue;
+      localFiles.set(entry.name, entry);
+      if (!localLibrary[entry.name]) newNames.push(entry.name);
+    }
+    if (localFiles.size === 0) {
+      status.textContent = 'Không tìm thấy file nhạc trong thư mục này';
+      return;
+    }
+    if (newNames.length > 0) {
+      status.textContent = `⏳ Đang phân tích cảm xúc cho ${newNames.length} bài mới...`;
+      await indexLocalFiles(newNames);
+      localStorage.setItem("mt_local_library", JSON.stringify(localLibrary));
+    }
+    status.textContent = `✅ Đã sẵn sàng ${localFiles.size} bài nhạc local`;
+    toast(`📁 Đã nạp ${localFiles.size} bài nhạc local!`);
+  } catch (e) {
+    if (e.name !== 'AbortError') status.textContent = '⚠️ Lỗi chọn thư mục';
+  }
+}
+
+async function indexLocalFiles(names) {
+  const items = names.map(n => n.replace(/\.[^/.]+$/, '').replace(/[_\-]/g, ' '));
+  try {
+    const data = await apiFetch(API + '/predict/batch', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({items})
+    });
+    data.results.forEach((r, i) => {
+      localLibrary[names[i]] = {emotion: r.emotion, label: r.label, emoji: r.emoji};
+    });
+  } catch (e) {
+    toast('⚠️ Lỗi phân tích nhạc local', true);
+  }
+}
+
+function getLocalTracksForEmotion(emotion, limit=6) {
+  const out = [];
+  for (const [name, info] of Object.entries(localLibrary)) {
+    if (info.emotion === emotion && localFiles.has(name)) {
+      out.push({
+        id: 'local-' + name,
+        name: name.replace(/\.[^/.]+$/, ''),
+        artist: 'Kho nhạc Local',
+        album: '',
+        image: '',
+        preview: null,
+        duration: 0,
+        tags: [],
+        source: 'local',
+        fileName: name,
+      });
+      if (out.length >= limit) break;
+    }
+  }
+  return out;
+}
+
+// ── ABOUT MODAL ───────────────────────────────────────────────────
+function showAbout() { document.getElementById('about-overlay').classList.add('show'); }
+function hideAbout() { document.getElementById('about-overlay').classList.remove('show'); }
+function showVersions() { document.getElementById('version-overlay').classList.add('show'); }
+function hideVersions() { document.getElementById('version-overlay').classList.remove('show'); }
+
+// ── GỢI Ý THÔNG MINH ──────────────────────────────────────────────
+function topKeys(obj, n) {
+  return Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n).map(e=>e[0]);
+}
+
+async function loadRecommend() {
+  searchMode = null;
+  currentOffset = 0;
+  const list = document.getElementById('song-list');
+  list.innerHTML = `<div class="loading-songs"><div class="spin spin-green" style="width:20px;height:20px;margin:0 auto 10px"></div><br>Đang tạo gợi ý riêng cho bạn...</div>`;
+  toggleLoadMore(false);
+  const artists = topKeys(likedArtists, 3).join(",");
+  const tags    = topKeys(likedTags, 3).join(",");
+  try {
+    const data = await apiFetch(`${API}/recommend?liked_artists=${encodeURIComponent(artists)}&liked_tags=${encodeURIComponent(tags)}`);
+    if (!data.tracks || data.tracks.length === 0) {
+      list.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:24px;">Chưa đủ dữ liệu gợi ý. Hãy nghe và thích vài bài trước!</div>';
+      return;
+    }
+    currentSongs = data.tracks;
+    renderSongList(currentSongs);
+    toast(data.personalized ? "✨ Gợi ý dựa trên sở thích của bạn!" : "✨ Gợi ý theo thời điểm hiện tại");
+  } catch (e) {
+    list.innerHTML = `<div style="color:var(--red);font-size:12px;text-align:center;padding:24px;">${e.userMsg || '⚠️ Lỗi tạo gợi ý'}</div>`;
+  }
+}
+
+function recordBehavior(song, type) {
+  if (song.artist) {
+    likedArtists[song.artist] = (likedArtists[song.artist] || 0) + (type==='like'?3:1);
+    localStorage.setItem("mt_artists", JSON.stringify(likedArtists));
+  }
+  (song.tags || []).forEach(tag => {
+    likedTags[tag] = (likedTags[tag] || 0) + (type==='like'?2:1);
+  });
+  localStorage.setItem("mt_tags", JSON.stringify(likedTags));
+  // gửi server để thống kê chung + RLUF Bandit (Ý tưởng 1) — kèm theo
+  // emotion gần nhất, nguồn nhạc (online/local) và tag_arm đang dùng
+  fetch(`${API}/track/event`, {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({type, track_id:song.id, name:song.name,
+                          artist:song.artist, tags:song.tags||[],
+                          emotion: currentEmotion,
+                          source: song.source === 'local' ? 'local' : 'online',
+                          tag_arm: currentTagArm})
+  }).catch(()=>{});
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function renderSongList(tracks) {
+  const list = document.getElementById('song-list');
+  list.scrollTop = 0;
+  list.innerHTML = tracks.map((t,i) => {
+    const fb = userFeedback[t.id];
+    const fbIcon = fb==='like'?' 👍':fb==='dislike'?' 👎':'';
+    const thumb = t.image
+      ? `<img class="song-thumb" src="${escapeHtml(t.image)}" alt="">`
+      : `<div class="song-thumb-ph">${t.source==='local' ? '📁' : '🎵'}</div>`;
+    const badge = t.source==='local'
+      ? '<span class="preview-badge local">LOCAL</span>'
+      : (t.preview ? '<span class="preview-badge">FULL</span>' : '');
+    return `<div class="song-item" id="si${i}" onclick="playSong(${i})">
+      ${thumb}
+      <div class="song-info">
+        <div class="song-title">${escapeHtml(t.name)}${fbIcon}</div>
+        <div class="song-artist">${escapeHtml(t.artist||'Unknown artist')}</div>
+        <div class="song-meta">
+          <div class="song-album">${escapeHtml(t.album||'')}</div>
+          ${badge}
+        </div>
+      </div>
+      <button class="song-play" id="play${i}" title="Phát / Tạm dừng" onclick="event.stopPropagation();clickSongPlay(${i})">▶</button>
+    </div>`;
+  }).join('');
+}
+
+// ── PLAYER ────────────────────────────────────────────────────────
+function syncPlayIcons() {
+  const icon = previewPlaying ? '⏸' : '▶';
+  document.querySelectorAll('.song-play').forEach((b,i) => {
+    b.textContent = (i === currentIdx) ? icon : '▶';
+  });
+}
+
+function playSong(idx) {
+  if (idx < 0 || idx >= currentSongs.length) return;   // bảo vệ chỉ số hợp lệ
+  currentIdx = idx;
+  const s = currentSongs[idx];
+  document.querySelectorAll('.song-item').forEach((el,i) => el.classList.toggle('playing', i===idx));
+
+  document.getElementById('p-title').textContent  = s.name;
+  document.getElementById('p-artist').textContent = s.artist;
+  document.getElementById('p-album').textContent  = s.album || '';
+
+  const cover = document.getElementById('p-cover');
+  const ph    = document.getElementById('p-cover-ph');
+  if (s.image) { cover.src=s.image; cover.style.display='block'; ph.style.display='none'; }
+  else { cover.style.display='none'; ph.style.display='flex'; ph.textContent = s.source==='local' ? '📁' : '🎵'; }
+
+  const audio = document.getElementById('preview-audio');
+  const pp    = document.getElementById('preview-player');
+  if (s.source === 'local') {
+    playLocalTrack(s, audio, pp);
+  } else if (s.preview) {
+    audio.src = s.preview;
+    pp.classList.add('show');
+    audio.play().catch(err => console.warn('autoplay blocked:', err));
+    previewPlaying = true;
+    recordBehavior(s, 'play');
+  } else {
+    pp.classList.remove('show');
+    audio.src = '';
+    previewPlaying = false;
+    toast("⚠️ Bài này không có file nhạc");
+  }
+  syncPlayIcons();
+
+  // fb-row luôn hiện (nút Bỏ qua dùng cho RLUF Bandit - Ý tưởng 1); Like/Dislike
+  // chỉ áp dụng cho nhạc online (nhạc local không có trên Jamendo để feedback)
+  document.getElementById('fb-row').style.display = 'flex';
+  const isLocal = s.source === 'local';
+  document.getElementById('fb-like').style.display    = isLocal ? 'none' : '';
+  document.getElementById('fb-dislike').style.display = isLocal ? 'none' : '';
+  if (!isLocal) {
+    document.getElementById('fb-like').className    = 'fb-btn' + (userFeedback[s.id]==='like'?' liked':'');
+    document.getElementById('fb-dislike').className = 'fb-btn' + (userFeedback[s.id]==='dislike'?' disliked':'');
+  }
+}
+
+async function playLocalTrack(s, audio, pp) {
+  try {
+    const handle = localFiles.get(s.fileName);
+    const file = await handle.getFile();
+    if (audio.src && audio.src.startsWith('blob:')) URL.revokeObjectURL(audio.src);
+    audio.src = URL.createObjectURL(file);
+    pp.classList.add('show');
+    await audio.play();
+    recordBehavior(s, 'play');
+  } catch (e) {
+    toast('⚠️ Không đọc được file local (cần chọn lại thư mục)', true);
+  }
+}
+
+function clickSongPlay(idx) {
+  if (idx === currentIdx) {
+    const audio = document.getElementById('preview-audio');
+    if (previewPlaying) { audio.pause(); previewPlaying=false; }
+    else { audio.play().catch(()=>{}); previewPlaying=true; }
+    syncPlayIcons();
+  } else {
+    playSong(idx);
+  }
+}
+
+function nextSong() { if (currentSongs.length) playSong((currentIdx+1)%currentSongs.length); }
+function prevSong() { if (currentSongs.length) playSong((currentIdx-1+currentSongs.length)%currentSongs.length); }
+
+// RLUF (Ý tưởng 1): nút "Bỏ qua" -> reward = -1 cho RLUF Bandit (source + tag_arm)
+function skipSong() {
+  if (currentIdx < 0 || !currentSongs.length) return;
+  recordBehavior(currentSongs[currentIdx], 'next');
+  nextSong();
+}
+
+// ── FEEDBACK ──────────────────────────────────────────────────────
+function feedback(type) {
+  if (currentIdx<0) return;
+  const s = currentSongs[currentIdx];
+  userFeedback[s.id] = type;
+  localStorage.setItem("mt_fb", JSON.stringify(userFeedback));
+  document.getElementById('fb-like').className    = 'fb-btn'+(type==='like'?' liked':'');
+  document.getElementById('fb-dislike').className = 'fb-btn'+(type==='dislike'?' disliked':'');
+  recordBehavior(s, type);
+  toast(type==='like'?'✅ Đã lưu!':'❌ Đã ghi nhận!');
+}
+
+// ── ONLINE LEARNING ───────────────────────────────────────────────
+async function teach(btn) {
+  if (!currentText) { toast("Phân tích cảm xúc trước!"); return; }
+  const emo = btn.dataset.e;
+  const statusEl = document.getElementById('learn-status');
+  statusEl.textContent = "⏳ Đang dạy model...";
+  try {
+    const d = await apiFetch(API+"/learn", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({text:currentText, correct_emotion:emo})
+    });
+    statusEl.textContent = `✓ ${d.message} | Total: ${d.feedback_count} | Alpha: ${d.new_alpha.toFixed(2)}`;
+    document.getElementById('stat-feedback').textContent = d.feedback_count;
+    document.getElementById('stat-alpha').textContent = d.new_alpha.toFixed(2);
+    toast("🧠 Model đã học xong!");
+  } catch (e) { statusEl.textContent = e.userMsg || "⚠️ Không kết nối server."; }
+}
+
+// ── HISTORY ───────────────────────────────────────────────────────
+function addHistory(text, data) {
+  history.unshift({text, emoji:data.emoji, label:data.label, conf:(data.confidence*100).toFixed(0)+'%', time:new Date().toLocaleString('vi-VN')});
+  if (history.length>20) history.pop();
+  localStorage.setItem("mt_hist", JSON.stringify(history));
+  renderHistory();
+}
+function renderHistory() {
+  const el = document.getElementById('history-list');
+  if (!history.length) { el.innerHTML='<div style="color:var(--muted);font-size:11px;text-align:center;padding:16px;">Chưa có lịch sử</div>'; return; }
+  el.innerHTML = history.slice(0,8).map(h=>`
+    <div class="hist-item">
+      <span class="hist-emo-icon">${h.emoji}</span>
+      <div class="hist-text">
+        <div class="hist-main">"${escapeHtml(h.text.slice(0,70))}${h.text.length>70?'...':''}"</div>
+        <div class="hist-meta">${h.label} · ${h.conf} · ${h.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── HEALTH / STATS ────────────────────────────────────────────────
+// Lấy thông tin kiến trúc thật từ server (vocab/hidden) thay vì hardcode
+async function loadHealth() {
+  try {
+    const d = await apiFetch(API + "/health");
+    document.getElementById('stat-vocab').textContent     = d.architecture?.vocab_size ?? '?';
+    document.getElementById('stat-classes').textContent   = d.architecture?.output_size ?? '10';
+    document.getElementById('stat-layers').textContent    =
+      `Embed${d.architecture?.embed_dim ?? '?'}→Attn→${d.architecture?.hidden_size ?? '?'}→${d.architecture?.output_size ?? 10}`;
+    document.getElementById('stat-feedback').textContent  = d.feedback_count ?? 0;
+    document.getElementById('stat-alpha').textContent     = (d.alpha ?? 0.85).toFixed(2);
+    document.getElementById('status-text').textContent    = `Attention · Rule Hybrid · ${d.music_api}`;
+    document.getElementById('status-dot').classList.remove('offline');
+  } catch (e) {
+    document.getElementById('status-dot').classList.add('offline');
+    document.getElementById('status-text').textContent = `Offline · ${e.userMsg || 'không tới được server'}`;
+    document.getElementById('stat-vocab').textContent  = '—';
+    document.getElementById('stat-layers').textContent = '—';
+  }
+}
+
+function updateStats(info) {
+  document.getElementById('stat-feedback').textContent = info.feedback_count;
+  document.getElementById('stat-alpha').textContent = info.alpha_rule.toFixed(2);
+}
+
+// ── KNOWLEDGE GRAPH (Ý tưởng 3 - Canvas 2D thuần) ─────────────────
+// tokens: [{text, attention(0..1), emotions:{emo_key: weight, ...}}, ...]  (từ /api/predict.graph)
+// scores: [{emotion, label, emoji, score}, ...] 12 cảm xúc (từ /api/predict.scores)
+function renderKnowledgeGraph(tokens, scores) {
+  const canvas = document.getElementById('kg-canvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth || canvas.parentElement.clientWidth || 300;
+  const h = 220;
+  canvas.width  = w * dpr;
+  canvas.height = h * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  if (kgAnimFrame) { cancelAnimationFrame(kgAnimFrame); kgAnimFrame = null; }
+  ctx.clearRect(0, 0, w, h);
+  if (!tokens || !tokens.length || !scores || !scores.length) return;
+
+  const cx = w / 2, cy = h / 2;
+  const rOuter = Math.min(w, h) * 0.46;
+  const rInner = Math.min(w, h) * 0.20;
+
+  // 12 bong bóng cảm xúc - vòng ngoài, kích thước theo score
+  const bubbles = scores.map((s, i) => {
+    const angle = (i / scores.length) * Math.PI * 2 - Math.PI / 2;
+    return { ...s, x: cx + Math.cos(angle) * rOuter, y: cy + Math.sin(angle) * rOuter, r: 9 + s.score * 24 };
+  });
+
+  // top ~8 từ khoá theo attention - vòng trong
+  const topTokens = [...tokens].sort((a, b) => b.attention - a.attention).slice(0, 8);
+  const nodes = topTokens.map((t, i) => {
+    const angle = (i / topTokens.length) * Math.PI * 2 - Math.PI / 2;
+    return { ...t, x: cx + Math.cos(angle) * rInner, y: cy + Math.sin(angle) * rInner, r: 4 + t.attention * 9 };
+  });
+
+  // tia năng lượng: từ khoá -> bong bóng cảm xúc tương ứng (theo LEXICON)
+  const beams = [];
+  nodes.forEach(node => {
+    Object.entries(node.emotions || {}).forEach(([emo, weight]) => {
+      const target = bubbles.find(b => b.emotion === emo);
+      if (target) beams.push({ from: node, to: target, weight: weight * (node.attention || 0.01) });
+    });
+  });
+  const maxW = beams.reduce((m, b) => Math.max(m, b.weight), 1e-6);
+
+  const start = performance.now();
+  const DURATION = 2500;
+
+  function draw(now) {
+    const t = now - start;
+    const pulse = t < DURATION ? (0.55 + 0.45 * Math.sin(t / 180)) : 0.55;
+    ctx.clearRect(0, 0, w, h);
+
+    // tia năng lượng
+    beams.forEach(b => {
+      const ratio = b.weight / maxW;
+      ctx.beginPath();
+      ctx.moveTo(b.from.x, b.from.y);
+      ctx.lineTo(b.to.x, b.to.y);
+      ctx.lineWidth = 0.5 + ratio * 2.5;
+      ctx.strokeStyle = `rgba(29,185,84,${Math.min(1, ratio * pulse).toFixed(3)})`;
+      ctx.stroke();
+    });
+
+    // bong bóng cảm xúc
+    bubbles.forEach(b => {
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(124,106,247,${(0.10 + b.score * 0.45).toFixed(3)})`;
+      ctx.fill();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(124,106,247,.4)';
+      ctx.stroke();
+      ctx.font = `${Math.max(10, b.r)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(b.emoji, b.x, b.y);
+    });
+
+    // node từ khoá
+    nodes.forEach(n => {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(29,185,84,${(0.25 + n.attention * 0.5 * pulse).toFixed(3)})`;
+      ctx.fill();
+      ctx.font = '9px "DM Mono",monospace';
+      ctx.fillStyle = '#dde4f0';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.text, n.x, n.y - n.r - 5);
+    });
+
+    if (t < DURATION) kgAnimFrame = requestAnimationFrame(draw);
+    else kgAnimFrame = null;
+  }
+  kgAnimFrame = requestAnimationFrame(draw);
+}
+
+function toast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('error', !!isError);
+  t.style.opacity = '1';
+  clearTimeout(toast._tm);
+  toast._tm = setTimeout(()=>t.style.opacity='0', isError ? 4200 : 2800);
+}
+</script>
+</body>
+</html>

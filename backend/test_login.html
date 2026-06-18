@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Test Spotify Login</title>
+  <style>
+    body { font-family: sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; }
+    button { padding: 12px 24px; font-size: 14px; cursor: pointer; margin: 8px 0; }
+    .info { background: #f0f0f0; padding: 16px; margin: 16px 0; border-radius: 8px; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>🎵 Test Spotify Login</h1>
+
+  <div class="info">
+    <strong>LocalStorage sid:</strong> <span id="stored-sid">-</span><br>
+    <strong>Status:</strong> <span id="status">-</span>
+  </div>
+
+  <button onclick="login()">🔐 Đăng nhập Spotify</button>
+  <button onclick="checkStatus()">🔍 Kiểm tra trạng thái</button>
+  <button onclick="clearStorage()">🗑️ Xóa localStorage</button>
+
+  <div id="log" style="margin-top: 20px; font-family: monospace; font-size: 12px;"></div>
+
+  <script>
+    const API = "http://localhost:5005/api";
+
+    function log(msg, isError = false) {
+      const div = document.getElementById("log");
+      const time = new Date().toLocaleTimeString();
+      div.innerHTML += `<div style="color: ${isError ? 'red' : 'black'}">[${time}] ${msg}</div>`;
+    }
+
+    function updateDisplay() {
+      const sid = localStorage.getItem("sp_sid") || "(empty)";
+      document.getElementById("stored-sid").textContent = sid;
+    }
+
+    function login() {
+      const clientId = "1d4eabb8b2e34996829d4d176d7b18ac";
+      const redirectUri = encodeURIComponent("http://localhost:5005/api/spotify/callback");
+      const scopes = encodeURIComponent("user-read-private streaming");
+      const url = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scopes}&show_dialog=true`;
+      log("Redirecting to Spotify...");
+      window.location.href = url;
+    }
+
+    async function checkStatus() {
+      const sid = localStorage.getItem("sp_sid");
+      if (!sid) {
+        log("No sid in localStorage", true);
+        document.getElementById("status").textContent = "Not logged in";
+        return;
+      }
+
+      log(`Checking status with sid: ${sid.slice(0, 16)}...`);
+      try {
+        const r = await fetch(`${API}/spotify/status?sid=${sid}`);
+        const d = await r.json();
+        log(`Response: ${JSON.stringify(d)}`);
+
+        if (d.logged_in) {
+          document.getElementById("status").innerHTML = '<span class="success">✅ Logged in</span>';
+        } else {
+          document.getElementById("status").innerHTML = '<span class="error">❌ Not logged in</span>';
+        }
+      } catch (e) {
+        log(`Error: ${e.message}`, true);
+        document.getElementById("status").innerHTML = '<span class="error">Error</span>';
+      }
+    }
+
+    function clearStorage() {
+      localStorage.removeItem("sp_sid");
+      log("Cleared localStorage");
+      updateDisplay();
+      document.getElementById("status").textContent = "-";
+    }
+
+    // Init: check for callback params
+    (function init() {
+      const params = new URLSearchParams(window.location.search);
+      const sid = params.get("spotify_sid");
+      const err = params.get("spotify_error");
+
+      if (sid) {
+        localStorage.setItem("sp_sid", sid);
+        log(`✅ Saved sid: ${sid.slice(0, 16)}...`);
+        window.history.replaceState({}, "", window.location.pathname);
+        checkStatus();
+      }
+
+      if (err) {
+        log(`❌ Error: ${decodeURIComponent(err)}`, true);
+        window.history.replaceState({}, "", window.location.pathname);
+      }
+
+      updateDisplay();
+
+      // Auto-check if we have a sid
+      if (localStorage.getItem("sp_sid")) {
+        checkStatus();
+      }
+    })();
+  </script>
+</body>
+</html>

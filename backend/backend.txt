@@ -1,0 +1,1037 @@
+
+===== \app.py =====
+
+from flask import Flask, request, jsonify, redirect, send_file
+from flask_cors import CORS
+import numpy as np
+import json, os, sys, time, random
+from datetime import datetime
+from collections import Counter
+import urllib.request, urllib.parse, base64
+
+# Ép stdout/stderr dùng UTF-8 để print tiếng Việt không crash trên Windows (cp1252)
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
+sys.path.insert(0, os.path.dirname(__file__))
+from emotion_mlp import EmotionEngine, SEED_DATA, EMOTIONS, EMOTION_META
+
+app = Flask(__name__)
+app.secret_key = "moodtune_secret_2024"
+CORS(app, supports_credentials=True)
+
+# ─── JAMENDO API (FREE - FULL TRACKS, NO USER LOGIN) ─────────────
+FRONTEND_URL       = "https://anhtaictv.me"
+JAMENDO_CLIENT_ID  = "cf31dbfd"   # Client ID Jamendo
+JAMENDO_API        = "https://api.jamendo.com/v3.0"
+
+def jamendo_search(query=None, tags=None, artist=None, limit=30,
+                   offset=0, order="popularity_total"):
+    """Search Jamendo API - free full tracks, only needs a client_id."""
+    p = {
+        "client_id":   JAMENDO_CLIENT_ID,
+        "format":      "json",
+        "limit":       limit,
+        "offset":      offset,
+        "order":       order,
+        "audioformat": "mp32",
+        "include":     "musicinfo",
+        "imagesize":   "300",
+    }
+    if query:
+        p["namesearch"] = query
+    if tags:
+        p["tags"] = tags          # ví dụ: "happy+pop"
+    if artist:
+        p["artist_name"] = artist
+    params = urllib.parse.urlencode(p)
+    req = urllib.request.Request(f"{JAMENDO_API}/tracks?{params}")
+
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        data = json.loads(resp.read())
+
+    tracks = []
+    for item in data.get("results", []):
+        # gom tags nhạc (genre/mood) để phục vụ gợi ý thông minh
+        mi = item.get("musicinfo", {}) or {}
+        tag_list = []
+        if isinstance(mi.get("tags"), dict):
+            for v in mi["tags"].values():
+                if isinstance(v, list):
+                    tag_list += v
+        tracks.append({
+            "id":        str(item["id"]),
+            "name":      item["name"],
+            "artist":    item.get("artist_name", ""),
+            "album":     item.get("album_name", ""),
+            "image":     item.get("album_image") or item.get("image", ""),
+            "preview":   item.get("audio"),          # full track MP3 stream
+            "duration":  item.get("duration", 0),
+            "open_url":  item.get("shareurl", ""),
+            "tags":      tag_list[:6],
+        })
+    return tracks
+
+# Mỗi cảm xúc có nhiều tag → mỗi lần random để kết quả luôn mới & đa dạng
+# Tất cả tag đã kiểm tra ≥ 20 bài trên Jamendo để luôn đủ nhạc
+EMOTION_TAGS = {
+    "vui_ve":     ["happy+pop", "feelgood+upbeat", "funk+groove", "summer+dance", "pop+happy"],
+    "buon_ba":    ["sad+ballad", "melancholic+piano", "sad+slow", "sad+acoustic"],
+    "lang_man":   ["love+romantic", "romantic+piano", "love+song", "soul+rnb"],
+    "nang_dong":  ["energetic+dance", "edm+party", "electro+upbeat", "power+electro"],
+    "thu_gian":   ["chillout+lounge", "ambient+relax", "downtempo+chill", "acoustic+calm"],
+    "co_don":     ["melancholic+acoustic", "sad+indie", "sad+lonely", "ambient+emotional"],
+    "cang_thang": ["rock+energetic", "metal+power", "rock+intense", "punk+fast"],
+    "tap_trung":  ["ambient+piano", "lofi+chill", "instrumental+calm", "piano+instrumental"],
+    "hoai_niem":  ["retro+synthwave", "retro+electronic", "nostalgic+chill", "80s+retro"],
+    "phieu_luu":  ["epic+cinematic", "soundtrack+epic", "cinematic+powerful", "cinematic+dark"],
+    "bi_an":      ["dark+ambient", "cinematic+dark", "atmospheric+dark", "soundtrack+mystery"],
+    "vui_nhon":   ["funk+groove", "disco+funk", "ska+punk", "reggae+happy", "swing+jazz"],
+}
+
+def pick_emotion_tags(emotion, n=1):
+    """Chọn ngẫu nhiên 1 nhóm tag từ list của cảm xúc cho Jamendo.
+    Mỗi entry đã là 'a+b' (2 tag AND); chỉ lấy 1 entry để không quá hẹp,
+    mỗi lần random ra entry khác → kết quả vẫn đa dạng."""
+    pool = EMOTION_TAGS.get(emotion, ["chillout"])
+    return random.choice(pool)
+
+def time_to_emotion(hour):
+    """Map giờ trong ngày → cảm xúc gợi ý hợp lý."""
+    if 5 <= hour < 11:   return "nang_dong"   # sáng: tươi tỉnh, năng động
+    if 11 <= hour < 14:  return "tap_trung"   # trưa: tập trung làm việc
+    if 14 <= hour < 18:  return "vui_ve"      # chiều: vui vẻ
+    if 18 <= hour < 22:  return "thu_gian"    # tối: thư giãn
+    return "thu_gian"                          # đêm khuya: chill/lofi
+
+# ─── AI ENGINE ────────────────────────────────────────────────────
+WEIGHTS_PATH = os.path.join(os.path.dirname(__file__), "weights")
+engine = EmotionEngine(WEIGHTS_PATH)
+if not os.path.exists(WEIGHTS_PATH + ".npz"):
+    print("[Server] First run — pretraining model...")
+    engine.pretrain(SEED_DATA, epochs=400)
+
+LOG_PATH = os.path.join(os.path.dirname(__file__), "feedback_log.jsonl")
+
+def log_event(event_type, data):
+    with open(LOG_PATH, "a", encoding="utf-8") as f:
+        f.write(json.dumps(
+            {"time": datetime.now().isoformat(), "type": event_type, **data},
+            ensure_ascii=False
+        ) + "\n")
+
+# ─── ENDPOINTS ────────────────────────────────────────────────────
+
+@app.route("/api/health")
+def health():
+    return jsonify({
+        "status": "ok", "model": "EmotionMLP-Hybrid",
+        "music_api": "jamendo_free",
+        "frontend": FRONTEND_URL,
+        "feedback_count": engine.feedback_count,
+        "alpha": engine.alpha, "emotions": EMOTIONS,
+    })
+
+@app.route("/api/predict", methods=["POST"])
+def predict():
+    data = request.get_json()
+    text = (data or {}).get("text", "").strip()
+    if not text:
+        return jsonify({"error": "text required"}), 400
+    result = engine.predict(text)
+    scores_list = sorted(
+        [{"emotion": e, "label": EMOTION_META[e]["vi"],
+          "emoji": EMOTION_META[e]["emoji"], "score": result["all_scores"][e]}
+         for e in EMOTIONS], key=lambda x: -x["score"]
+    )
+    log_event("predict", {"text": text, "result": result["emotion"]})
+    return jsonify({
+        "emotion": result["emotion"], "label": result["label"],
+        "emoji": result["emoji"], "confidence": result["confidence"],
+        "scores": scores_list,
+        "model_info": {
+            "alpha_rule": result["alpha"],
+            "alpha_mlp": round(1 - result["alpha"], 2),
+            "feedback_count": engine.feedback_count,
+        },
+    })
+
+@app.route("/api/learn", methods=["POST"])
+def learn():
+    data    = request.get_json()
+    text    = (data or {}).get("text", "").strip()
+    correct = (data or {}).get("correct_emotion", "").strip()
+    if not text or not correct:
+        return jsonify({"error": "text and correct_emotion required"}), 400
+    if correct not in EMOTIONS:
+        return jsonify({"error": f"Unknown emotion: {correct}"}), 400
+    engine.learn(text, correct, steps=30)
+    log_event("feedback", {"text": text, "correct": correct,
+                           "feedback_count": engine.feedback_count})
+    return jsonify({
+        "status": "learned", "feedback_count": engine.feedback_count,
+        "new_alpha": engine.alpha,
+        "message": f"Model đã học: '{text}' → {EMOTION_META[correct]['vi']}",
+    })
+
+@app.route("/api/stats")
+def stats():
+    s = {"total_predicts": 0, "total_feedback": 0,
+         "emotion_counts": {e: 0 for e in EMOTIONS}}
+    if os.path.exists(LOG_PATH):
+        with open(LOG_PATH, encoding="utf-8") as f:
+            for line in f:
+                try:
+                    ev = json.loads(line)
+                    if ev["type"] == "predict":
+                        s["total_predicts"] += 1
+                        s["emotion_counts"][ev.get("result", "vui_ve")] += 1
+                    elif ev["type"] == "feedback":
+                        s["total_feedback"] += 1
+                except: pass
+    return jsonify({**s, "model_alpha": engine.alpha,
+                    "feedback_count": engine.feedback_count})
+
+# ─── JAMENDO MUSIC SEARCH (NO USER LOGIN) ────────────────────────
+
+@app.route("/api/music/search")
+def music_search():
+    """Search music using Jamendo API - no user login required.
+    Hỗ trợ phân trang (offset) và đa dạng tag ngẫu nhiên theo cảm xúc."""
+    emotion = request.args.get("emotion", "thu_gian")
+    query   = request.args.get("q", "").strip()
+    offset  = int(request.args.get("offset", 0) or 0)
+    limit   = int(request.args.get("limit", 30) or 30)
+    order   = request.args.get("order", "popularity_total")
+
+    try:
+        if query:
+            # Tìm thủ công theo tên bài/nghệ sĩ
+            tracks = jamendo_search(query=query, limit=limit,
+                                    offset=offset, order=order)
+            used = query
+        else:
+            # Tìm theo cảm xúc: random tag để mỗi lần luôn mới
+            tags = pick_emotion_tags(emotion)
+            tracks = jamendo_search(tags=tags, limit=limit,
+                                    offset=offset, order=order)
+            used = tags
+        return jsonify({
+            "tracks": tracks, "query": query or emotion,
+            "tags_used": used, "source": "jamendo",
+            "offset": offset, "limit": limit,
+            "has_more": len(tracks) >= limit,   # còn nhạc để tải thêm
+        })
+    except Exception as e:
+        print(f"[Jamendo] Search error: {e}")
+        return jsonify({"error": str(e), "tracks": []}), 500
+
+# ─── LƯU HÀNH VI NGƯỜI DÙNG (GỢI Ý THÔNG MINH) ───────────────────
+
+@app.route("/api/track/event", methods=["POST"])
+def track_event():
+    """Lưu sự kiện nghe/like/dislike để thống kê & gợi ý thông minh."""
+    d = request.get_json() or {}
+    etype = d.get("type", "")
+    if etype not in ("play", "like", "dislike"):
+        return jsonify({"error": "invalid type"}), 400
+    log_event("track_" + etype, {
+        "track_id": d.get("track_id", ""),
+        "name":     d.get("name", ""),
+        "artist":   d.get("artist", ""),
+        "tags":     d.get("tags", []),
+        "emotion":  d.get("emotion", ""),
+    })
+    return jsonify({"status": "logged"})
+
+def _top_from_log(field, etypes, top_n=5):
+    """Đếm giá trị phổ biến nhất của 1 field trong log theo loại sự kiện."""
+    counter = Counter()
+    if os.path.exists(LOG_PATH):
+        with open(LOG_PATH, encoding="utf-8") as f:
+            for line in f:
+                try:
+                    ev = json.loads(line)
+                except Exception:
+                    continue
+                if ev.get("type") not in etypes:
+                    continue
+                val = ev.get(field)
+                if isinstance(val, list):
+                    counter.update([v for v in val if v])
+                elif val:
+                    counter[val] += 1
+    return [k for k, _ in counter.most_common(top_n)]
+
+@app.route("/api/recommend")
+def recommend():
+    """Gợi ý nhạc dựa trên nghệ sĩ/tag user thích (ưu tiên client) +
+    fallback theo giờ hiện tại. liked_artists/liked_tags: chuỗi phân tách bởi ','."""
+    cli_artists = [a for a in request.args.get("liked_artists", "").split(",") if a.strip()]
+    cli_tags    = [t for t in request.args.get("liked_tags", "").split(",") if t.strip()]
+
+    # Kết hợp dữ liệu client (ưu tiên) với thống kê chung của server
+    artists = cli_artists or _top_from_log("artist", ("track_like",), 3)
+    tags    = cli_tags    or _top_from_log("tags",   ("track_like", "track_play"), 3)
+
+    tracks, seen = [], set()
+    try:
+        # 1) Nhạc của các nghệ sĩ user hay thích
+        for a in artists[:3]:
+            for t in jamendo_search(artist=a.strip(), limit=6):
+                if t["id"] not in seen:
+                    seen.add(t["id"]); tracks.append(t)
+        # 2) Nhạc theo tag ưa thích
+        if tags:
+            for t in jamendo_search(tags="+".join(t.strip() for t in tags[:2]), limit=12):
+                if t["id"] not in seen:
+                    seen.add(t["id"]); tracks.append(t)
+        # 3) Fallback: chưa đủ dữ liệu → gợi ý theo giờ
+        if len(tracks) < 8:
+            emo = time_to_emotion(datetime.now().hour)
+            for t in jamendo_search(tags=pick_emotion_tags(emo), limit=15):
+                if t["id"] not in seen:
+                    seen.add(t["id"]); tracks.append(t)
+
+        random.shuffle(tracks)
+        return jsonify({
+            "tracks": tracks[:20], "source": "jamendo",
+            "based_on": {"artists": artists, "tags": tags},
+            "personalized": bool(artists or tags),
+        })
+    except Exception as e:
+        print(f"[Recommend] error: {e}")
+        return jsonify({"error": str(e), "tracks": []}), 500
+
+@app.route("/api/time-suggestion")
+def time_suggestion():
+    """Trả cảm xúc gợi ý theo giờ. Nhận ?hour= từ client (giờ máy người dùng)."""
+    h = request.args.get("hour")
+    hour = int(h) if (h is not None and h.isdigit()) else datetime.now().hour
+    emo = time_to_emotion(hour)
+    return jsonify({
+        "hour": hour, "emotion": emo,
+        "label": EMOTION_META[emo]["vi"],
+        "emoji": EMOTION_META[emo]["emoji"],
+    })
+
+# ─── RUN ──────────────────────────────────────────────────────────
+if __name__ == "__main__":
+    print("=" * 50)
+    print(" MoodTune AI Backend + Jamendo Music API")
+    print(f" Feedback: {engine.feedback_count} | Alpha: {engine.alpha:.2f}")
+    print(f" Frontend: {FRONTEND_URL}")
+    print(f" Music API: Jamendo (Free - Full Tracks)")
+    print("=" * 50)
+    app.run(host="0.0.0.0", port=5005, debug=False)
+
+===== \emotion_mlp.py =====
+
+"""
+MoodTune Emotion Engine - Hybrid AI Model
+=========================================
+Kiến trúc 2 tầng:
+
+1. RULE SCORER: Từ điển cảm xúc → weighted scoring (nhanh, chính xác với từ khóa)
+2. MLP LEARNER: Học từ feedback người dùng (online learning, tự cải thiện)
+
+Kết quả cuối = softmax(rule_score * alpha + mlp_score * (1-alpha))
+alpha bắt đầu = 0.85, giảm dần khi mlp học nhiều hơn
+
+Không dùng bất kỳ ML framework nào.
+"""
+
+import numpy as np
+import json
+import os
+import re
+import sys
+
+# Ép stdout/stderr dùng UTF-8 để print tiếng Việt không crash trên Windows (cp1252)
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
+# ─── NHÃN CẢM XÚC ───────────────────────────────────────────────
+EMOTIONS = ["vui_ve","buon_ba","lang_man","nang_dong","thu_gian","co_don","cang_thang","tap_trung",
+            "hoai_niem","phieu_luu","bi_an","vui_nhon"]
+EMOTION_META = {
+    "vui_ve":     {"vi": "Vui vẻ",     "emoji": "😄"},
+    "buon_ba":    {"vi": "Buồn bã",    "emoji": "😢"},
+    "lang_man":   {"vi": "Lãng mạn",   "emoji": "🥰"},
+    "nang_dong":  {"vi": "Năng động",  "emoji": "⚡"},
+    "thu_gian":   {"vi": "Thư giãn",   "emoji": "🌿"},
+    "co_don":     {"vi": "Cô đơn",     "emoji": "🌙"},
+    "cang_thang": {"vi": "Căng thẳng", "emoji": "🔥"},
+    "tap_trung":  {"vi": "Tập trung",  "emoji": "🎯"},
+    "hoai_niem":  {"vi": "Hoài niệm",  "emoji": "🍂"},
+    "phieu_luu":  {"vi": "Phiêu lưu",  "emoji": "⚔️"},
+    "bi_an":      {"vi": "Bí ẩn",      "emoji": "🔮"},
+    "vui_nhon":   {"vi": "Vui nhộn",   "emoji": "🤪"},
+}
+
+# ─── TỪ ĐIỂN RULE-BASED (weight theo mức độ liên quan) ──────────
+LEXICON = {
+    "vui_ve": {
+        "vui":2.5,"hạnh phúc":3.0,"sung sướng":2.5,"tuyệt":2.0,"tuyệt vời":3.0,
+        "phấn khởi":2.5,"hào hứng":2.0,"thích":1.5,"cười":2.0,"mừng":2.5,
+        "haha":2.0,"hehe":1.5,"tốt":1.5,"hay":1.5,"đỉnh":2.0,"khoái":2.5,
+        "sướng":2.5,"tươi":2.0,"ok":1.2,"thú vị":2.0,"tốt bụng":1.5,
+        "xinh":1.5,"đẹp":1.5,"vui quá":3.0,"thú vui":2.0,"rạng rỡ":2.5,
+    },
+    "buon_ba": {
+        "buồn":3.0,"khóc":3.0,"đau":2.5,"khổ":2.5,"tủi":2.5,"thất vọng":2.5,
+        "chán":2.0,"nản":2.0,"mệt mỏi":1.8,"đau lòng":3.0,"tan vỡ":3.0,
+        "chia tay":3.0,"mất":2.0,"trống rỗng":2.5,"héo":2.0,"ủ rũ":2.5,
+        "nước mắt":3.0,"thương":1.5,"tội nghiệp":1.5,"bi":2.0,"đau khổ":3.0,
+        "tuyệt vọng":3.0,"vô vọng":2.5,"chán nản":2.5,"tiếc":2.0,"hối hận":2.0,
+    },
+    "lang_man": {
+        "yêu":3.0,"thương":2.5,"nhớ":2.0,"tim":2.0,"tình yêu":3.0,
+        "lãng mạn":3.0,"ngọt ngào":2.5,"dịu dàng":2.5,"ôm":2.0,"hôn":2.5,
+        "bạn gái":2.5,"bạn trai":2.5,"người yêu":3.0,"crush":3.0,
+        "si mê":3.0,"say đắm":3.0,"ngưỡng mộ":2.0,"hẹn hò":3.0,
+        "valentine":2.5,"ánh trăng":2.0,"hoa":1.5,"tình":2.0,"yêu thương":2.5,
+        "nhớ nhung":2.5,"thầm thương":2.5,"mê":2.0,
+    },
+    "nang_dong": {
+        "năng động":3.0,"phấn khích":2.5,"hứng khởi":2.5,"sôi nổi":2.5,
+        "nhiệt huyết":2.5,"party":3.0,"nhảy":2.5,"dance":2.5,"workout":3.0,
+        "gym":3.0,"chạy":2.0,"tập":2.0,"thể thao":2.5,"festival":2.5,
+        "nhạc mạnh":2.5,"bass":2.0,"beat":2.0,"remix":2.0,"hype":3.0,
+        "lit":2.5,"siêu":2.0,"mạnh":1.5,"khỏe":2.0,"pump":2.5,"energetic":3.0,
+    },
+    "thu_gian": {
+        "thư giãn":3.0,"nghỉ ngơi":2.5,"bình yên":3.0,"nhẹ nhàng":2.5,
+        "yên tĩnh":2.5,"tĩnh lặng":2.5,"lofi":3.0,"acoustic":2.5,
+        "nhẹ":2.0,"dịu":2.0,"êm":2.0,"calm":3.0,"chill":2.5,"relax":3.0,
+        "cozy":2.5,"ấm áp":2.5,"mưa":2.0,"trà":2.0,"cà phê":1.8,
+        "đọc sách":2.0,"nằm":1.5,"yên ả":2.5,"comfortable":2.5,"thư thái":3.0,
+    },
+    "co_don": {
+        "cô đơn":3.0,"một mình":2.5,"lạc lõng":2.5,"xa":1.5,"nhớ nhà":3.0,
+        "tha hương":2.5,"vắng":2.0,"trống":2.0,"im lặng":2.0,"đêm khuya":2.5,
+        "đêm":1.5,"khuya":2.0,"tối":1.2,"bóng tối":2.0,"bơ vơ":3.0,
+        "lẻ loi":3.0,"đơn độc":3.0,"không ai":2.5,"vắng vẻ":2.5,
+        "nỗi niềm":2.0,"tâm tư":2.0,"thao thức":2.0,"xa nhà":3.0,
+    },
+    "cang_thang": {
+        "căng thẳng":3.0,"áp lực":3.0,"stress":3.0,"lo lắng":2.5,"lo":2.0,
+        "sợ":2.0,"hồi hộp":2.0,"bất an":2.5,"tức":2.5,"giận":2.5,"bực":2.5,
+        "bực bội":2.5,"khó chịu":2.0,"bực mình":2.5,"chán ghét":2.0,"ghét":2.0,
+        "mệt":1.5,"kiệt sức":2.5,"burn out":3.0,"quá tải":3.0,"deadline":2.5,
+        "thi":1.5,"không ổn":2.5,"tệ":2.0,"khủng hoảng":3.0,"rắc rối":2.0,
+    },
+    "tap_trung": {
+        "tập trung":3.0,"học":2.0,"làm việc":2.5,"study":2.5,"work":2.0,
+        "focus":3.0,"nghiên cứu":2.5,"đọc":1.5,"viết":1.5,"code":2.5,
+        "lập trình":2.5,"dự án":2.0,"project":2.0,"deadline":1.5,"hiệu quả":2.5,
+        "năng suất":3.0,"productive":3.0,"deep work":3.0,"sáng tạo":2.0,
+        "brainstorm":2.5,"nhiệm vụ":2.0,"task":2.0,"mục tiêu":2.0,"kế hoạch":2.0,
+    },
+    "hoai_niem": {
+        "hoài niệm":3.0,"nhớ về":2.5,"kỷ niệm":3.0,"ngày xưa":3.0,"tuổi thơ":3.0,
+        "quá khứ":2.5,"hồi đó":2.5,"thuở":2.0,"xưa cũ":2.5,"cũ":1.5,"hồi ức":3.0,
+        "thời gian":1.5,"năm tháng":2.5,"nhớ lại":2.5,"vintage":2.5,"retro":3.0,
+        "bồi hồi":3.0,"bâng khuâng":2.5,"luyến tiếc":2.5,"thanh xuân":3.0,
+        "tuổi học trò":2.5,"ngày ấy":2.5,"hoài cổ":3.0,"nuối tiếc":2.5,"ngày tháng cũ":3.0,
+    },
+    "phieu_luu": {
+        "phiêu lưu":3.0,"khám phá":3.0,"mạo hiểm":3.0,"hành trình":2.5,"du lịch":2.5,
+        "chinh phục":3.0,"thử thách":2.5,"vượt qua":2.5,"epic":3.0,"hùng tráng":3.0,
+        "anh hùng":2.5,"chiến đấu":2.5,"phượt":2.5,"lên đường":2.5,"khát vọng":2.5,
+        "tự do":2.0,"bay nhảy":2.0,"mơ ước":2.0,"hoài bão":2.5,"dấn thân":3.0,
+        "vượt biển":2.5,"leo núi":2.5,"cinematic":2.5,"hoành tráng":3.0,"phi thường":2.5,
+    },
+    "bi_an": {
+        "bí ẩn":3.0,"huyền bí":3.0,"ma mị":2.5,"u ám":2.5,"bóng tối":2.5,"kỳ bí":3.0,
+        "mơ hồ":2.0,"mê hoặc":2.5,"rùng rợn":2.5,"ám ảnh":2.5,"thần bí":3.0,
+        "ghê rợn":2.5,"đêm tối":2.0,"sương mù":2.0,"lạnh lẽo":2.0,"âm u":2.5,
+        "siêu nhiên":3.0,"ma quái":2.5,"linh hồn":2.5,"huyền ảo":2.5,"bí mật":2.5,
+        "mystery":3.0,"dark":2.5,"kinh dị":2.5,"liêu trai":3.0,
+    },
+    "vui_nhon": {
+        "vui nhộn":3.0,"hài hước":3.0,"buồn cười":3.0,"tếu":2.5,"nhí nhố":3.0,
+        "lầy lội":3.0,"troll":2.5,"hề":2.5,"comedy":3.0,"funny":3.0,"vui tính":2.5,
+        "tinh nghịch":2.5,"nghịch ngợm":2.5,"ngộ nghĩnh":2.5,"đáng yêu":2.0,
+        "cute":2.0,"tưng tửng":2.5,"quậy":2.5,"hớn hở":2.5,"nhộn nhịp":2.0,
+        "vui vẻ hài":2.5,"cười bể bụng":3.0,"meme":2.5,"hài":2.5,"giải trí":2.0,
+    },
+}
+
+# Tạo vocab list phẳng để MLP dùng
+VOCAB = []
+VOCAB_IDX = {}
+for emo, words in LEXICON.items():
+    for w in words:
+        if w not in VOCAB_IDX:
+            VOCAB_IDX[w] = len(VOCAB)
+            VOCAB.append(w)
+VOCAB_SIZE = len(VOCAB)
+N = len(EMOTIONS)
+print(f"[Init] Vocab={VOCAB_SIZE} | Classes={N}")
+
+
+# ─── TIỀN XỬ LÝ ─────────────────────────────────────────────────
+def preprocess(text):
+    t = text.lower().strip()
+    # Giữ dấu tiếng Việt
+    t = re.sub(r'[^\w\sàáâãèéêìíòóôõùúýăđơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỷỹ]', ' ', t)
+    return t
+
+
+# Từ phủ định: nếu đứng ngay trước từ cảm xúc thì đảo dấu điểm
+NEGATIONS = {"không", "chẳng", "chả", "đâu", "chưa", "khỏi", "ko", "k"}
+
+# ─── RULE SCORER ────────────────────────────────────────────────
+def rule_score(text):
+    t = preprocess(text)
+    scores = np.zeros(N)
+    words = t.split()
+
+    # Bigram matching (cụm 2 từ)
+    for i in range(len(words)-1):
+        phrase = words[i]+" "+words[i+1]
+        for ei, emo in enumerate(EMOTIONS):
+            if phrase in LEXICON[emo]:
+                scores[ei] += LEXICON[emo][phrase] * 1.5  # bigram boost
+
+    # Unigram + xử lý phủ định
+    for i, w in enumerate(words):
+        # có từ phủ định ngay trước? ("không vui", "chẳng buồn")
+        negated = i > 0 and words[i-1] in NEGATIONS
+        for ei, emo in enumerate(EMOTIONS):
+            if w in LEXICON[emo]:
+                val = LEXICON[emo][w]
+                # phủ định → giảm mạnh điểm cảm xúc đó thay vì cộng
+                scores[ei] += (-0.6 * val) if negated else val
+
+    scores = np.maximum(scores, 0)   # không cho điểm âm
+    # Softmax
+    if scores.max() == 0:
+        return np.ones(N) / N  # uniform nếu không match
+    e = np.exp(scores - scores.max())
+    return e / e.sum()
+
+
+# ─── BAG-OF-WORDS VECTOR CHO MLP ────────────────────────────────
+def to_bow(text):
+    t = preprocess(text)
+    vec = np.zeros(VOCAB_SIZE, dtype=np.float32)
+    words = t.split()
+    for w in words:
+        if w in VOCAB_IDX:
+            vec[VOCAB_IDX[w]] += 1.0
+    for i in range(len(words)-1):
+        phrase = words[i]+" "+words[i+1]
+        if phrase in VOCAB_IDX:
+            vec[VOCAB_IDX[phrase]] += 1.5
+    norm = np.linalg.norm(vec)
+    if norm > 0:
+        vec /= norm
+    return vec
+
+
+# ─── MLP (tự viết: forward + backprop) ──────────────────────────
+class MLP:
+    """
+    2-layer MLP: Input → Hidden(32, ReLU) → Output(8, Softmax)
+    Train bằng SGD + momentum
+    Chỉ dùng numpy
+    """
+    def __init__(self, lr=0.1, hidden=64):
+        self.lr = lr
+        h = hidden          # tăng 32 → 64 để học mẫu phong phú hơn
+        # He init
+        self.W1 = np.random.randn(VOCAB_SIZE, h) * np.sqrt(2/VOCAB_SIZE)
+        self.b1 = np.zeros(h)
+        self.W2 = np.random.randn(h, N) * np.sqrt(2/h)
+        self.b2 = np.zeros(N)
+        # Momentum
+        self.m = {"W1":0,"b1":0,"W2":0,"b2":0}
+        self.mu = 0.9
+        # L2 regularization để tránh overfit khi học online
+        self.l2 = 1e-4
+
+    def forward(self, x):
+        self._x = x
+        self._z1 = x @ self.W1 + self.b1
+        self._a1 = np.maximum(0, self._z1)   # ReLU
+        self._z2 = self._a1 @ self.W2 + self.b2
+        e = np.exp(self._z2 - self._z2.max())
+        self._out = e / e.sum()              # Softmax
+        return self._out
+
+    def backward(self, y_true):
+        dz2 = self._out - y_true             # CE + Softmax gradient
+        dW2 = np.outer(self._a1, dz2) + self.l2 * self.W2   # + L2
+        db2 = dz2
+        da1 = self.W2 @ dz2
+        dz1 = da1 * (self._z1 > 0)          # ReLU grad
+        dW1 = np.outer(self._x, dz1) + self.l2 * self.W1    # + L2
+        db1 = dz1
+        # Momentum SGD
+        for name, grad in [("W1",dW1),("b1",db1),("W2",dW2),("b2",db2)]:
+            self.m[name] = self.mu*self.m[name] - self.lr*grad
+            setattr(self, name, getattr(self, name) + self.m[name])
+
+    def predict(self, x):
+        return self.forward(x)
+
+    def save(self, path):
+        np.savez(path, W1=self.W1,b1=self.b1,W2=self.W2,b2=self.b2)
+
+    def load(self, path):
+        if os.path.exists(path+".npz"):
+            d = np.load(path+".npz")
+            self.W1,self.b1,self.W2,self.b2 = d["W1"],d["b1"],d["W2"],d["b2"]
+            return True
+        return False
+
+
+# ─── HYBRID ENGINE ───────────────────────────────────────────────
+class EmotionEngine:
+    """
+    Kết hợp Rule Scorer + MLP Learner
+    alpha: trọng số rule (giảm dần khi có nhiều feedback)
+    """
+    def __init__(self, weights_path="weights"):
+        self.mlp = MLP(lr=0.08, hidden=64)
+        self.weights_path = weights_path
+        self.feedback_count = 0
+        self.alpha = 0.85  # ban đầu tin rule nhiều hơn
+        # Experience replay: lưu (text, label) các feedback để train lại,
+        # tránh "quên" kiến thức cũ khi học câu mới (catastrophic forgetting)
+        self.replay = []
+        self.replay_path = weights_path + "_replay.json"
+        self._load_replay()
+
+        if self.mlp.load(weights_path):
+            # Load feedback count
+            meta_path = weights_path + "_meta.json"
+            if os.path.exists(meta_path):
+                with open(meta_path) as f:
+                    meta = json.load(f)
+                    self.feedback_count = meta.get("feedback_count", 0)
+                    self.alpha = self._calc_alpha()
+            print(f"[Engine] Loaded | feedback={self.feedback_count} | alpha={self.alpha:.2f} | replay={len(self.replay)}")
+
+    def _calc_alpha(self):
+        """Alpha giảm mượt theo số feedback (sigmoid-like), chặn ở [0.35, 0.85].
+        Càng nhiều feedback → càng tin MLP hơn rule."""
+        fc = self.feedback_count
+        # giảm nhanh lúc đầu rồi chậm lại, sàn 0.35
+        return max(0.35, 0.85 - 0.5 * (fc / (fc + 40)))
+
+    def _load_replay(self):
+        if os.path.exists(self.replay_path):
+            try:
+                with open(self.replay_path, encoding="utf-8") as f:
+                    self.replay = json.load(f)
+            except Exception:
+                self.replay = []
+
+    def _save_replay(self):
+        # giới hạn 500 mẫu gần nhất để file không phình to
+        self.replay = self.replay[-500:]
+        with open(self.replay_path, "w", encoding="utf-8") as f:
+            json.dump(self.replay, f, ensure_ascii=False)
+
+    def predict(self, text):
+        rule = rule_score(text)
+        bow  = to_bow(text)
+        mlp  = self.mlp.predict(bow)
+
+        # Hybrid blend
+        combined = self.alpha * rule + (1 - self.alpha) * mlp
+        idx = int(np.argmax(combined))
+        emo = EMOTIONS[idx]
+
+        return {
+            "emotion": emo,
+            "label":   EMOTION_META[emo]["vi"],
+            "emoji":   EMOTION_META[emo]["emoji"],
+            "confidence": float(combined[idx]),
+            "all_scores": {EMOTIONS[i]: float(combined[i]) for i in range(N)},
+            "rule_scores": {EMOTIONS[i]: float(rule[i]) for i in range(N)},
+            "mlp_scores":  {EMOTIONS[i]: float(mlp[i]) for i in range(N)},
+            "alpha": self.alpha,
+        }
+
+    def learn(self, text, correct_emotion, steps=25):
+        """Online learning từ feedback người dùng + experience replay.
+        Mỗi bước: train câu mới (trọng số cao) xen kẽ ôn lại vài mẫu cũ
+        → model học câu mới nhưng KHÔNG quên kiến thức trước đó."""
+        label = EMOTIONS.index(correct_emotion)
+        bow = to_bow(text)
+        y = np.zeros(N); y[label] = 1.0
+
+        # Lưu vào replay buffer (chống trùng câu y hệt)
+        if not any(r[0] == text and r[1] == label for r in self.replay):
+            self.replay.append([text, label])
+
+        for step in range(steps):
+            # Train câu mới (nhấn mạnh hơn — lặp nhiều lần)
+            self.mlp.forward(bow); self.mlp.backward(y)
+            # Xen kẽ ôn lại mẫu cũ ngẫu nhiên (replay)
+            if self.replay and step % 2 == 0:
+                rt, rl = self.replay[np.random.randint(len(self.replay))]
+                rbow = to_bow(rt)
+                ry = np.zeros(N); ry[rl] = 1.0
+                self.mlp.forward(rbow); self.mlp.backward(ry)
+
+        self.feedback_count += 1
+        self.alpha = self._calc_alpha()
+        self.save()
+        self._save_replay()
+        print(f"[Learn] '{text}' -> {correct_emotion} | alpha={self.alpha:.2f} | replay={len(self.replay)}")
+
+    def pretrain(self, data, epochs=200):
+        """Pre-train MLP trên seed data với learning-rate decay."""
+        print(f"[Pretrain] {epochs} epochs x {len(data)} samples")
+        base_lr = self.mlp.lr
+        for ep in range(epochs):
+            # LR decay: giảm dần để hội tụ ổn định hơn
+            self.mlp.lr = base_lr * (1.0 - 0.5 * ep / epochs)
+            np.random.shuffle(data)
+            loss = 0
+            for text, label in data:
+                bow = to_bow(text)
+                y = np.zeros(N); y[label] = 1.0
+                p = self.mlp.forward(bow)
+                loss += -np.sum(y * np.log(p + 1e-9))
+                self.mlp.backward(y)
+            if (ep+1) % 50 == 0:
+                print(f"  ep {ep+1} loss={loss/len(data):.3f}")
+        self.mlp.lr = base_lr
+        # Đưa seed data vào replay buffer để feedback sau ôn cùng kiến thức gốc
+        self.replay = [[t, l] for t, l in data]
+        self.save()
+        self._save_replay()
+
+    def save(self):
+        self.mlp.save(self.weights_path)
+        with open(self.weights_path + "_meta.json", "w") as f:
+            json.dump({"feedback_count": self.feedback_count, "alpha": self.alpha}, f)
+
+
+# ─── SEED TRAINING DATA ──────────────────────────────────────────
+SEED_DATA = [
+    ("hôm nay tôi rất vui", 0), ("hạnh phúc quá trời", 0),
+    ("tuyệt vời thật sự", 0), ("vui lắm luôn á", 0),
+    ("phấn khởi cả ngày", 0), ("cười suốt không thôi", 0),
+    ("thích thú lắm nha", 0), ("mừng vui khôn tả", 0),
+
+    ("buồn lắm không muốn làm gì", 1), ("khóc cả đêm rồi", 1),
+    ("đau lòng vô cùng", 1), ("chán nản thất vọng", 1),
+    ("mệt mỏi và tủi thân", 1), ("tan vỡ rồi còn gì nữa", 1),
+    ("không muốn sống tiếp", 1), ("tuyệt vọng hoàn toàn", 1),
+
+    ("đang yêu người đó lắm", 2), ("nhớ người yêu quá", 2),
+    ("tim đập nhanh mỗi khi gặp", 2), ("lãng mạn tối nay", 2),
+    ("crush nhắn tin rồi", 2), ("yêu thương ngọt ngào", 2),
+    ("hẹn hò buổi tối", 2), ("si mê cô ấy quá", 2),
+
+    ("muốn party nhảy múa", 3), ("tập gym thấy cực phê", 3),
+    ("năng lượng tràn trề hôm nay", 3), ("nhạc mạnh cho tôi nghe", 3),
+    ("sôi nổi hào hứng lắm", 3), ("workout buổi sáng xong", 3),
+    ("hype quá muốn nhảy", 3), ("chạy bộ xong thấy đỉnh", 3),
+
+    ("muốn thư giãn nhẹ nhàng", 4), ("ngồi uống trà nghe mưa", 4),
+    ("nghỉ ngơi bình yên thôi", 4), ("lofi chill nhẹ nhàng", 4),
+    ("yên tĩnh ấm áp cozy", 4), ("relax cuối tuần rồi", 4),
+    ("thư thái tâm hồn lắm", 4), ("bình yên không muốn đi đâu", 4),
+
+    ("cô đơn không ai hiểu tôi", 5), ("một mình đêm khuya", 5),
+    ("nhớ nhà quá muốn về", 5), ("lạc lõng giữa đám đông", 5),
+    ("bơ vơ không ai bên cạnh", 5), ("đêm vắng lặng cô đơn", 5),
+    ("xa nhà đã lâu rồi", 5), ("lẻ loi một mình thật sự", 5),
+
+    ("stress deadline quá tải rồi", 6), ("căng thẳng không biết sao", 6),
+    ("áp lực công việc nhiều quá", 6), ("lo lắng thi cử sắp tới", 6),
+    ("tức giận bực bội cả ngày", 6), ("burn out kiệt sức rồi", 6),
+    ("không ổn chút nào", 6), ("hồi hộp lo sợ ghê", 6),
+
+    ("cần tập trung học bài", 7), ("làm việc cần nhạc nền", 7),
+    ("study mode on rồi", 7), ("code project quan trọng", 7),
+    ("nghiên cứu tài liệu cần yên tĩnh", 7), ("deep work cần focus", 7),
+    ("ôn thi cần sự tập trung", 7), ("brainstorm ý tưởng mới", 7),
+
+    ("nhớ về kỷ niệm ngày xưa", 8), ("hoài niệm tuổi thơ êm đềm", 8),
+    ("bồi hồi nhớ thanh xuân", 8), ("ngày ấy thật đẹp biết bao", 8),
+    ("nhạc retro gợi nhớ quá khứ", 8), ("luyến tiếc thời học trò", 8),
+    ("bâng khuâng nhớ ngày tháng cũ", 8), ("hồi ức vintage thật đẹp", 8),
+
+    ("muốn phiêu lưu khám phá thế giới", 9), ("hành trình chinh phục đỉnh núi", 9),
+    ("nhạc epic hùng tráng cổ vũ", 9), ("khát vọng vượt qua thử thách", 9),
+    ("lên đường mạo hiểm phượt xa", 9), ("cinematic hoành tráng đầy cảm hứng", 9),
+    ("dấn thân vào cuộc phiêu lưu", 9), ("chinh phục giấc mơ phi thường", 9),
+
+    ("không khí bí ẩn huyền bí", 10), ("nhạc ma mị u ám rùng rợn", 10),
+    ("đêm tối đầy bí mật kỳ bí", 10), ("huyền ảo mê hoặc lòng người", 10),
+    ("dark ambient thần bí", 10), ("ám ảnh liêu trai ghê rợn", 10),
+    ("sương mù âm u huyền bí", 10), ("siêu nhiên ma quái bí ẩn", 10),
+
+    ("nhạc vui nhộn hài hước cười", 11), ("tếu táo lầy lội nhí nhố", 11),
+    ("comedy funny buồn cười quá", 11), ("tinh nghịch tưng tửng đáng yêu", 11),
+    ("nhạc cute ngộ nghĩnh vui tính", 11), ("quậy phá tinh nghịch hớn hở", 11),
+    ("hài hước cười bể bụng", 11), ("nhạc nền meme troll vui nhộn", 11),
+]
+
+
+# ─── MAIN ────────────────────────────────────────────────────────
+if __name__ == "__main__":
+    np.random.seed(42)
+    engine = EmotionEngine("weights")
+
+    if not os.path.exists("weights.npz"):
+        engine.pretrain(SEED_DATA, epochs=300)
+
+    tests = [
+        "hôm nay tôi rất vui và hạnh phúc",
+        "buồn quá không muốn làm gì cả",
+        "yêu em lắm nhớ em nhiều",
+        "muốn tập gym nghe nhạc sôi động",
+        "ngồi uống cà phê nghe lofi chill",
+        "cô đơn một mình trong đêm khuya",
+        "stress deadline quá tải không chịu được",
+        "cần tập trung học bài thi quan trọng",
+        "nhớ về kỷ niệm tuổi thơ ngày xưa",
+        "muốn phiêu lưu khám phá mạo hiểm",
+        "không khí bí ẩn huyền bí ma mị",
+        "nhạc vui nhộn hài hước cười bể bụng",
+    ]
+    print("\n[Test Results]")
+    print("-"*65)
+    for t in tests:
+        r = engine.predict(t)
+        bar = "█" * int(r["confidence"]*20)
+        print(f"Input : {t}")
+        print(f"Result: {r['emoji']} {r['label']} | {r['confidence']*100:.1f}% {bar}")
+        print()
+
+===== \quick_test.html =====
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Quick Test - Spotify Session</title>
+  <style>
+    body { font-family: sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; background: #1a1a1a; color: #fff; }
+    .box { background: #2a2a2a; padding: 20px; border-radius: 12px; margin: 16px 0; }
+    .success { color: #1db954; }
+    .error { color: #ff4444; }
+    button { background: #1db954; border: none; padding: 12px 24px; border-radius: 24px; color: #000; font-weight: bold; cursor: pointer; margin: 8px 4px; }
+    button:hover { background: #1ed760; }
+    .secondary { background: #333; color: #fff; }
+    .secondary:hover { background: #444; }
+  </style>
+</head>
+<body>
+  <h1>🎵 Quick Test - Spotify Session</h1>
+
+  <div class="box">
+    <h3>Session ID mới nhất:</h3>
+    <code style="background: #000; padding: 8px; display: block; border-radius: 4px;">TUXRAqElGMV8KhkgcNqQYA</code>
+  </div>
+
+  <div class="box">
+    <h3>Status:</h3>
+    <div id="status">Đang kiểm tra...</div>
+  </div>
+
+  <button onclick="testSession()">🔍 Test Session</button>
+  <button onclick="saveToStorage()" class="secondary">💾 Lưu vào localStorage</button>
+  <button onclick="checkStorage()" class="secondary">📋 Xem localStorage</button>
+
+  <div class="box" id="log" style="font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;"></div>
+
+  <script>
+    const API = "https://anhtaictv.me/api";
+    const SID = "TUXRAqElGMV8KhkgcNqQYA";
+
+    function log(msg, isError = false) {
+      const div = document.getElementById("log");
+      const time = new Date().toLocaleTimeString();
+      div.innerHTML += `<div style="color: ${isError ? '#ff4444' : '#1db954'}">[${time}] ${msg}</div>`;
+      div.scrollTop = div.scrollHeight;
+    }
+
+    async function testSession() {
+      log(`Testing session: ${SID.slice(0, 16)}...`);
+      try {
+        const r = await fetch(`${API}/spotify/status?sid=${SID}`);
+        const d = await r.json();
+        log(`Response: ${JSON.stringify(d)}`);
+
+        const statusDiv = document.getElementById("status");
+        if (d.logged_in) {
+          statusDiv.innerHTML = '<span class="success">✅ Session hợp lệ - Backend nhận ra token!</span>';
+          log("✅ Token hoạt động!");
+        } else {
+          statusDiv.innerHTML = '<span class="error">❌ Session không hợp lệ</span>';
+          log("❌ Backend không nhận ra token", true);
+        }
+      } catch (e) {
+        log(`Error: ${e.message}`, true);
+        document.getElementById("status").innerHTML = '<span class="error">❌ Lỗi kết nối</span>';
+      }
+    }
+
+    function saveToStorage() {
+      localStorage.setItem("sp_sid", SID);
+      log(`✅ Đã lưu sid vào localStorage`);
+      alert("Đã lưu! Giờ mở https://anhtaictv.me và refresh trang.");
+    }
+
+    function checkStorage() {
+      const stored = localStorage.getItem("sp_sid");
+      if (stored) {
+        log(`localStorage sp_sid: ${stored}`);
+        if (stored === SID) {
+          log("✅ Khớp với session mới nhất!");
+        } else {
+          log("⚠️ Khác với session mới nhất", true);
+        }
+      } else {
+        log("❌ localStorage trống", true);
+      }
+    }
+
+    // Auto-test on load
+    testSession();
+    checkStorage();
+  </script>
+</body>
+</html>
+
+===== \spotify_tokens.json =====
+
+{"TESTSID123": {"access_token": "fake_access_token_for_testing", "refresh_token": "fake_refresh_token", "expires_at": 1811751691.2231424}, "BwSlTgj2S9LGJqssJKzn3g": {"access_token": "BQCwpODqlfN2_OWgSImIEr3-MDBWYjIq-TdrR0K8vsAyvE9qSNIKrIfvJf9k1r5f82JcSZRvrXh8_cARFGBKrwDolOLySyeuyVZW0MeyCVOxxxFmAiWjc7t-2MKeZac_W4ulwpXoRZocCmlBuYM3B46gZ0JUVDkkT5bqIg-bS6kQTARQKahSZm89pSw__K5iGE1uTaVM-lpHoXgXt94XIOAJcYpgcMcMHsq_nxx2gGItenZuGFeGQZnjDTcgK0O8uiwx", "refresh_token": "AQDpq-Qm6VkThYwDizx2xa2Q5_Cf9T7aPBYj5PH1rzaZVVPs3KGw5v3LvJmFHdLuYBh0vLMKDC5agd5dDS7_TADyxt9TTezdd03m1hMcVZVELfpsO8VmYQoapGAvEHASdUM", "expires_at": 1780232895.6469855}, "o6dsKQM69Jts7GdeX9Gwg": {"access_token": "BQANIOMZZ5h0vrhtxXbXX9WD-vHEQCc2qidbj4bj3TWODE-9BLARSUSykYJcinjJOxSwf_lXZKLkPHBXgdXPflNy6_5zEUs94h4SQ2jazZHMqsRFAw_4j0ZqsNi4aZa0QDjBdwFEEsIuABYa6zEdUJohSeftkItDC7Z6LYnNF4raBFI9m8P58tM9b725N2UukbQ_4-DbE9lUAgQ-SQW6nAf59dkkUY5dVK_--uxnj8u4azAp8EXSiav23C9zdFdZ1yPo", "refresh_token": "AQAhsmflqc8LjD9vRnh7JubshYFfBNz8Z5EnfEpSLe1Ui1eZdCQkToZcj6UdMxUoRjPuacrIw1Yc1sOXRvqqqy9ktFPwq7L34R_eQ5aXmXzM0JQLAv_WX1owWMnc9j2NplY", "expires_at": 1780220484.283833}, "TR90V3EVQZCKZ5a0OJKCGg": {"access_token": "BQB19yz1yqJv99O02gM4AmWzfn0GtDnqOgpUCHEFTKKbgGvTVewd8VGG0C78E6dN4bxf2kUEjsGnlYQ5tMveBWfCtBgfQ_H9Z-7j3ws3RxrLAHSW18jIMiLRMBK38gYHrpzq8RhEWi2acY26BEVN5Dn1E-XMHWW78g8xWTkw30GEpaavimb-EjCSCGYEtZgaNMCEifnR9ySvchE-Hz_1vuW497tRDE7kRKI41ockWyzMdSVNK0KRX9CPKGsCylSQtf7R", "refresh_token": "AQDsGpdc-eYempHpx_XvqoamGsUd-QZcfZL_Q_DOzkPJ2G1lrepjuSBcQWLYIqi9feybJHHyy4OaSkrNhm2lxCqlvjIv56Kr4AXeGwNBO4QvGscUwNDHRmyQU2HYcR__Oro", "expires_at": 1780232893.7417896}, "TUXRAqElGMV8KhkgcNqQYA": {"access_token": "BQA4viHNzYP9BCb4p3DjShmDY0YtLS7qZ1UkVJNliT2Fz_knMV77Vj6Ane0QjvqPHL5Kma-mGahX83IHsK8Lg9cixVdAKoJ2HucSXKN6OELSRB9yd1BynwIVmkyJnPCE_FKg8u-K015oGWUMoN84Vjaz2HAYCuoiKanlf3Rpc05JVMlOSK6X9352ON5D6nTSJEiusosOkTarIaHnHFzLlr8ZFw6xOKlCgKWNi110Pu-J8x9JMs3jzcanEHwdQUk3xxL3", "refresh_token": "AQCizBLz00jVGunSVcUCDFK4Vc8k7FrhXjbjtFO1-xPR5d_HGt0SjB8XcpA7Q8sVjMfirK2XUYwHg0DCVSrcIxM84HFCimNLgP1MqdFglqByaLI7WjUyb41Ym15tl88jd0I", "expires_at": 1780230501.0420156}, "EwQvPclUx2qBa890Odyvw": {"access_token": "BQC2NJveJB-Qw64AGoJv_JSGHVXTabChPYG5dFd7o7gl3Gefcd1trsGhUVuWl9ONrh77qhgiq9I1zkqvWudnEhHPHjyFNm9gFbH5rbRNnabfLfoJeXP6SLMQbl1qRte7IZ9tEOomS2EZZP1fB_q-zg-wO3Nr2CBi2tn1_WK-cCnsVcZtJd-vsWybSwJy_NIBIO5fLzuPGAwjnt88bQPVxL81moOxx6zA3NPQEV4t2aSkelxjmcrdxE7B5eBGJra-wrId", "refresh_token": "AQDZVMY2XsqC0ELOS6j42rRxwcbJkCGiO8S5YPgS-DfRhl6fWqkzQ7YJadgPyilRPda-k10LCIC7l7wibt3I_-jTLkiwJhQzbRqUhwIIsCExSAKbZD06eu2ls2gxoIn6VS0", "expires_at": 1780230958.2265997}, "rUq3yE7cVKxtqnuBQW5rA": {"access_token": "BQC06SnzClv7ZXC7zDMcukeoIscNXYl3m1ZgPEQcFRLjyOPGYR3kjtek_ffcjaUF_UEnRhRUdK1MuF8sPMMwiSchckHgottC3WRI_fjNeBWTEg6DmMwnQEcg9XyPQkPSskePs6t0iUcq77VTPbsuzEmL3AM2X6exnfRl30LCWQPRFE9lCEzJBibjrzRH0haSSMpQ_gUK37dSL-6iuNv-rBCyo0Pk-mVhZdDwYJAxzfA2SMWNjy0lVzRatoBkzCxSU31e", "refresh_token": "AQD_dCyNRyXtvwUYKKb-vy49gFCFSzmN_ApNtCuQTxES5P-Hkn3Q50wVzcC0kg4Hoj1E5Q1eXOo7OFBWOQm63-srmnk0WdPrTpZ_xRXIRnMo3HHIp-EKjYLGiTHDj8yaEyw", "expires_at": 1780231480.6075594}, "LPPPD7e5lrq7Eo7xMjKO6w": {"access_token": "BQBPiNweieD2tGZVxSXSnF2tM9TLuy70W8Jy-MBV4ET_W3MjoJKt1AXWfHRJoybjyhkSn3WcLL-vvIcR4LcjVyIoQ5zWPpwnFo6k5TxGuE1pAyld_7yiCtdmc1009yNpM-xD_usbvYVofj_WeSMIGqlm-GHt_29x6-EJaXPVu77gHxjkC1l0z4l_i-LOsGLWVSAFgaup4j4kg_HBe_SpTOxOsFSy7MmF_PX1RGCpH_mrZqJf-6kejahzaumPTU_XRGF8", "refresh_token": "AQAcEEZmY9NmBN5eJIgBfbV04Xh3uBH6fPU1Q-6LncQ9PYNUh3pgdzlhmjFh44cBhzrKcvMbDaWOUg_ZWa6H1CZL7MbiZc5ntqbYW-e7Bw3a6651zvC8Xj2bN0lIwpoB3Nw", "expires_at": 1780231483.624353}, "SyJqoKvEX2uzREU9QGEA": {"access_token": "BQAXlmTIEIcdb3UfookpB_Ei15AO8KYt9Po_1MFZqx6OuIJamixNpejl3ap25nc9OUcK6ed_dTVePpMakPjv-OzOVPJJhYuIPzdY_GjDomF-XIolj_zbzd5l4rr3RQOq36HUKYHiHGRNzm9PXhqp4CWTaixlDF-WJ_fd2-S4Bur185y-FyOr7-w3DT5C4PjrVNnOsKXDAB5WzN8lx3aKRaI5wQygTrWdPz3WU65srR8h3cneg2vMKGX0Srwq4KpZwsQy", "refresh_token": "AQC3jwXONE5ri0GJr_YF5m5uw_ATF0mYRWDi2-elaiXj8SyEMQCuBAljpSn5umwF4pz0RGMVuDFiSX39FA_EN2gCUMbiSJrk2Oe_QZph6HeuPep6SqXyRD9VWxc9iShzRlg", "expires_at": 1780231490.2056606}, "wWQeMsSIP4y2LMOAT2idCg": {"access_token": "BQBCSJahsZc0QbySWlFnJOcd53-F8A3i_UHI_rvwRWW7zMjF4QOD_m_vlrD9G4Fc-R4ylq-kRG4gX8oL36ZcwrN8O5D1oa7HJHgV1BKC3RssLJP3ph_6XeVGGzzr35oPoYJt7aw7Xbo4wz0CmBns3UDP2LRzkHVsy3ltbYKjK4u1c0RFE-pPnSyRlzc1x738Oev8bSmrFebONSMrX_7UI8GmqhMWDorLxbUILaFx3xNLBzFPUEMlM9fBLEI38j7LIu30", "refresh_token": "AQDA3eb8vXZEww3x5Jr1tFVkOdydiaP8yzRScra2cunNjXOyhnEoc1XuaUjocukz4ZquIxgeG-6kkB9tnQVKE3U3vEyupZN_y0tWmVzYGcNPEN6cKBaTGeeilBFmhSdThlU", "expires_at": 1780231569.670272}}
+
+===== \test_login.html =====
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Test Spotify Login</title>
+  <style>
+    body { font-family: sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; }
+    button { padding: 12px 24px; font-size: 14px; cursor: pointer; margin: 8px 0; }
+    .info { background: #f0f0f0; padding: 16px; margin: 16px 0; border-radius: 8px; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>🎵 Test Spotify Login</h1>
+
+  <div class="info">
+    <strong>LocalStorage sid:</strong> <span id="stored-sid">-</span><br>
+    <strong>Status:</strong> <span id="status">-</span>
+  </div>
+
+  <button onclick="login()">🔐 Đăng nhập Spotify</button>
+  <button onclick="checkStatus()">🔍 Kiểm tra trạng thái</button>
+  <button onclick="clearStorage()">🗑️ Xóa localStorage</button>
+
+  <div id="log" style="margin-top: 20px; font-family: monospace; font-size: 12px;"></div>
+
+  <script>
+    const API = "http://localhost:5005/api";
+
+    function log(msg, isError = false) {
+      const div = document.getElementById("log");
+      const time = new Date().toLocaleTimeString();
+      div.innerHTML += `<div style="color: ${isError ? 'red' : 'black'}">[${time}] ${msg}</div>`;
+    }
+
+    function updateDisplay() {
+      const sid = localStorage.getItem("sp_sid") || "(empty)";
+      document.getElementById("stored-sid").textContent = sid;
+    }
+
+    function login() {
+      const clientId = "1d4eabb8b2e34996829d4d176d7b18ac";
+      const redirectUri = encodeURIComponent("http://localhost:5005/api/spotify/callback");
+      const scopes = encodeURIComponent("user-read-private streaming");
+      const url = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scopes}&show_dialog=true`;
+      log("Redirecting to Spotify...");
+      window.location.href = url;
+    }
+
+    async function checkStatus() {
+      const sid = localStorage.getItem("sp_sid");
+      if (!sid) {
+        log("No sid in localStorage", true);
+        document.getElementById("status").textContent = "Not logged in";
+        return;
+      }
+
+      log(`Checking status with sid: ${sid.slice(0, 16)}...`);
+      try {
+        const r = await fetch(`${API}/spotify/status?sid=${sid}`);
+        const d = await r.json();
+        log(`Response: ${JSON.stringify(d)}`);
+
+        if (d.logged_in) {
+          document.getElementById("status").innerHTML = '<span class="success">✅ Logged in</span>';
+        } else {
+          document.getElementById("status").innerHTML = '<span class="error">❌ Not logged in</span>';
+        }
+      } catch (e) {
+        log(`Error: ${e.message}`, true);
+        document.getElementById("status").innerHTML = '<span class="error">Error</span>';
+      }
+    }
+
+    function clearStorage() {
+      localStorage.removeItem("sp_sid");
+      log("Cleared localStorage");
+      updateDisplay();
+      document.getElementById("status").textContent = "-";
+    }
+
+    // Init: check for callback params
+    (function init() {
+      const params = new URLSearchParams(window.location.search);
+      const sid = params.get("spotify_sid");
+      const err = params.get("spotify_error");
+
+      if (sid) {
+        localStorage.setItem("sp_sid", sid);
+        log(`✅ Saved sid: ${sid.slice(0, 16)}...`);
+        window.history.replaceState({}, "", window.location.pathname);
+        checkStatus();
+      }
+
+      if (err) {
+        log(`❌ Error: ${decodeURIComponent(err)}`, true);
+        window.history.replaceState({}, "", window.location.pathname);
+      }
+
+      updateDisplay();
+
+      // Auto-check if we have a sid
+      if (localStorage.getItem("sp_sid")) {
+        checkStatus();
+      }
+    })();
+  </script>
+</body>
+</html>
+
+===== \weights_meta.json =====
+
+{"feedback_count": 4, "alpha": 0.8045454545454546}
+
+===== \weights_replay.json =====
+
+[["tinh nghịch tưng tửng đáng yêu", 11], ["vui lắm luôn á", 0], ["chán nản thất vọng", 1], ["nghiên cứu tài liệu cần yên tĩnh", 7], ["nhớ nhà quá muốn về", 5], ["hype quá muốn nhảy", 3], ["ngồi uống trà nghe mưa", 4], ["yêu thương ngọt ngào", 2], ["hẹn hò buổi tối", 2], ["bâng khuâng nhớ ngày tháng cũ", 8], ["bơ vơ không ai bên cạnh", 5], ["phấn khởi cả ngày", 0], ["cinematic hoành tráng đầy cảm hứng", 9], ["sương mù âm u huyền bí", 10], ["tập gym thấy cực phê", 3], ["chạy bộ xong thấy đỉnh", 3], ["hoài niệm tuổi thơ êm đềm", 8], ["chinh phục giấc mơ phi thường", 9], ["năng lượng tràn trề hôm nay", 3], ["ngày ấy thật đẹp biết bao", 8], ["buồn lắm không muốn làm gì", 1], ["nhạc nền meme troll vui nhộn", 11], ["thư thái tâm hồn lắm", 4], ["tan vỡ rồi còn gì nữa", 1], ["lãng mạn tối nay", 2], ["muốn phiêu lưu khám phá thế giới", 9], ["brainstorm ý tưởng mới", 7], ["quậy phá tinh nghịch hớn hở", 11], ["stress deadline quá tải rồi", 6], ["ám ảnh liêu trai ghê rợn", 10], ["nghỉ ngơi bình yên thôi", 4], ["cười suốt không thôi", 0], ["tim đập nhanh mỗi khi gặp", 2], ["căng thẳng không biết sao", 6], ["lên đường mạo hiểm phượt xa", 9], ["yên tĩnh ấm áp cozy", 4], ["workout buổi sáng xong", 3], ["đêm tối đầy bí mật kỳ bí", 10], ["nhạc epic hùng tráng cổ vũ", 9], ["đêm vắng lặng cô đơn", 5], ["khát vọng vượt qua thử thách", 9], ["sôi nổi hào hứng lắm", 3], ["ôn thi cần sự tập trung", 7], ["lo lắng thi cử sắp tới", 6], ["dark ambient thần bí", 10], ["siêu nhiên ma quái bí ẩn", 10], ["nhạc vui nhộn hài hước cười", 11], ["mệt mỏi và tủi thân", 1], ["nhạc retro gợi nhớ quá khứ", 8], ["hài hước cười bể bụng", 11], ["thích thú lắm nha", 0], ["relax cuối tuần rồi", 4], ["hồi ức vintage thật đẹp", 8], ["dấn thân vào cuộc phiêu lưu", 9], ["crush nhắn tin rồi", 2], ["xa nhà đã lâu rồi", 5], ["một mình đêm khuya", 5], ["study mode on rồi", 7], ["không muốn sống tiếp", 1], ["không ổn chút nào", 6], ["không khí bí ẩn huyền bí", 10], ["lạc lõng giữa đám đông", 5], ["nhạc ma mị u ám rùng rợn", 10], ["mừng vui khôn tả", 0], ["bình yên không muốn đi đâu", 4], ["khóc cả đêm rồi", 1], ["code project quan trọng", 7], ["nhớ người yêu quá", 2], ["nhớ về kỷ niệm ngày xưa", 8], ["áp lực công việc nhiều quá", 6], ["lẻ loi một mình thật sự", 5], ["tức giận bực bội cả ngày", 6], ["hành trình chinh phục đỉnh núi", 9], ["huyền ảo mê hoặc lòng người", 10], ["luyến tiếc thời học trò", 8], ["nhạc cute ngộ nghĩnh vui tính", 11], ["muốn party nhảy múa", 3], ["hôm nay tôi rất vui", 0], ["burn out kiệt sức rồi", 6], ["lofi chill nhẹ nhàng", 4], ["si mê cô ấy quá", 2], ["hồi hộp lo sợ ghê", 6], ["đang yêu người đó lắm", 2], ["muốn thư giãn nhẹ nhàng", 4], ["đau lòng vô cùng", 1], ["nhạc mạnh cho tôi nghe", 3], ["cô đơn không ai hiểu tôi", 5], ["làm việc cần nhạc nền", 7], ["cần tập trung học bài", 7], ["hạnh phúc quá trời", 0], ["deep work cần focus", 7], ["tuyệt vọng hoàn toàn", 1], ["comedy funny buồn cười quá", 11], ["bồi hồi nhớ thanh xuân", 8], ["tuyệt vời thật sự", 0], ["tếu táo lầy lội nhí nhố", 11], ["năng động phấn khích hứng khởi", 0], ["năng động phấn khích hứng khởi", 3], ["buồn bã không muốn làm gì", 0]]
