@@ -2364,3 +2364,143 @@
 {"time": "2026-06-18T09:27:57.270210", "type": "predict", "text": "Đã nỗ lực hết mình cho kế hoạch này mà vẫn thất bại, muốn đập nát mọi thứ quá!", "result": "angry"}
 {"time": "2026-06-18T09:27:57.275916", "type": "predict", "text": "Đừng có vẽ vời tương lai hão huyền cho tôi nữa, nghe mà chỉ thấy sôi máu thôi!", "result": "angry"}
 {"time": "2026-06-18T09:27:57.280881", "type": "predict", "text": "Ức chế kinh khủng, tương lai đáng lẽ phải tốt đẹp hơn thế này chứ không phải giờ đây.", "result": "angry"}
+{"time": "2026-06-18T10:00:50.514462", "type": "predict", "text": "Hạnh phúc quá, hôm nay kỷ niệm 5 năm ngày cưới cùng chồng yêu!", "result": "happy"}
+{"time": "2026-06-18T10:00:50.521763", "type": "predict", "text": "Cả nhà mình vừa có chuyến đi chơi biển thật là tuyệt vời luôn.", "result": "happy"}
+{"time": "2026-06-18T10:00:50.529868", "type": "predict", "text": "Mừng ghê, cuối tuần này cả gia đình lại được quây quần bên nhau.", "result": "relaxed"}
+{"time": "2026-06-18T10:00:50.534670", "type": "predict", "text": "Yêu thương ngập tràn, cảm ơn anh đã luôn là điểm tựa vững chắc.", "result": "romantic"}
+{"time": "2026-06-18T10:00:50.540338", "type": "predict", "text": "Cảm giác được ở bên người mình yêu thật là phấn khích ghê gớm!", "result": "happy"}
+{"time": "2026-06-18T10:00:50.656664", "type": "feedback", "text": "Hạnh phúc quá, hôm nay kỷ niệm 5 năm ngày cưới cùng chồng yêu!", "correct": "happy", "feedback_count": 586}
+{"time": "2026-06-18T10:00:50.758566", "type": "feedback", "text": "Cả nhà mình vừa có chuyến đi chơi biển thật là tuyệt vời luôn.", "correct": "happy", "feedback_count": 587}
+{"time": "2026-06-18T10:00:50.862338", "type": "feedback", "text": "Mừng ghê, cuối tuần này cả gia đình lại được quây quần bên nhau.", "correct": "happy", "feedback_count": 588}
+{"time": "2026-06-18T10:00:50.869377", "type": "predict", "text": "Hạnh phúc quá, hôm nay kỷ niệm 5 năm ngày cưới cùng chồng yêu!", "result": "happy"}
+{"time": "2026-06-18T10:00:50.877761", "type": "predict", "text": "Cả nhà mình vừa có chuyến đi chơi biển thật là tuyệt vời luôn.", "result": "happy"}
+{"time": "2026-06-18T10:00:50.884819", "type": "predict", "text": "Mừng ghê, cuối tuần này cả gia đình lại được quây quần bên nhau.", "result": "happy"}
+{"time": "2026-06-18T10:00:50.895884", "type": "predict", "text": "Yêu thương ngập tràn, cảm ơn anh đã luôn là điểm tựa vững chắc.", "result": "romantic"}
+{"time": "2026-06-18T10:00:50.902012", "type": "predict", "text": "Cảm giác được ở bên người mình yêu thật là phấn khích ghê gớm!", "result": "happy"}
+{"time": "2026-06-18T10:01:07.049260", "type": "predict", "text": "Chú chó nhỏ của mình vừa mất, cả căn nhà bỗng trống trải đến lạ. 😔", "result": "happy"}
+{"time": "2026-06-18T10:01:07.056174", "type": "predict", "text": "Ngồi dưới tán cây già, lòng mình cứ nặng trĩu những nỗi niềm không tên.", "result": "sad"}
+{"time": "2026-06-18T10:01:07.062238", "type": "predict", "text": "Mưa rơi trên những cánh hoa tàn, cảm giác cô đơn bủa vây tâm trí.", "result": "sad"}
+{"time": "2026-06-18T10:01:07.067708", "type": "predict", "text": "Nhìn chú mèo nằm im lìm trong góc tối mà lòng buồn không tả xiết.", "result": "sad"}
+{"time": "2026-06-18T10:01:07.072850", "type": "predict", "text": "Chiều muộn gió lạnh buốt, chỉ muốn ngồi lặng lẽ giữa rừng cây hoang vắng.", "result": "sad"}
+{"time": "2026-06-18T10:01:07.157220", "type": "feedback", "text": "Chú chó nhỏ của mình vừa mất, cả căn nhà bỗng trống trải đến lạ. 😔", "correct": "sad", "feedback_count": 589}
+{"time": "2026-06-18T10:01:07.234576", "type": "feedback", "text": "Ngồi dưới tán cây già, lòng mình cứ nặng trĩu những nỗi niềm không tên.", "correct": "sad", "feedback_count": 590}
+{"time": "2026-06-18T10:01:07.315785", "type": "feedback", "text": "Nhìn chú mèo nằm im lìm trong góc tối mà lòng buồn không tả xiết.", "correct": "sad", "feedback_count": 591}
+{"time": "2026-06-18T10:01:07.321141", "type": "predict", "text": "Chú chó nhỏ của mình vừa mất, cả căn nhà bỗng trống trải đến lạ. 😔", "result": "sad"}
+{"time": "2026-06-18T10:01:07.325716", "type": "predict", "text": "Ngồi dưới tán cây già, lòng mình cứ nặng trĩu những nỗi niềm không tên.", "result": "sad"}
+{"time": "2026-06-18T10:01:07.330686", "type": "predict", "text": "Mưa rơi trên những cánh hoa tàn, cảm giác cô đơn bủa vây tâm trí.", "result": "sad"}
+{"time": "2026-06-18T10:01:07.335552", "type": "predict", "text": "Nhìn chú mèo nằm im lìm trong góc tối mà lòng buồn không tả xiết.", "result": "sad"}
+{"time": "2026-06-18T10:01:07.340451", "type": "predict", "text": "Chiều muộn gió lạnh buốt, chỉ muốn ngồi lặng lẽ giữa rừng cây hoang vắng.", "result": "lonely"}
+{"time": "2026-06-18T10:01:23.436182", "type": "predict", "text": "Chạy bộ dưới hoàng hôn cùng người ấy, nhịp tim mình đập nhanh vì yêu.", "result": "romantic"}
+{"time": "2026-06-18T10:01:23.445538", "type": "predict", "text": "Tập gym chung rồi nắm tay nhau đi về, cảm giác này thật ngọt ngào.", "result": "romantic"}
+{"time": "2026-06-18T10:01:23.451699", "type": "predict", "text": "Chỉ cần cùng em nâng tạ mỗi sáng, bao mệt mỏi tan biến hết trơn.", "result": "romantic"}
+{"time": "2026-06-18T10:01:23.456435", "type": "predict", "text": "Ánh mắt người ấy khi cùng tập yoga làm tim mình loạn nhịp quá nè.", "result": "romantic"}
+{"time": "2026-06-18T10:01:23.461127", "type": "predict", "text": "Chạy marathon cùng nhau, mỗi hơi thở đều đong đầy tình cảm lãng mạn.", "result": "romantic"}
+{"time": "2026-06-18T10:01:23.543649", "type": "feedback", "text": "Chạy bộ dưới hoàng hôn cùng người ấy, nhịp tim mình đập nhanh vì yêu.", "correct": "romantic", "feedback_count": 592}
+{"time": "2026-06-18T10:01:23.620382", "type": "feedback", "text": "Tập gym chung rồi nắm tay nhau đi về, cảm giác này thật ngọt ngào.", "correct": "romantic", "feedback_count": 593}
+{"time": "2026-06-18T10:01:23.690090", "type": "feedback", "text": "Ánh mắt người ấy khi cùng tập yoga làm tim mình loạn nhịp quá nè.", "correct": "romantic", "feedback_count": 594}
+{"time": "2026-06-18T10:01:23.763302", "type": "feedback", "text": "Chạy marathon cùng nhau, mỗi hơi thở đều đong đầy tình cảm lãng mạn.", "correct": "romantic", "feedback_count": 595}
+{"time": "2026-06-18T10:01:23.768395", "type": "predict", "text": "Chạy bộ dưới hoàng hôn cùng người ấy, nhịp tim mình đập nhanh vì yêu.", "result": "romantic"}
+{"time": "2026-06-18T10:01:23.773326", "type": "predict", "text": "Tập gym chung rồi nắm tay nhau đi về, cảm giác này thật ngọt ngào.", "result": "romantic"}
+{"time": "2026-06-18T10:01:23.778400", "type": "predict", "text": "Chỉ cần cùng em nâng tạ mỗi sáng, bao mệt mỏi tan biến hết trơn.", "result": "romantic"}
+{"time": "2026-06-18T10:01:23.783120", "type": "predict", "text": "Ánh mắt người ấy khi cùng tập yoga làm tim mình loạn nhịp quá nè.", "result": "romantic"}
+{"time": "2026-06-18T10:01:23.787842", "type": "predict", "text": "Chạy marathon cùng nhau, mỗi hơi thở đều đong đầy tình cảm lãng mạn.", "result": "romantic"}
+{"time": "2026-06-18T10:01:40.055363", "type": "predict", "text": "Đang cùng người yêu cháy hết mình với chuyến đi phượt xuyên Việt cuối tuần này!", "result": "romantic"}
+{"time": "2026-06-18T10:01:40.061135", "type": "predict", "text": "Cả nhà ơi, cùng nhau chuẩn bị tiệc BBQ ngoài trời thôi, hào hứng quá đi mất.", "result": "sad"}
+{"time": "2026-06-18T10:01:40.070291", "type": "predict", "text": "Chạy bộ cùng chồng yêu vào mỗi buổi sáng giúp mình tràn đầy nhựa sống luôn nè.", "result": "romantic"}
+{"time": "2026-06-18T10:01:40.076611", "type": "predict", "text": "Hôm nay gia đình mình sẽ tổ chức tiệc nhảy tại gia, quẩy thôi mọi người ơi!", "result": "happy"}
+{"time": "2026-06-18T10:01:40.082090", "type": "predict", "text": "Cảm giác được cùng người thương tham gia giải chạy marathon thật bùng nổ và phấn khích.", "result": "romantic"}
+{"time": "2026-06-18T10:01:40.155101", "type": "feedback", "text": "Đang cùng người yêu cháy hết mình với chuyến đi phượt xuyên Việt cuối tuần này!", "correct": "energetic", "feedback_count": 596}
+{"time": "2026-06-18T10:01:40.221583", "type": "feedback", "text": "Chạy bộ cùng chồng yêu vào mỗi buổi sáng giúp mình tràn đầy nhựa sống luôn nè.", "correct": "energetic", "feedback_count": 597}
+{"time": "2026-06-18T10:01:40.298132", "type": "feedback", "text": "Hôm nay gia đình mình sẽ tổ chức tiệc nhảy tại gia, quẩy thôi mọi người ơi!", "correct": "energetic", "feedback_count": 598}
+{"time": "2026-06-18T10:01:40.368824", "type": "feedback", "text": "Cảm giác được cùng người thương tham gia giải chạy marathon thật bùng nổ và phấn khích.", "correct": "energetic", "feedback_count": 599}
+{"time": "2026-06-18T10:01:40.375744", "type": "predict", "text": "Đang cùng người yêu cháy hết mình với chuyến đi phượt xuyên Việt cuối tuần này!", "result": "energetic"}
+{"time": "2026-06-18T10:01:40.381971", "type": "predict", "text": "Cả nhà ơi, cùng nhau chuẩn bị tiệc BBQ ngoài trời thôi, hào hứng quá đi mất.", "result": "stressed"}
+{"time": "2026-06-18T10:01:40.387305", "type": "predict", "text": "Chạy bộ cùng chồng yêu vào mỗi buổi sáng giúp mình tràn đầy nhựa sống luôn nè.", "result": "energetic"}
+{"time": "2026-06-18T10:01:40.392651", "type": "predict", "text": "Hôm nay gia đình mình sẽ tổ chức tiệc nhảy tại gia, quẩy thôi mọi người ơi!", "result": "energetic"}
+{"time": "2026-06-18T10:01:40.397364", "type": "predict", "text": "Cảm giác được cùng người thương tham gia giải chạy marathon thật bùng nổ và phấn khích.", "result": "energetic"}
+{"time": "2026-06-18T10:01:56.540069", "type": "predict", "text": "Chiều hoàng hôn lặng lẽ ngắm phố xá lên đèn, tâm hồn thấy nhẹ nhàng quá.", "result": "relaxed"}
+{"time": "2026-06-18T10:01:56.549112", "type": "predict", "text": "Chỉ cần nằm dài nghe nhạc không lời thế này là đủ nạp lại năng lượng.", "result": "relaxed"}
+{"time": "2026-06-18T10:01:56.554654", "type": "predict", "text": "Cuối tuần rồi, pha tách trà nóng rồi chill cùng bản nhạc yêu thích thôi.", "result": "relaxed"}
+{"time": "2026-06-18T10:01:56.560104", "type": "predict", "text": "Mọi thứ xung quanh cứ chậm rãi trôi, cảm giác bình yên dễ chịu thật đấy.", "result": "relaxed"}
+{"time": "2026-06-18T10:01:56.564942", "type": "predict", "text": "Ngồi cafe vỉa hè ngắm dòng người qua lại, lòng thảnh thơi không nghĩ ngợi gì. 🌿", "result": "relaxed"}
+{"time": "2026-06-18T10:01:56.642436", "type": "feedback", "text": "Chiều hoàng hôn lặng lẽ ngắm phố xá lên đèn, tâm hồn thấy nhẹ nhàng quá.", "correct": "relaxed", "feedback_count": 600}
+{"time": "2026-06-18T10:01:56.717781", "type": "feedback", "text": "Chỉ cần nằm dài nghe nhạc không lời thế này là đủ nạp lại năng lượng.", "correct": "relaxed", "feedback_count": 601}
+{"time": "2026-06-18T10:01:56.794647", "type": "feedback", "text": "Cuối tuần rồi, pha tách trà nóng rồi chill cùng bản nhạc yêu thích thôi.", "correct": "relaxed", "feedback_count": 602}
+{"time": "2026-06-18T10:01:56.860923", "type": "feedback", "text": "Mọi thứ xung quanh cứ chậm rãi trôi, cảm giác bình yên dễ chịu thật đấy.", "correct": "relaxed", "feedback_count": 603}
+{"time": "2026-06-18T10:01:56.924582", "type": "feedback", "text": "Ngồi cafe vỉa hè ngắm dòng người qua lại, lòng thảnh thơi không nghĩ ngợi gì. 🌿", "correct": "relaxed", "feedback_count": 604}
+{"time": "2026-06-18T10:01:56.932955", "type": "predict", "text": "Chiều hoàng hôn lặng lẽ ngắm phố xá lên đèn, tâm hồn thấy nhẹ nhàng quá.", "result": "relaxed"}
+{"time": "2026-06-18T10:01:56.941942", "type": "predict", "text": "Chỉ cần nằm dài nghe nhạc không lời thế này là đủ nạp lại năng lượng.", "result": "relaxed"}
+{"time": "2026-06-18T10:01:56.947151", "type": "predict", "text": "Cuối tuần rồi, pha tách trà nóng rồi chill cùng bản nhạc yêu thích thôi.", "result": "relaxed"}
+{"time": "2026-06-18T10:01:56.953154", "type": "predict", "text": "Mọi thứ xung quanh cứ chậm rãi trôi, cảm giác bình yên dễ chịu thật đấy.", "result": "relaxed"}
+{"time": "2026-06-18T10:01:56.958539", "type": "predict", "text": "Ngồi cafe vỉa hè ngắm dòng người qua lại, lòng thảnh thơi không nghĩ ngợi gì. 🌿", "result": "relaxed"}
+{"time": "2026-06-18T10:02:13.123949", "type": "predict", "text": "Ngồi nghe nhạc một mình giữa căn phòng tối, lòng thấy trống trải lạ kỳ.", "result": "sad"}
+{"time": "2026-06-18T10:02:13.132957", "type": "predict", "text": "Chẳng biết tâm sự cùng ai, chỉ muốn tìm một bài hát làm bạn lúc này.", "result": "sad"}
+{"time": "2026-06-18T10:02:13.138715", "type": "predict", "text": "Mưa rơi ngoài cửa sổ làm mình thấy lạc lõng quá, chẳng có ai bên cạnh.", "result": "lonely"}
+{"time": "2026-06-18T10:02:13.144466", "type": "predict", "text": "Đêm nay phố xá thưa người, cảm giác đơn độc bủa vây lấy tâm trí.", "result": "lonely"}
+{"time": "2026-06-18T10:02:13.149596", "type": "predict", "text": "Chỉ còn lại mình với bản nhạc buồn, lặng lẽ gặm nhấm nỗi nhớ không tên 🥀.", "result": "sad"}
+{"time": "2026-06-18T10:02:13.215847", "type": "feedback", "text": "Ngồi nghe nhạc một mình giữa căn phòng tối, lòng thấy trống trải lạ kỳ.", "correct": "lonely", "feedback_count": 605}
+{"time": "2026-06-18T10:02:13.283704", "type": "feedback", "text": "Chẳng biết tâm sự cùng ai, chỉ muốn tìm một bài hát làm bạn lúc này.", "correct": "lonely", "feedback_count": 606}
+{"time": "2026-06-18T10:02:13.350277", "type": "feedback", "text": "Mưa rơi ngoài cửa sổ làm mình thấy lạc lõng quá, chẳng có ai bên cạnh.", "correct": "lonely", "feedback_count": 607}
+{"time": "2026-06-18T10:02:13.407905", "type": "feedback", "text": "Đêm nay phố xá thưa người, cảm giác đơn độc bủa vây lấy tâm trí.", "correct": "lonely", "feedback_count": 608}
+{"time": "2026-06-18T10:02:13.483968", "type": "feedback", "text": "Chỉ còn lại mình với bản nhạc buồn, lặng lẽ gặm nhấm nỗi nhớ không tên 🥀.", "correct": "lonely", "feedback_count": 609}
+{"time": "2026-06-18T10:02:13.490010", "type": "predict", "text": "Ngồi nghe nhạc một mình giữa căn phòng tối, lòng thấy trống trải lạ kỳ.", "result": "lonely"}
+{"time": "2026-06-18T10:02:13.495029", "type": "predict", "text": "Chẳng biết tâm sự cùng ai, chỉ muốn tìm một bài hát làm bạn lúc này.", "result": "lonely"}
+{"time": "2026-06-18T10:02:13.500253", "type": "predict", "text": "Mưa rơi ngoài cửa sổ làm mình thấy lạc lõng quá, chẳng có ai bên cạnh.", "result": "lonely"}
+{"time": "2026-06-18T10:02:13.505403", "type": "predict", "text": "Đêm nay phố xá thưa người, cảm giác đơn độc bủa vây lấy tâm trí.", "result": "lonely"}
+{"time": "2026-06-18T10:02:13.510617", "type": "predict", "text": "Chỉ còn lại mình với bản nhạc buồn, lặng lẽ gặm nhấm nỗi nhớ không tên 🥀.", "result": "lonely"}
+{"time": "2026-06-18T10:02:29.826608", "type": "predict", "text": "Deadline dí sát nút mà con mèo cứ chạy nhảy làm mình phát điên lên được.", "result": "stressed"}
+{"time": "2026-06-18T10:02:29.835019", "type": "predict", "text": "Chó cưng sủa ầm ĩ khiến đầu óc mình căng như dây đàn, thật muốn bùng nổ.", "result": "stressed"}
+{"time": "2026-06-18T10:02:29.841568", "type": "predict", "text": "Mưa bão cây cối đổ rạp, phải lo dọn dẹp chạy đôn chạy đáo mệt quá.", "result": "energetic"}
+{"time": "2026-06-18T10:02:29.846958", "type": "predict", "text": "Đàn cún con phá tan vườn hoa rồi, mình đang rối hết cả lên đây nè 😰.", "result": "energetic"}
+{"time": "2026-06-18T10:02:29.852312", "type": "predict", "text": "Công việc ngập đầu lại thêm việc dắt chó đi dạo, thực sự quá tải kinh khủng.", "result": "stressed"}
+{"time": "2026-06-18T10:02:29.914935", "type": "feedback", "text": "Deadline dí sát nút mà con mèo cứ chạy nhảy làm mình phát điên lên được.", "correct": "stressed", "feedback_count": 610}
+{"time": "2026-06-18T10:02:29.977594", "type": "feedback", "text": "Chó cưng sủa ầm ĩ khiến đầu óc mình căng như dây đàn, thật muốn bùng nổ.", "correct": "stressed", "feedback_count": 611}
+{"time": "2026-06-18T10:02:30.042474", "type": "feedback", "text": "Mưa bão cây cối đổ rạp, phải lo dọn dẹp chạy đôn chạy đáo mệt quá.", "correct": "stressed", "feedback_count": 612}
+{"time": "2026-06-18T10:02:30.103303", "type": "feedback", "text": "Đàn cún con phá tan vườn hoa rồi, mình đang rối hết cả lên đây nè 😰.", "correct": "stressed", "feedback_count": 613}
+{"time": "2026-06-18T10:02:30.169969", "type": "feedback", "text": "Công việc ngập đầu lại thêm việc dắt chó đi dạo, thực sự quá tải kinh khủng.", "correct": "stressed", "feedback_count": 614}
+{"time": "2026-06-18T10:02:30.174862", "type": "predict", "text": "Deadline dí sát nút mà con mèo cứ chạy nhảy làm mình phát điên lên được.", "result": "stressed"}
+{"time": "2026-06-18T10:02:30.179787", "type": "predict", "text": "Chó cưng sủa ầm ĩ khiến đầu óc mình căng như dây đàn, thật muốn bùng nổ.", "result": "stressed"}
+{"time": "2026-06-18T10:02:30.184842", "type": "predict", "text": "Mưa bão cây cối đổ rạp, phải lo dọn dẹp chạy đôn chạy đáo mệt quá.", "result": "stressed"}
+{"time": "2026-06-18T10:02:30.189890", "type": "predict", "text": "Đàn cún con phá tan vườn hoa rồi, mình đang rối hết cả lên đây nè 😰.", "result": "stressed"}
+{"time": "2026-06-18T10:02:30.194809", "type": "predict", "text": "Công việc ngập đầu lại thêm việc dắt chó đi dạo, thực sự quá tải kinh khủng.", "result": "stressed"}
+{"time": "2026-06-18T10:02:46.408026", "type": "predict", "text": "Ngồi xem lại cuốn nhật ký cũ, tâm trí mình hoàn toàn chìm đắm vào từng dòng chữ.", "result": "focused"}
+{"time": "2026-06-18T10:02:46.415445", "type": "predict", "text": "Đang tĩnh tâm lục lại mấy tấm hình hồi xưa, chỉ muốn tập trung viết lại kỉ niệm.", "result": "focused"}
+{"time": "2026-06-18T10:02:46.421148", "type": "predict", "text": "Mọi thứ xung quanh lặng thinh, mình chỉ muốn nghiền ngẫm sâu sắc về những ngày đã qua.", "result": "nostalgic"}
+{"time": "2026-06-18T10:02:46.426355", "type": "predict", "text": "Bật playlist nhạc xưa rồi ngồi sắp xếp lại đống ảnh cũ, thấy lòng an yên lạ thường.", "result": "relaxed"}
+{"time": "2026-06-18T10:02:46.431442", "type": "predict", "text": "Đắm chìm vào không gian hoài niệm, mình đang nỗ lực nhớ lại từng chi tiết nhỏ nhất.", "result": "focused"}
+{"time": "2026-06-18T10:02:46.489634", "type": "feedback", "text": "Đang tĩnh tâm lục lại mấy tấm hình hồi xưa, chỉ muốn tập trung viết lại kỉ niệm.", "correct": "focused", "feedback_count": 615}
+{"time": "2026-06-18T10:02:46.494770", "type": "predict", "text": "Ngồi xem lại cuốn nhật ký cũ, tâm trí mình hoàn toàn chìm đắm vào từng dòng chữ.", "result": "focused"}
+{"time": "2026-06-18T10:02:46.499575", "type": "predict", "text": "Đang tĩnh tâm lục lại mấy tấm hình hồi xưa, chỉ muốn tập trung viết lại kỉ niệm.", "result": "focused"}
+{"time": "2026-06-18T10:02:46.504568", "type": "predict", "text": "Mọi thứ xung quanh lặng thinh, mình chỉ muốn nghiền ngẫm sâu sắc về những ngày đã qua.", "result": "nostalgic"}
+{"time": "2026-06-18T10:02:46.509501", "type": "predict", "text": "Bật playlist nhạc xưa rồi ngồi sắp xếp lại đống ảnh cũ, thấy lòng an yên lạ thường.", "result": "relaxed"}
+{"time": "2026-06-18T10:02:46.514537", "type": "predict", "text": "Đắm chìm vào không gian hoài niệm, mình đang nỗ lực nhớ lại từng chi tiết nhỏ nhất.", "result": "focused"}
+{"time": "2026-06-18T10:03:02.760707", "type": "predict", "text": "Ngắm lại xấp hóa đơn cũ, tự nhiên thấy nhớ thời chưa phải lo cơm áo gạo tiền quá.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:02.768386", "type": "predict", "text": "Mới đó mà đã năm năm rồi, lúc ấy mình nghèo mà vui, chẳng nặng gánh lo toan như bây giờ.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:02.774151", "type": "predict", "text": "Dọn tủ thấy cuốn sổ chi tiêu hồi xưa, tự nhiên thấy buồn man mác về một thời đã xa.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:02.779644", "type": "predict", "text": "Nhớ cái dạo mình mới đi làm, lương ba cọc ba đồng nhưng tâm hồn lại thảnh thơi vô cùng.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:02.784874", "type": "predict", "text": "Tự dưng nhìn lại ảnh khu trọ cũ, thèm cái cảm giác giản đơn không cần nghĩ ngợi về tiền bạc.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:02.844954", "type": "feedback", "text": "Ngắm lại xấp hóa đơn cũ, tự nhiên thấy nhớ thời chưa phải lo cơm áo gạo tiền quá.", "correct": "nostalgic", "feedback_count": 616}
+{"time": "2026-06-18T10:03:02.910121", "type": "feedback", "text": "Mới đó mà đã năm năm rồi, lúc ấy mình nghèo mà vui, chẳng nặng gánh lo toan như bây giờ.", "correct": "nostalgic", "feedback_count": 617}
+{"time": "2026-06-18T10:03:02.970971", "type": "feedback", "text": "Dọn tủ thấy cuốn sổ chi tiêu hồi xưa, tự nhiên thấy buồn man mác về một thời đã xa.", "correct": "nostalgic", "feedback_count": 618}
+{"time": "2026-06-18T10:03:03.039072", "type": "feedback", "text": "Nhớ cái dạo mình mới đi làm, lương ba cọc ba đồng nhưng tâm hồn lại thảnh thơi vô cùng.", "correct": "nostalgic", "feedback_count": 619}
+{"time": "2026-06-18T10:03:03.106342", "type": "feedback", "text": "Tự dưng nhìn lại ảnh khu trọ cũ, thèm cái cảm giác giản đơn không cần nghĩ ngợi về tiền bạc.", "correct": "nostalgic", "feedback_count": 620}
+{"time": "2026-06-18T10:03:03.111640", "type": "predict", "text": "Ngắm lại xấp hóa đơn cũ, tự nhiên thấy nhớ thời chưa phải lo cơm áo gạo tiền quá.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:03.117059", "type": "predict", "text": "Mới đó mà đã năm năm rồi, lúc ấy mình nghèo mà vui, chẳng nặng gánh lo toan như bây giờ.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:03.122052", "type": "predict", "text": "Dọn tủ thấy cuốn sổ chi tiêu hồi xưa, tự nhiên thấy buồn man mác về một thời đã xa.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:03.127065", "type": "predict", "text": "Nhớ cái dạo mình mới đi làm, lương ba cọc ba đồng nhưng tâm hồn lại thảnh thơi vô cùng.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:03.132395", "type": "predict", "text": "Tự dưng nhìn lại ảnh khu trọ cũ, thèm cái cảm giác giản đơn không cần nghĩ ngợi về tiền bạc.", "result": "nostalgic"}
+{"time": "2026-06-18T10:03:19.437878", "type": "predict", "text": "Phục vụ gì mà chậm chạp, đợi cả tiếng đồng hồ chưa có món, tức điên người!", "result": "angry"}
+{"time": "2026-06-18T10:03:19.446925", "type": "predict", "text": "Đã ghi chú không hành mà quán vẫn cho vào, thật là làm ăn cẩu thả quá.", "result": "angry"}
+{"time": "2026-06-18T10:03:19.453412", "type": "predict", "text": "Đồ ăn vừa đắt lại còn nguội ngắt, cảm giác như bị lừa tiền vậy, bực ghê.", "result": "angry"}
+{"time": "2026-06-18T10:03:19.458837", "type": "predict", "text": "Quán làm ăn kiểu gì vậy, thái độ nhân viên lồi lõm coi thường khách hàng thế à?", "result": "angry"}
+{"time": "2026-06-18T10:03:19.463980", "type": "predict", "text": "Chờ đợi cả buổi sáng mà món lên không đúng vị, thật sự quá thất vọng và ức chế!", "result": "angry"}
+{"time": "2026-06-18T10:03:19.522709", "type": "feedback", "text": "Phục vụ gì mà chậm chạp, đợi cả tiếng đồng hồ chưa có món, tức điên người!", "correct": "angry", "feedback_count": 621}
+{"time": "2026-06-18T10:03:19.591425", "type": "feedback", "text": "Đã ghi chú không hành mà quán vẫn cho vào, thật là làm ăn cẩu thả quá.", "correct": "angry", "feedback_count": 622}
+{"time": "2026-06-18T10:03:19.658189", "type": "feedback", "text": "Đồ ăn vừa đắt lại còn nguội ngắt, cảm giác như bị lừa tiền vậy, bực ghê.", "correct": "angry", "feedback_count": 623}
+{"time": "2026-06-18T10:03:19.721740", "type": "feedback", "text": "Quán làm ăn kiểu gì vậy, thái độ nhân viên lồi lõm coi thường khách hàng thế à?", "correct": "angry", "feedback_count": 624}
+{"time": "2026-06-18T10:03:19.782171", "type": "feedback", "text": "Chờ đợi cả buổi sáng mà món lên không đúng vị, thật sự quá thất vọng và ức chế!", "correct": "angry", "feedback_count": 625}
+{"time": "2026-06-18T10:03:19.789606", "type": "predict", "text": "Phục vụ gì mà chậm chạp, đợi cả tiếng đồng hồ chưa có món, tức điên người!", "result": "angry"}
+{"time": "2026-06-18T10:03:19.795720", "type": "predict", "text": "Đã ghi chú không hành mà quán vẫn cho vào, thật là làm ăn cẩu thả quá.", "result": "angry"}
+{"time": "2026-06-18T10:03:19.800718", "type": "predict", "text": "Đồ ăn vừa đắt lại còn nguội ngắt, cảm giác như bị lừa tiền vậy, bực ghê.", "result": "angry"}
+{"time": "2026-06-18T10:03:19.806228", "type": "predict", "text": "Quán làm ăn kiểu gì vậy, thái độ nhân viên lồi lõm coi thường khách hàng thế à?", "result": "angry"}
+{"time": "2026-06-18T10:03:19.811692", "type": "predict", "text": "Chờ đợi cả buổi sáng mà món lên không đúng vị, thật sự quá thất vọng và ức chế!", "result": "angry"}
