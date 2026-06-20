@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
-import json, os, sys, time, random
+import json, os, sys, time, random, threading
 from datetime import datetime
 from collections import Counter
 import urllib.request, urllib.parse, urllib.error
@@ -172,6 +172,37 @@ def log_event(event_type, data):
             ensure_ascii=False
         ) + "\n")
 
+# ─── BỘ ĐẾM NGƯỜI DÙNG (online / đang nghe / tổng lượt truy cập) ──
+# Không dùng DB/WebSocket: frontend gọi /api/presence/ping định kỳ
+# (heartbeat), server giữ session trong RAM và coi là "rời trang" nếu
+# quá PRESENCE_TIMEOUT giây không thấy ping nào.
+VISIT_STATS_PATH  = os.path.join(os.path.dirname(__file__), "visit_stats.json")
+PRESENCE_TIMEOUT  = 40   # giây không ping → coi như đã rời trang
+
+presence_lock     = threading.Lock()
+online_sessions   = {}   # session_id -> {"last_seen": ts, "listening": bool}
+counted_sessions  = set()  # session_id đã được tính vào tổng lượt truy cập
+
+def _load_visit_total():
+    if os.path.exists(VISIT_STATS_PATH):
+        try:
+            with open(VISIT_STATS_PATH, encoding="utf-8") as f:
+                return int(json.load(f).get("total_visits", 0))
+        except Exception:
+            pass
+    return 0
+
+def _save_visit_total(total):
+    with open(VISIT_STATS_PATH, "w", encoding="utf-8") as f:
+        json.dump({"total_visits": total}, f)
+
+visit_total = _load_visit_total()
+
+def _prune_sessions():
+    cutoff = time.time() - PRESENCE_TIMEOUT
+    for sid in [s for s, v in online_sessions.items() if v["last_seen"] < cutoff]:
+        online_sessions.pop(sid, None)
+
 # ─── ENDPOINTS ────────────────────────────────────────────────────
 
 @app.route("/api/health")
@@ -194,6 +225,37 @@ def health():
             "activation":  "leaky_relu",
             "l2":          round(engine.mlp.l2, 6),
         },
+    })
+
+@app.route("/api/presence/ping", methods=["POST"])
+def presence_ping():
+    """Heartbeat từ frontend (gọi định kỳ + khi rời trang qua sendBeacon).
+    Trả về số người đang online / đang nghe nhạc / tổng lượt truy cập."""
+    global visit_total
+    data = request.get_json(silent=True) or {}
+    session_id = (data.get("session_id") or "").strip()
+    if not session_id:
+        return jsonify({"error": "session_id required"}), 400
+
+    with presence_lock:
+        if data.get("leaving"):
+            online_sessions.pop(session_id, None)
+        else:
+            _prune_sessions()
+            if session_id not in counted_sessions:
+                counted_sessions.add(session_id)
+                visit_total += 1
+                _save_visit_total(visit_total)
+            online_sessions[session_id] = {
+                "last_seen": time.time(),
+                "listening": bool(data.get("listening")),
+            }
+        online_count    = len(online_sessions)
+        listening_count = sum(1 for v in online_sessions.values() if v["listening"])
+
+    return jsonify({
+        "status": "ok", "online": online_count,
+        "listening": listening_count, "total_visits": visit_total,
     })
 
 @app.route("/api/predict", methods=["POST"])

@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MoodTune — AI Cảm Xúc Tự Xây</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#080810">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MoodTune">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -21,8 +29,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
 header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:28px}
 .logo{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,7vw,34px);line-height:1;
-  background:linear-gradient(135deg,#1ed760 0%,#1db954 50%,#7c6af7 100%);
+  display:inline-flex;align-items:center;gap:10px}
+.logo-text{background:linear-gradient(135deg,#1ed760 0%,#1db954 50%,#7c6af7 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-icon{height:1.3em;width:1.3em;object-fit:contain;border-radius:50%}
 .logo em{font-style:italic}
 .sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;margin-top:4px}
 .version-tag{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--accent2);background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.25);border-radius:8px;padding:2px 7px;vertical-align:middle;margin-left:8px;letter-spacing:.05em;cursor:pointer;transition:all .2s}
@@ -46,6 +56,12 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
 .stat-pill{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;gap:7px;color:var(--muted)}
 .stat-pill .val{color:var(--accent2);font-weight:500}
 
+.presence-widget{position:fixed;bottom:16px;right:16px;z-index:40;display:flex;align-items:center;gap:7px;
+  background:rgba(16,16,30,.85);backdrop-filter:blur(6px);border:1px solid var(--border);border-radius:30px;
+  padding:7px 13px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);box-shadow:0 4px 18px rgba(0,0,0,.3)}
+.presence-widget b{color:var(--accent2);font-weight:500}
+.presence-widget .presence-sep{opacity:.35}
+
 .grid{display:grid;grid-template-columns:5fr 7fr;gap:16px;margin-bottom:16px}
 @media(max-width:780px){.grid{grid-template-columns:1fr}}
 @media(max-width:480px){
@@ -53,6 +69,7 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
   .modal-box{padding:18px}
   .player-top{gap:12px}
   .stat-pill{font-size:9.5px;padding:6px 11px}
+  .presence-widget{font-size:9px;padding:6px 10px;bottom:10px;right:10px;gap:5px}
 }
 .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;min-width:0}
 .card-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:8px}
@@ -202,7 +219,7 @@ audio{width:100%;height:40px}
 
 <header>
   <div>
-    <div class="logo">Mood<em>Tune</em> <span class="version-tag" onclick="showVersions()" title="Xem lịch sử phiên bản">v3.6</span></div>
+    <div class="logo"><img src="logo.png" alt="MoodTune" class="logo-icon"><span class="logo-text">Mood<em>Tune</em></span> <span class="version-tag" onclick="showVersions()" title="Xem lịch sử phiên bản">v3.6</span></div>
     <div class="sub">// AI CẢM XÚC TỰ XÂY · SELF-ATTENTION · JAMENDO</div>
   </div>
   <div class="header-actions">
@@ -409,6 +426,14 @@ audio{width:100%;height:40px}
 </div>
 </div>
 <div id="toast"></div>
+<div class="presence-widget" title="Người dùng trực tuyến">
+  <span class="dot" id="presence-dot" style="width:6px;height:6px"></span>
+  <span><b id="stat-online">—</b> online</span>
+  <span class="presence-sep">·</span>
+  <span>🎧 <b id="stat-listening">—</b></span>
+  <span class="presence-sep">·</span>
+  <span>👀 <b id="stat-visits">—</b></span>
+</div>
 
 <script>
 // ─── API ENDPOINT (tự nhận biết môi trường) ───────────────────────
@@ -448,6 +473,19 @@ let likedTags    = JSON.parse(localStorage.getItem("mt_tags") || "{}");
 const AUDIO_EXT = ['.mp3','.m4a','.flac','.wav','.ogg'];
 let localFiles = new Map();   // filename -> FileSystemFileHandle (chỉ tồn tại trong session)
 let localLibrary = JSON.parse(localStorage.getItem("mt_local_library") || "{}"); // filename -> {emotion,label,emoji}
+
+// Bộ đếm người dùng (online / đang nghe / lượt truy cập) — sessionStorage
+// để mỗi tab tính là 1 lượt, nhưng reload trong cùng tab không bị đếm trùng.
+function getSessionId() {
+  let id = sessionStorage.getItem("mt_session_id");
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : "sid-" + Date.now() + "-" + Math.random().toString(36).slice(2));
+    sessionStorage.setItem("mt_session_id", id);
+  }
+  return id;
+}
+const SESSION_ID = getSessionId();
+const PRESENCE_PING_MS = 15000;
 
 // ── ERROR HELPER ──────────────────────────────────────────────────
 // Phân biệt loại lỗi để báo cho user thay vì "Lỗi kết nối server" chung chung
@@ -498,10 +536,11 @@ function emotionByHour(h) {
   renderHistory();
   loadHealth();   // pull vocab/hidden/feedback từ server, đồng thời báo trạng thái
   initLocalLibrary();
+  pingPresence(); // báo "đã vào trang" + lấy số online/lượt truy cập ngay lập tức
 
   const audio = document.getElementById('preview-audio');
-  audio.addEventListener('play',  () => { previewPlaying = true;  syncPlayIcons(); });
-  audio.addEventListener('pause', () => { previewPlaying = false; syncPlayIcons(); });
+  audio.addEventListener('play',  () => { previewPlaying = true;  syncPlayIcons(); pingPresence(); });
+  audio.addEventListener('pause', () => { previewPlaying = false; syncPlayIcons(); pingPresence(); });
   audio.addEventListener('ended', () => { nextSong(); });
 
   // Tự động chọn cảm xúc theo giờ máy người dùng
@@ -1013,6 +1052,35 @@ async function loadHealth() {
     document.getElementById('stat-layers').textContent = '—';
   }
 }
+
+// ── BỘ ĐẾM NGƯỜI DÙNG (online / đang nghe / lượt truy cập) ────────
+function updatePresenceUI(d) {
+  document.getElementById('stat-online').textContent    = d.online ?? '—';
+  document.getElementById('stat-listening').textContent = d.listening ?? '—';
+  document.getElementById('stat-visits').textContent    = d.total_visits ?? '—';
+}
+
+async function pingPresence(extra = {}) {
+  try {
+    const d = await apiFetch(API + "/presence/ping", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: SESSION_ID, listening: previewPlaying, ...extra }),
+    });
+    updatePresenceUI(d);
+  } catch (e) { /* im lặng - không làm phiền user vì lỗi đếm online */ }
+}
+
+// Báo "rời trang" ngay khi đóng/chuyển tab để online-count chính xác hơn,
+// thay vì phải chờ PRESENCE_TIMEOUT bên server hết hạn.
+window.addEventListener('pagehide', () => {
+  navigator.sendBeacon(API + "/presence/ping", new Blob(
+    [JSON.stringify({ session_id: SESSION_ID, leaving: true })],
+    { type: 'application/json' }
+  ));
+});
+
+setInterval(() => pingPresence(), PRESENCE_PING_MS);
 
 function updateStats(info) {
   document.getElementById('stat-feedback').textContent = info.feedback_count;
