@@ -165,6 +165,33 @@ mab = ThompsonBandit(BANDIT_PATH)
 
 LOG_PATH = os.path.join(os.path.dirname(__file__), "feedback_log.jsonl")
 
+# ─── RATE LIMIT cho /api/learn (chống spam đầu độc model online learning) ──
+# Online learning dùng 1 model NumPy chung cho mọi người dùng (không phải
+# user-riêng) -> phải chặn 1 IP spam nhãn sai để bảo vệ model chung, nhưng
+# vẫn cho script dạy AI nội bộ (gemini_teacher.py) bỏ qua giới hạn qua
+# header bí mật MOODTUNE_ADMIN_KEY (không set -> bypass này tắt hẳn).
+MOODTUNE_ADMIN_KEY = os.environ.get("MOODTUNE_ADMIN_KEY", "")
+LEARN_RATE_LIMIT  = 12   # tối đa số request /api/learn
+LEARN_RATE_WINDOW = 60   # ... trong mỗi cửa sổ (giây) / 1 IP
+
+_learn_hits_lock = threading.Lock()
+_learn_hits = {}   # ip -> [timestamp request gần đây]
+
+def _client_ip():
+    fwd = request.headers.get("X-Forwarded-For", "")
+    return fwd.split(",")[0].strip() if fwd else (request.remote_addr or "unknown")
+
+def _is_admin_request():
+    return bool(MOODTUNE_ADMIN_KEY) and request.headers.get("X-Admin-Key") == MOODTUNE_ADMIN_KEY
+
+def _is_rate_limited(ip):
+    now = time.time()
+    with _learn_hits_lock:
+        hits = [t for t in _learn_hits.get(ip, []) if now - t < LEARN_RATE_WINDOW]
+        hits.append(now)
+        _learn_hits[ip] = hits
+        return len(hits) > LEARN_RATE_LIMIT
+
 def log_event(event_type, data):
     with open(LOG_PATH, "a", encoding="utf-8") as f:
         f.write(json.dumps(
@@ -331,6 +358,9 @@ def predict():
 
 @app.route("/api/learn", methods=["POST"])
 def learn():
+    if not _is_admin_request() and _is_rate_limited(_client_ip()):
+        return jsonify({"error": f"Quá nhiều yêu cầu dạy model, thử lại sau "
+                                  f"({LEARN_RATE_LIMIT} request/{LEARN_RATE_WINDOW}s)."}), 429
     data    = request.get_json()
     text    = (data or {}).get("text", "").strip()
     correct = (data or {}).get("correct_emotion", "").strip()

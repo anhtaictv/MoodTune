@@ -329,6 +329,12 @@ class AttentionMLP:
             return self._out
         self._empty = False
 
+        # Tự vá nếu E bị lệch nhỏ hơn VOCAB hiện tại (vd: process restart nạp
+        # lại weights.npz cũ hơn dynamic_vocab.json/dynamic_lexicon.json đã
+        # ghi xuống đĩa) — tránh IndexError ở backward() khi gặp token mới.
+        if self.E.shape[0] < VOCAB_SIZE:
+            self.expand_vocab(VOCAB_SIZE - self.E.shape[0])
+
         X = self.E[token_ids]                        # (T, d)
         Q = X @ self.Wq
         K = X @ self.Wk
