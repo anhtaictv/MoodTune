@@ -8,6 +8,12 @@ __pycache__/
 # Logs
 *.log
 
+# Snapshot trước mỗi lần dạy AI hàng loạt (xem teacher_common.backup_model_state)
+backend/backups/
+
+# Cache đặc trưng audio (BPM/Spectral/MFCC) — tự sinh lại được, không cần track
+backend/audio_cache.json
+
 # Claude Code local settings
 .claude/
 

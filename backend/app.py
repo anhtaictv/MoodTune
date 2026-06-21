@@ -601,4 +601,10 @@ if __name__ == "__main__":
     print(f" Vocab: {engine.vocab_size} | Embed: {engine.mlp.d} | Hidden: {engine.mlp.W1.shape[1]} (Self-Attention)")
     print(f" Music API: Jamendo (Free - Full Tracks)")
     print("=" * 50)
-    app.run(host="0.0.0.0", port=5005, debug=False)
+    # waitress thay cho Flask dev server (dev server tự cảnh báo "không dùng
+    # cho production"). threads=1: AttentionMLP/EmotionEngine là NumPy thuần
+    # tự viết, mutate self.E/self._ids/... trực tiếp không có lock -> 2
+    # request /api/learn xử lý đồng thời sẽ ghi đè state lẫn nhau. Giữ
+    # threads=1 để hành vi giống dev server cũ (an toàn), chỉ đổi server.
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=5005, threads=1)

@@ -77,7 +77,7 @@ def analyze_track(track_id, audio_url):
         if y.size == 0:
             return None
         tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
-        bpm = float(tempo)
+        bpm = float(np.atleast_1d(tempo)[0])  # librosa mới trả tempo dạng array, không phải scalar
         centroid = float(np.mean(librosa.feature.spectral_centroid(y=y, sr=sr)))
         mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13).mean(axis=1)
 
