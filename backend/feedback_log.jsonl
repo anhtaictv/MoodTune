@@ -13927,3 +13927,552 @@
 {"time": "2026-06-21T14:25:56.739044", "type": "predict", "text": "Dcm thằng khốn, đã vay tiền rồi còn chặn số để bùng nợ tao à? 😡", "result": "energetic"}
 {"time": "2026-06-21T14:25:56.743727", "type": "predict", "text": "Thật không chấp nhận được kiểu làm việc lươn lẹo, dối trá của team đối tác.", "result": "angry"}
 {"time": "2026-06-21T14:25:56.748727", "type": "predict", "text": "Tôi hoàn toàn phẫn nộ trước hành vi phá hoại tài sản công cộng vô ý thức.", "result": "stressed"}
+{"time": "2026-06-21T19:23:55.740992", "type": "predict", "text": "toi rat vui", "result": "energetic"}
+{"time": "2026-06-21T19:28:46.172223", "type": "predict", "text": "Cuối cùng cũng xong hết deadline rồi, liên hoan tưng bừng thôi anh em ơi!", "result": "energetic"}
+{"time": "2026-06-21T19:28:46.235997", "type": "predict", "text": "Con cún nhà mình hôm nay được đi công viên chạy nhảy nhìn yêu quá trời.", "result": "sad"}
+{"time": "2026-06-21T19:28:46.245839", "type": "predict", "text": "Chốt deal thành công! Thưởng nóng tháng này tha hồ mua sắm thả ga luôn.", "result": "relaxed"}
+{"time": "2026-06-21T19:28:46.253973", "type": "predict", "text": "Ai cũng cười tươi rói khi xem màn trình diễn ca nhạc đỉnh cao tối nay.", "result": "happy"}
+{"time": "2026-06-21T19:28:46.265690", "type": "predict", "text": "Tin vui nè cả nhà, mình vừa nhận được kết quả đỗ đại học xuất sắc!", "result": "happy"}
+{"time": "2026-06-21T19:28:46.293348", "type": "predict", "text": "Nhật ký hôm nay: Bầu trời xanh ngắt, tâm trạng mình phơi phới như đang bay.", "result": "relaxed"}
+{"time": "2026-06-21T19:28:46.306917", "type": "predict", "text": "Ui trời ơi, vé concert của idol tui cuối cùng cũng đã săn được rồi nèee!", "result": "happy"}
+{"time": "2026-06-21T19:28:46.322981", "type": "predict", "text": "Đời là những chuyến đi, hôm nay thấy lòng mình hân hoan khó tả quá đi thôi.", "result": "lonely"}
+{"time": "2026-06-21T19:28:46.344179", "type": "predict", "text": "Thật không thể tin nổi, món quà bất ngờ này làm tui cười suốt cả ngày.", "result": "happy"}
+{"time": "2026-06-21T19:28:46.356791", "type": "predict", "text": "Cuối cùng cũng xong hết deadline rồi, liên hoan tưng bừng thôi anh em ơi!", "result": "energetic"}
+{"time": "2026-06-21T19:28:46.364624", "type": "predict", "text": "Con cún nhà mình hôm nay được đi công viên chạy nhảy nhìn yêu quá trời.", "result": "sad"}
+{"time": "2026-06-21T19:28:46.370132", "type": "predict", "text": "Chốt deal thành công! Thưởng nóng tháng này tha hồ mua sắm thả ga luôn.", "result": "relaxed"}
+{"time": "2026-06-21T19:28:46.375219", "type": "predict", "text": "Ai cũng cười tươi rói khi xem màn trình diễn ca nhạc đỉnh cao tối nay.", "result": "happy"}
+{"time": "2026-06-21T19:28:46.383314", "type": "predict", "text": "Tin vui nè cả nhà, mình vừa nhận được kết quả đỗ đại học xuất sắc!", "result": "happy"}
+{"time": "2026-06-21T19:28:46.389519", "type": "predict", "text": "Nhật ký hôm nay: Bầu trời xanh ngắt, tâm trạng mình phơi phới như đang bay.", "result": "relaxed"}
+{"time": "2026-06-21T19:28:46.395050", "type": "predict", "text": "Ui trời ơi, vé concert của idol tui cuối cùng cũng đã săn được rồi nèee!", "result": "happy"}
+{"time": "2026-06-21T19:28:46.401557", "type": "predict", "text": "Đời là những chuyến đi, hôm nay thấy lòng mình hân hoan khó tả quá đi thôi.", "result": "lonely"}
+{"time": "2026-06-21T19:28:46.408192", "type": "predict", "text": "Thật không thể tin nổi, món quà bất ngờ này làm tui cười suốt cả ngày.", "result": "happy"}
+{"time": "2026-06-21T19:29:54.156667", "type": "predict", "text": "Kết quả thi trượt rồi, bao nhiêu công sức ôn luyện coi như bỏ biển.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.167438", "type": "predict", "text": "Chán quá, deadline dự án tới sát nút mà đầu óc trống rỗng không nghĩ được gì.", "result": "stressed"}
+{"time": "2026-06-21T19:29:54.174211", "type": "predict", "text": "Mưa mãi, chuyến đi Đà Lạt đành hủy bỏ vì thời tiết tệ hại thế này.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.181701", "type": "predict", "text": "Tại sao mọi nỗ lực của tôi đều dẫn đến kết cục thất bại ê chề như vậy chứ?", "result": "stressed"}
+{"time": "2026-06-21T19:29:54.188742", "type": "predict", "text": "Hôm nay là một ngày tồi tệ khi biết tin dự án mình tâm huyết bị cấp trên gạt bỏ.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.197898", "type": "predict", "text": "mọi thứ sụp đổ hết ròi, ko còn cơ hội sửa sai nữa đâu :(.", "result": "stressed"}
+{"time": "2026-06-21T19:29:54.407520", "type": "predict", "text": "Dòng nhật ký hôm nay chỉ toàn màu xám, tớ thực sự kiệt sức vì những mất mát này.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.423360", "type": "predict", "text": "Tạm biệt nhé, bản hợp đồng mà tôi đã dành cả thanh xuân để theo đuổi cuối cùng cũng tan thành mây khói.", "result": "nostalgic"}
+{"time": "2026-06-21T19:29:54.430121", "type": "predict", "text": "Chẳng còn tâm trí đâu mà nghe nhạc nữa, mọi thứ xung quanh thật vô nghĩa.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.446741", "type": "predict", "text": "Đau lòng quá, bao nhiêu kỳ vọng gửi gắm vào bài thi cuối kỳ đều đã hóa hư không.", "result": "stressed"}
+{"time": "2026-06-21T19:29:54.483027", "type": "predict", "text": "Kết quả thi trượt rồi, bao nhiêu công sức ôn luyện coi như bỏ biển.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.569312", "type": "predict", "text": "Chán quá, deadline dự án tới sát nút mà đầu óc trống rỗng không nghĩ được gì.", "result": "stressed"}
+{"time": "2026-06-21T19:29:54.585088", "type": "predict", "text": "Mưa mãi, chuyến đi Đà Lạt đành hủy bỏ vì thời tiết tệ hại thế này.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.594714", "type": "predict", "text": "Tại sao mọi nỗ lực của tôi đều dẫn đến kết cục thất bại ê chề như vậy chứ?", "result": "stressed"}
+{"time": "2026-06-21T19:29:54.607768", "type": "predict", "text": "Hôm nay là một ngày tồi tệ khi biết tin dự án mình tâm huyết bị cấp trên gạt bỏ.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.617786", "type": "predict", "text": "mọi thứ sụp đổ hết ròi, ko còn cơ hội sửa sai nữa đâu :(.", "result": "stressed"}
+{"time": "2026-06-21T19:29:54.628860", "type": "predict", "text": "Dòng nhật ký hôm nay chỉ toàn màu xám, tớ thực sự kiệt sức vì những mất mát này.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.638061", "type": "predict", "text": "Tạm biệt nhé, bản hợp đồng mà tôi đã dành cả thanh xuân để theo đuổi cuối cùng cũng tan thành mây khói.", "result": "nostalgic"}
+{"time": "2026-06-21T19:29:54.646162", "type": "predict", "text": "Chẳng còn tâm trí đâu mà nghe nhạc nữa, mọi thứ xung quanh thật vô nghĩa.", "result": "sad"}
+{"time": "2026-06-21T19:29:54.655003", "type": "predict", "text": "Đau lòng quá, bao nhiêu kỳ vọng gửi gắm vào bài thi cuối kỳ đều đã hóa hư không.", "result": "stressed"}
+{"time": "2026-06-21T19:31:28.142610", "type": "predict", "text": "Hôm nay tớ chạy bộ 5km mà vẫn tràn trề sinh lực, cười mãi không thôi!", "result": "stressed"}
+{"time": "2026-06-21T19:31:28.149660", "type": "predict", "text": "Nắng vàng rực rỡ quá, chuẩn bị balo đi du lịch thôi mọi người ơi ☀️", "result": "happy"}
+{"time": "2026-06-21T19:31:28.155843", "type": "predict", "text": "Ai bảo học hành là khổ chứ, tớ vừa giải xong bài toán khó, sướng rơn!", "result": "stressed"}
+{"time": "2026-06-21T19:31:28.162003", "type": "predict", "text": "Cuối cùng dự án cũng xong xuôi tốt đẹp, tối nay cả team mình đi xõa nhé.", "result": "focused"}
+{"time": "2026-06-21T19:31:28.170068", "type": "predict", "text": "Chẳng thể tin được tương lai của tụi mình lại tươi sáng đến nhường này, hạnh phúc ghê!", "result": "happy"}
+{"time": "2026-06-21T19:31:28.176343", "type": "predict", "text": "OMG!!! Tin vui đến dồn dập, tớ đang nhảy cẫng lên vì sung sướng đây này.", "result": "energetic"}
+{"time": "2026-06-21T19:31:28.183560", "type": "predict", "text": "Nhật ký ngày 20/10: Nhận được món quà bất ngờ, miệng cười tươi suốt cả ngày dài.", "result": "happy"}
+{"time": "2026-06-21T19:31:28.190913", "type": "predict", "text": "Mọi người ơi, kế hoạch đi Đà Lạt tuần sau đã được chốt, háo hức quá đi mất!", "result": "energetic"}
+{"time": "2026-06-21T19:31:28.200314", "type": "predict", "text": "Kết quả thi vượt xa mong đợi, cảm giác hân hoan này thật sự chẳng thể tả nổi.", "result": "energetic"}
+{"time": "2026-06-21T19:31:28.208066", "type": "predict", "text": "Hôm nay tớ chạy bộ 5km mà vẫn tràn trề sinh lực, cười mãi không thôi!", "result": "stressed"}
+{"time": "2026-06-21T19:31:28.216291", "type": "predict", "text": "Nắng vàng rực rỡ quá, chuẩn bị balo đi du lịch thôi mọi người ơi ☀️", "result": "happy"}
+{"time": "2026-06-21T19:31:28.223775", "type": "predict", "text": "Ai bảo học hành là khổ chứ, tớ vừa giải xong bài toán khó, sướng rơn!", "result": "stressed"}
+{"time": "2026-06-21T19:31:28.234290", "type": "predict", "text": "Cuối cùng dự án cũng xong xuôi tốt đẹp, tối nay cả team mình đi xõa nhé.", "result": "focused"}
+{"time": "2026-06-21T19:31:28.274941", "type": "predict", "text": "Chẳng thể tin được tương lai của tụi mình lại tươi sáng đến nhường này, hạnh phúc ghê!", "result": "happy"}
+{"time": "2026-06-21T19:31:28.306716", "type": "predict", "text": "OMG!!! Tin vui đến dồn dập, tớ đang nhảy cẫng lên vì sung sướng đây này.", "result": "energetic"}
+{"time": "2026-06-21T19:31:28.318074", "type": "predict", "text": "Nhật ký ngày 20/10: Nhận được món quà bất ngờ, miệng cười tươi suốt cả ngày dài.", "result": "happy"}
+{"time": "2026-06-21T19:31:28.331110", "type": "predict", "text": "Mọi người ơi, kế hoạch đi Đà Lạt tuần sau đã được chốt, háo hức quá đi mất!", "result": "energetic"}
+{"time": "2026-06-21T19:31:28.339137", "type": "predict", "text": "Kết quả thi vượt xa mong đợi, cảm giác hân hoan này thật sự chẳng thể tả nổi.", "result": "energetic"}
+{"time": "2026-06-21T19:33:17.202867", "type": "predict", "text": "Cuối cùng cũng xong đồ án rồi, đi ăn mừng tất niên thôi các bác ơi!", "result": "energetic"}
+{"time": "2026-06-21T19:33:17.227104", "type": "predict", "text": "Cảm giác cầm tấm bằng loại Giỏi trên tay thực sự quá đỗi tự hào và hạnh phúc.", "result": "happy"}
+{"time": "2026-06-21T19:33:17.241906", "type": "predict", "text": "Chẳng hiểu sao hôm nay tui thấy yêu đời lạ, mọi thứ đều rạng rỡ và tràn đầy hy vọng.", "result": "sad"}
+{"time": "2026-06-21T19:33:17.247423", "type": "predict", "text": "Mọi người ơi, quán cafe view hồ mới mở đỉnh quá, check-in ngay kẻo lỡ nha!", "result": "relaxed"}
+{"time": "2026-06-21T19:33:17.256940", "type": "predict", "text": "Sau bao ngày tập luyện, cuối cùng tớ cũng chinh phục được mục tiêu chạy bộ 10km rồi, vui không tả nổi!", "result": "energetic"}
+{"time": "2026-06-21T19:33:17.264068", "type": "predict", "text": "Ước mơ du học của mình sắp thành hiện thực rồi, cuộc đời đúng là một chuyến phiêu lưu tuyệt vời.", "result": "happy"}
+{"time": "2026-06-21T19:33:17.271185", "type": "predict", "text": "Này, nay được tăng lương kìa, tối nay phải làm bữa tiệc lớn khao cả nhà mình thôi!", "result": "energetic"}
+{"time": "2026-06-21T19:33:17.286999", "type": "predict", "text": "OMG, crush vừa thả tim story của mình kìa, tim tớ như muốn nhảy ra khỏi lồng ngực luôn ấy! :D", "result": "romantic"}
+{"time": "2026-06-21T19:33:17.311894", "type": "predict", "text": "Tận hưởng hương vị món ăn yêu thích cùng bạn bè giữa không gian rực rỡ sắc màu này thật là sướng.", "result": "relaxed"}
+{"time": "2026-06-21T19:33:17.835643", "type": "feedback", "text": "Cảm giác cầm tấm bằng loại Giỏi trên tay thực sự quá đỗi tự hào và hạnh phúc.", "correct": "happy", "feedback_count": 3456}
+{"time": "2026-06-21T19:33:18.277446", "type": "feedback", "text": "Chẳng hiểu sao hôm nay tui thấy yêu đời lạ, mọi thứ đều rạng rỡ và tràn đầy hy vọng.", "correct": "happy", "feedback_count": 3457}
+{"time": "2026-06-21T19:33:18.834456", "type": "feedback", "text": "Mọi người ơi, quán cafe view hồ mới mở đỉnh quá, check-in ngay kẻo lỡ nha!", "correct": "energetic", "feedback_count": 3458}
+{"time": "2026-06-21T19:33:19.324256", "type": "feedback", "text": "Sau bao ngày tập luyện, cuối cùng tớ cũng chinh phục được mục tiêu chạy bộ 10km rồi, vui không tả nổi!", "correct": "happy", "feedback_count": 3459}
+{"time": "2026-06-21T19:33:19.681989", "type": "feedback", "text": "OMG, crush vừa thả tim story của mình kìa, tim tớ như muốn nhảy ra khỏi lồng ngực luôn ấy! :D", "correct": "romantic", "feedback_count": 3460}
+{"time": "2026-06-21T19:33:19.687986", "type": "predict", "text": "Cuối cùng cũng xong đồ án rồi, đi ăn mừng tất niên thôi các bác ơi!", "result": "happy"}
+{"time": "2026-06-21T19:33:19.693868", "type": "predict", "text": "Cảm giác cầm tấm bằng loại Giỏi trên tay thực sự quá đỗi tự hào và hạnh phúc.", "result": "happy"}
+{"time": "2026-06-21T19:33:19.699756", "type": "predict", "text": "Chẳng hiểu sao hôm nay tui thấy yêu đời lạ, mọi thứ đều rạng rỡ và tràn đầy hy vọng.", "result": "happy"}
+{"time": "2026-06-21T19:33:19.705125", "type": "predict", "text": "Mọi người ơi, quán cafe view hồ mới mở đỉnh quá, check-in ngay kẻo lỡ nha!", "result": "energetic"}
+{"time": "2026-06-21T19:33:19.710552", "type": "predict", "text": "Sau bao ngày tập luyện, cuối cùng tớ cũng chinh phục được mục tiêu chạy bộ 10km rồi, vui không tả nổi!", "result": "happy"}
+{"time": "2026-06-21T19:33:19.716384", "type": "predict", "text": "Ước mơ du học của mình sắp thành hiện thực rồi, cuộc đời đúng là một chuyến phiêu lưu tuyệt vời.", "result": "happy"}
+{"time": "2026-06-21T19:33:19.721342", "type": "predict", "text": "Này, nay được tăng lương kìa, tối nay phải làm bữa tiệc lớn khao cả nhà mình thôi!", "result": "energetic"}
+{"time": "2026-06-21T19:33:19.726574", "type": "predict", "text": "OMG, crush vừa thả tim story của mình kìa, tim tớ như muốn nhảy ra khỏi lồng ngực luôn ấy! :D", "result": "romantic"}
+{"time": "2026-06-21T19:33:19.732311", "type": "predict", "text": "Tận hưởng hương vị món ăn yêu thích cùng bạn bè giữa không gian rực rỡ sắc màu này thật là sướng.", "result": "happy"}
+{"time": "2026-06-21T19:34:02.809343", "type": "predict", "text": "Dự án thất bại, mọi nỗ lực của tôi đổ sông đổ biển hết rồi.", "result": "stressed"}
+{"time": "2026-06-21T19:34:02.817803", "type": "predict", "text": "Tại sao bài kiểm tra này lại khiến mình trở nên vô dụng thế nhỉ?", "result": "stressed"}
+{"time": "2026-06-21T19:34:02.825071", "type": "predict", "text": "Chán nản quá, crush vừa từ chối mình ngay trước mặt bao người.", "result": "angry"}
+{"time": "2026-06-21T19:34:02.832253", "type": "predict", "text": "Nhật ký: Hôm nay tớ chính thức bị sa thải, cảm giác trống rỗng bao trùm.", "result": "sad"}
+{"time": "2026-06-21T19:34:02.838691", "type": "predict", "text": "Mn ơi, chuyện gđ mình căng thẳng quá, tớ mệt mỏi chỉ muốn buông xuôi.", "result": "romantic"}
+{"time": "2026-06-21T19:34:02.844362", "type": "predict", "text": "Chấn thương này nặng quá, cả mùa giải coi như bỏ đi rồi, buồn thật sự.", "result": "romantic"}
+{"time": "2026-06-21T19:34:02.849540", "type": "predict", "text": "Mọi công sức tập luyện đổ vỡ vì sai lầm ngớ ngẩn của chính mình.", "result": "stressed"}
+{"time": "2026-06-21T19:34:02.855329", "type": "predict", "text": "Mệt mỏi, thất vọng vì những lời chỉ trích cay nghiệt trên mạng xã hội hôm nay. 😔", "result": "sad"}
+{"time": "2026-06-21T19:34:02.860871", "type": "predict", "text": "Liệu có cách nào để cứu vãn mối quan hệ đang rạn nứt này không?", "result": "focused"}
+{"time": "2026-06-21T19:34:02.867066", "type": "predict", "text": "Chẳng còn gì để nói, tình bạn bao năm kết thúc bằng sự phản bội.", "result": "sad"}
+{"time": "2026-06-21T19:34:03.166897", "type": "feedback", "text": "Chán nản quá, crush vừa từ chối mình ngay trước mặt bao người.", "correct": "sad", "feedback_count": 3461}
+{"time": "2026-06-21T19:34:03.450342", "type": "feedback", "text": "Mn ơi, chuyện gđ mình căng thẳng quá, tớ mệt mỏi chỉ muốn buông xuôi.", "correct": "stressed", "feedback_count": 3462}
+{"time": "2026-06-21T19:34:03.746264", "type": "feedback", "text": "Chấn thương này nặng quá, cả mùa giải coi như bỏ đi rồi, buồn thật sự.", "correct": "sad", "feedback_count": 3463}
+{"time": "2026-06-21T19:34:04.178185", "type": "feedback", "text": "Chẳng còn gì để nói, tình bạn bao năm kết thúc bằng sự phản bội.", "correct": "sad", "feedback_count": 3464}
+{"time": "2026-06-21T19:34:04.183957", "type": "predict", "text": "Dự án thất bại, mọi nỗ lực của tôi đổ sông đổ biển hết rồi.", "result": "angry"}
+{"time": "2026-06-21T19:34:04.189277", "type": "predict", "text": "Tại sao bài kiểm tra này lại khiến mình trở nên vô dụng thế nhỉ?", "result": "stressed"}
+{"time": "2026-06-21T19:34:04.195104", "type": "predict", "text": "Chán nản quá, crush vừa từ chối mình ngay trước mặt bao người.", "result": "sad"}
+{"time": "2026-06-21T19:34:04.200517", "type": "predict", "text": "Nhật ký: Hôm nay tớ chính thức bị sa thải, cảm giác trống rỗng bao trùm.", "result": "sad"}
+{"time": "2026-06-21T19:34:04.206004", "type": "predict", "text": "Mn ơi, chuyện gđ mình căng thẳng quá, tớ mệt mỏi chỉ muốn buông xuôi.", "result": "stressed"}
+{"time": "2026-06-21T19:34:04.211489", "type": "predict", "text": "Chấn thương này nặng quá, cả mùa giải coi như bỏ đi rồi, buồn thật sự.", "result": "sad"}
+{"time": "2026-06-21T19:34:04.216965", "type": "predict", "text": "Mọi công sức tập luyện đổ vỡ vì sai lầm ngớ ngẩn của chính mình.", "result": "sad"}
+{"time": "2026-06-21T19:34:04.222540", "type": "predict", "text": "Mệt mỏi, thất vọng vì những lời chỉ trích cay nghiệt trên mạng xã hội hôm nay. 😔", "result": "sad"}
+{"time": "2026-06-21T19:34:04.228510", "type": "predict", "text": "Liệu có cách nào để cứu vãn mối quan hệ đang rạn nứt này không?", "result": "focused"}
+{"time": "2026-06-21T19:34:04.234088", "type": "predict", "text": "Chẳng còn gì để nói, tình bạn bao năm kết thúc bằng sự phản bội.", "result": "sad"}
+{"time": "2026-06-21T19:34:39.504994", "type": "predict", "text": "Anh là định mệnh tuyệt vời nhất mà cuộc đời đã mang đến cho em.", "result": "romantic"}
+{"time": "2026-06-21T19:34:39.520897", "type": "predict", "text": "Đêm nay, trái tim em đập loạn nhịp khi nghĩ về nụ cười của cậu ấy.", "result": "romantic"}
+{"time": "2026-06-21T19:34:39.527208", "type": "predict", "text": "Có ai hiểu cảm giác tim đập liên hồi mỗi khi nhận được tin nhắn từ crush không?", "result": "happy"}
+{"time": "2026-06-21T19:34:39.533838", "type": "predict", "text": "Từng giai điệu bài hát này như đang viết riêng câu chuyện tình yêu của hai chúng mình.", "result": "romantic"}
+{"time": "2026-06-21T19:34:39.539839", "type": "predict", "text": "Hôm nay kỉ niệm 3 năm, cảm ơn anh đã luôn nắm chặt tay em đi qua mọi giông bão.", "result": "romantic"}
+{"time": "2026-06-21T19:34:39.546642", "type": "predict", "text": "Chỉ cần nhìn thấy ánh mắt anh, thế giới xung quanh bỗng trở nên rực rỡ và tràn đầy sức sống hơn bao giờ hết, yêu thương này thật khó tả quá đi! ❤️", "result": "happy"}
+{"time": "2026-06-21T19:34:39.552574", "type": "predict", "text": "Này, liệu tối mai cậu có muốn cùng tớ đi dạo dưới ánh đèn phố thị lung linh kia không?", "result": "romantic"}
+{"time": "2026-06-21T19:34:39.558096", "type": "predict", "text": "Gửi đến người thương: cảm ơn anh đã biến những ngày bình thường của em trở thành những khoảnh khắc lãng mạn đáng nhớ nhất.", "result": "romantic"}
+{"time": "2026-06-21T19:34:39.859076", "type": "feedback", "text": "Anh là định mệnh tuyệt vời nhất mà cuộc đời đã mang đến cho em.", "correct": "romantic", "feedback_count": 3465}
+{"time": "2026-06-21T19:34:40.153758", "type": "feedback", "text": "Đêm nay, trái tim em đập loạn nhịp khi nghĩ về nụ cười của cậu ấy.", "correct": "romantic", "feedback_count": 3466}
+{"time": "2026-06-21T19:34:40.454996", "type": "feedback", "text": "Có ai hiểu cảm giác tim đập liên hồi mỗi khi nhận được tin nhắn từ crush không?", "correct": "romantic", "feedback_count": 3467}
+{"time": "2026-06-21T19:34:40.720278", "type": "feedback", "text": "Từng giai điệu bài hát này như đang viết riêng câu chuyện tình yêu của hai chúng mình.", "correct": "romantic", "feedback_count": 3468}
+{"time": "2026-06-21T19:34:41.015184", "type": "feedback", "text": "Hôm nay kỉ niệm 3 năm, cảm ơn anh đã luôn nắm chặt tay em đi qua mọi giông bão.", "correct": "romantic", "feedback_count": 3469}
+{"time": "2026-06-21T19:34:41.294113", "type": "feedback", "text": "Chỉ cần nhìn thấy ánh mắt anh, thế giới xung quanh bỗng trở nên rực rỡ và tràn đầy sức sống hơn bao giờ hết, yêu thương này thật khó tả quá đi! ❤️", "correct": "romantic", "feedback_count": 3470}
+{"time": "2026-06-21T19:34:41.566911", "type": "feedback", "text": "Này, liệu tối mai cậu có muốn cùng tớ đi dạo dưới ánh đèn phố thị lung linh kia không?", "correct": "romantic", "feedback_count": 3471}
+{"time": "2026-06-21T19:34:41.869742", "type": "feedback", "text": "Gửi đến người thương: cảm ơn anh đã biến những ngày bình thường của em trở thành những khoảnh khắc lãng mạn đáng nhớ nhất.", "correct": "romantic", "feedback_count": 3472}
+{"time": "2026-06-21T19:34:41.885101", "type": "predict", "text": "Anh là định mệnh tuyệt vời nhất mà cuộc đời đã mang đến cho em.", "result": "romantic"}
+{"time": "2026-06-21T19:34:41.891443", "type": "predict", "text": "Đêm nay, trái tim em đập loạn nhịp khi nghĩ về nụ cười của cậu ấy.", "result": "romantic"}
+{"time": "2026-06-21T19:34:41.897356", "type": "predict", "text": "Có ai hiểu cảm giác tim đập liên hồi mỗi khi nhận được tin nhắn từ crush không?", "result": "romantic"}
+{"time": "2026-06-21T19:34:41.903135", "type": "predict", "text": "Từng giai điệu bài hát này như đang viết riêng câu chuyện tình yêu của hai chúng mình.", "result": "romantic"}
+{"time": "2026-06-21T19:34:41.908619", "type": "predict", "text": "Hôm nay kỉ niệm 3 năm, cảm ơn anh đã luôn nắm chặt tay em đi qua mọi giông bão.", "result": "romantic"}
+{"time": "2026-06-21T19:34:41.914352", "type": "predict", "text": "Chỉ cần nhìn thấy ánh mắt anh, thế giới xung quanh bỗng trở nên rực rỡ và tràn đầy sức sống hơn bao giờ hết, yêu thương này thật khó tả quá đi! ❤️", "result": "romantic"}
+{"time": "2026-06-21T19:34:41.919651", "type": "predict", "text": "Này, liệu tối mai cậu có muốn cùng tớ đi dạo dưới ánh đèn phố thị lung linh kia không?", "result": "romantic"}
+{"time": "2026-06-21T19:34:41.924969", "type": "predict", "text": "Gửi đến người thương: cảm ơn anh đã biến những ngày bình thường của em trở thành những khoảnh khắc lãng mạn đáng nhớ nhất.", "result": "romantic"}
+{"time": "2026-06-21T19:35:16.291529", "type": "predict", "text": "Tăng tốc chạy bộ thêm 5km nữa nào, nhịp tim đang đẩy lên cực đại rồi!", "result": "energetic"}
+{"time": "2026-06-21T19:35:16.300006", "type": "predict", "text": "Cả nhóm ơi tối nay quẩy banh nóc tại bar nhé, không say không về nha ae!!", "result": "focused"}
+{"time": "2026-06-21T19:35:16.305859", "type": "predict", "text": "Đang nhảy vũ đạo cuồng nhiệt theo nhịp trống dồn dập khiến mồ hôi ướt đẫm cả áo.", "result": "energetic"}
+{"time": "2026-06-21T19:35:16.311121", "type": "predict", "text": "Máu đang chảy rần rần trong huyết quản khi chuẩn bị bước lên sàn đấu võ thuật chuyên nghiệp.", "result": "focused"}
+{"time": "2026-06-21T19:35:16.316427", "type": "predict", "text": "Chạm đến ước mơ rồi, mình phải bật tung hết năng lượng để hoàn thành dự án gấp rút này ngay lập tức!", "result": "stressed"}
+{"time": "2026-06-21T19:35:16.320915", "type": "predict", "text": "Ui cha, nhạc bass căng cực, nhảy mau lên kẻo lỡ nhịp sôi động của buổi party!", "result": "energetic"}
+{"time": "2026-06-21T19:35:16.326450", "type": "predict", "text": "Đã khởi động cơ bắp sẵn sàng cho giải chạy marathon bứt phá giới hạn vào rạng sáng mai.", "result": "energetic"}
+{"time": "2026-06-21T19:35:16.333535", "type": "predict", "text": "Hồi ức về đêm đại nhạc hội năm ấy vẫn làm mình bùng cháy, muốn nhảy múa cuồng say không dừng lại.", "result": "nostalgic"}
+{"time": "2026-06-21T19:35:16.646583", "type": "feedback", "text": "Tăng tốc chạy bộ thêm 5km nữa nào, nhịp tim đang đẩy lên cực đại rồi!", "correct": "energetic", "feedback_count": 3473}
+{"time": "2026-06-21T19:35:17.039954", "type": "feedback", "text": "Đang nhảy vũ đạo cuồng nhiệt theo nhịp trống dồn dập khiến mồ hôi ướt đẫm cả áo.", "correct": "energetic", "feedback_count": 3474}
+{"time": "2026-06-21T19:35:17.382623", "type": "feedback", "text": "Máu đang chảy rần rần trong huyết quản khi chuẩn bị bước lên sàn đấu võ thuật chuyên nghiệp.", "correct": "energetic", "feedback_count": 3475}
+{"time": "2026-06-21T19:35:17.777161", "type": "feedback", "text": "Chạm đến ước mơ rồi, mình phải bật tung hết năng lượng để hoàn thành dự án gấp rút này ngay lập tức!", "correct": "energetic", "feedback_count": 3476}
+{"time": "2026-06-21T19:35:18.120342", "type": "feedback", "text": "Ui cha, nhạc bass căng cực, nhảy mau lên kẻo lỡ nhịp sôi động của buổi party!", "correct": "energetic", "feedback_count": 3477}
+{"time": "2026-06-21T19:35:18.453043", "type": "feedback", "text": "Đã khởi động cơ bắp sẵn sàng cho giải chạy marathon bứt phá giới hạn vào rạng sáng mai.", "correct": "energetic", "feedback_count": 3478}
+{"time": "2026-06-21T19:35:18.817427", "type": "feedback", "text": "Hồi ức về đêm đại nhạc hội năm ấy vẫn làm mình bùng cháy, muốn nhảy múa cuồng say không dừng lại.", "correct": "energetic", "feedback_count": 3479}
+{"time": "2026-06-21T19:35:18.831828", "type": "predict", "text": "Tăng tốc chạy bộ thêm 5km nữa nào, nhịp tim đang đẩy lên cực đại rồi!", "result": "energetic"}
+{"time": "2026-06-21T19:35:18.840174", "type": "predict", "text": "Cả nhóm ơi tối nay quẩy banh nóc tại bar nhé, không say không về nha ae!!", "result": "focused"}
+{"time": "2026-06-21T19:35:18.846168", "type": "predict", "text": "Đang nhảy vũ đạo cuồng nhiệt theo nhịp trống dồn dập khiến mồ hôi ướt đẫm cả áo.", "result": "energetic"}
+{"time": "2026-06-21T19:35:18.853376", "type": "predict", "text": "Máu đang chảy rần rần trong huyết quản khi chuẩn bị bước lên sàn đấu võ thuật chuyên nghiệp.", "result": "energetic"}
+{"time": "2026-06-21T19:35:18.860544", "type": "predict", "text": "Chạm đến ước mơ rồi, mình phải bật tung hết năng lượng để hoàn thành dự án gấp rút này ngay lập tức!", "result": "energetic"}
+{"time": "2026-06-21T19:35:18.867924", "type": "predict", "text": "Ui cha, nhạc bass căng cực, nhảy mau lên kẻo lỡ nhịp sôi động của buổi party!", "result": "energetic"}
+{"time": "2026-06-21T19:35:18.873017", "type": "predict", "text": "Đã khởi động cơ bắp sẵn sàng cho giải chạy marathon bứt phá giới hạn vào rạng sáng mai.", "result": "energetic"}
+{"time": "2026-06-21T19:35:18.882028", "type": "predict", "text": "Hồi ức về đêm đại nhạc hội năm ấy vẫn làm mình bùng cháy, muốn nhảy múa cuồng say không dừng lại.", "result": "energetic"}
+{"time": "2026-06-21T19:35:46.283206", "type": "predict", "text": "Chiều nay nằm nghe tiếng mưa rơi đều trên mái hiên, lòng nhẹ bẫng chẳng vướng bận chi.", "result": "relaxed"}
+{"time": "2026-06-21T19:35:46.291247", "type": "predict", "text": "Chỉ mong mai sau được sống trong căn nhà nhỏ giữa rừng, mỗi ngày trôi qua tĩnh lặng thế này thôi.", "result": "relaxed"}
+{"time": "2026-06-21T19:35:46.298677", "type": "predict", "text": "Nắng vàng ươm vắt ngang ban công, mình pha ấm trà rồi cứ ngồi im lìm chẳng làm gì cả.", "result": "relaxed"}
+{"time": "2026-06-21T19:35:46.305609", "type": "predict", "text": "Cuối tuần rảnh rỗi, chỉ muốn buông bỏ mọi deadline, thả mình vào không gian tĩnh mịch ko suy nghĩ. 🧘", "result": "relaxed"}
+{"time": "2026-06-21T19:35:46.310736", "type": "predict", "text": "Ai đó có thấy tâm hồn mình như đang tan vào trong làn gió mát buổi hoàng hôn không?", "result": "relaxed"}
+{"time": "2026-06-21T19:35:46.316592", "type": "predict", "text": "Chẳng cần đi xa, chỉ cần nằm dài trên bãi cỏ, ngắm trời mây trôi chậm rãi là quá đủ cho 1 ngày bình yên.", "result": "relaxed"}
+{"time": "2026-06-21T19:35:46.661888", "type": "feedback", "text": "Chiều nay nằm nghe tiếng mưa rơi đều trên mái hiên, lòng nhẹ bẫng chẳng vướng bận chi.", "correct": "relaxed", "feedback_count": 3480}
+{"time": "2026-06-21T19:35:46.997462", "type": "feedback", "text": "Chỉ mong mai sau được sống trong căn nhà nhỏ giữa rừng, mỗi ngày trôi qua tĩnh lặng thế này thôi.", "correct": "relaxed", "feedback_count": 3481}
+{"time": "2026-06-21T19:35:47.392235", "type": "feedback", "text": "Nắng vàng ươm vắt ngang ban công, mình pha ấm trà rồi cứ ngồi im lìm chẳng làm gì cả.", "correct": "relaxed", "feedback_count": 3482}
+{"time": "2026-06-21T19:35:47.764437", "type": "feedback", "text": "Cuối tuần rảnh rỗi, chỉ muốn buông bỏ mọi deadline, thả mình vào không gian tĩnh mịch ko suy nghĩ. 🧘", "correct": "relaxed", "feedback_count": 3483}
+{"time": "2026-06-21T19:35:48.088643", "type": "feedback", "text": "Ai đó có thấy tâm hồn mình như đang tan vào trong làn gió mát buổi hoàng hôn không?", "correct": "relaxed", "feedback_count": 3484}
+{"time": "2026-06-21T19:35:48.414832", "type": "feedback", "text": "Chẳng cần đi xa, chỉ cần nằm dài trên bãi cỏ, ngắm trời mây trôi chậm rãi là quá đủ cho 1 ngày bình yên.", "correct": "relaxed", "feedback_count": 3485}
+{"time": "2026-06-21T19:35:48.439200", "type": "predict", "text": "Chiều nay nằm nghe tiếng mưa rơi đều trên mái hiên, lòng nhẹ bẫng chẳng vướng bận chi.", "result": "relaxed"}
+{"time": "2026-06-21T19:35:48.448373", "type": "predict", "text": "Chỉ mong mai sau được sống trong căn nhà nhỏ giữa rừng, mỗi ngày trôi qua tĩnh lặng thế này thôi.", "result": "relaxed"}
+{"time": "2026-06-21T19:35:48.456545", "type": "predict", "text": "Nắng vàng ươm vắt ngang ban công, mình pha ấm trà rồi cứ ngồi im lìm chẳng làm gì cả.", "result": "relaxed"}
+{"time": "2026-06-21T19:35:48.467736", "type": "predict", "text": "Cuối tuần rảnh rỗi, chỉ muốn buông bỏ mọi deadline, thả mình vào không gian tĩnh mịch ko suy nghĩ. 🧘", "result": "relaxed"}
+{"time": "2026-06-21T19:35:48.475545", "type": "predict", "text": "Ai đó có thấy tâm hồn mình như đang tan vào trong làn gió mát buổi hoàng hôn không?", "result": "relaxed"}
+{"time": "2026-06-21T19:35:48.483001", "type": "predict", "text": "Chẳng cần đi xa, chỉ cần nằm dài trên bãi cỏ, ngắm trời mây trôi chậm rãi là quá đủ cho 1 ngày bình yên.", "result": "relaxed"}
+{"time": "2026-06-21T19:36:15.607849", "type": "predict", "text": "Đêm nay thành phố lên đèn rực rỡ, nhưng sao mình vẫn cứ thấy trơ trọi một mình giữa dòng người vội vã thế này.", "result": "lonely"}
+{"time": "2026-06-21T19:36:15.617375", "type": "predict", "text": "Chẳng có ai nhắn tin, lướt feed chỉ thấy người ta khoe hạnh phúc, tủi thân ghê.", "result": "lonely"}
+{"time": "2026-06-21T19:36:15.626382", "type": "predict", "text": "Giá như lúc này có một người ngồi cạnh lặng im, chỉ cần thế thôi cũng đủ xua đi cái trống trải vô hình đang bủa vây.", "result": "lonely"}
+{"time": "2026-06-21T19:36:15.633342", "type": "predict", "text": "Mọi người đi đâu hết rồi, group chat im ắng đến đáng sợ.", "result": "lonely"}
+{"time": "2026-06-21T19:36:15.639166", "type": "predict", "text": "Tương lai rộng mở thật đấy, nhưng liệu có ý nghĩa gì khi chẳng có lấy một tri kỷ để sẻ chia thành quả sau này?", "result": "lonely"}
+{"time": "2026-06-21T19:36:15.647317", "type": "predict", "text": "Nằm dài giữa căn phòng vắng lặng, thở dài tự hỏi tại sao kết nối giữa người với người lại mong manh đến thế.", "result": "lonely"}
+{"time": "2026-06-21T19:36:15.663654", "type": "predict", "text": "Chẳng còn ai để tâm sự, cảm giác lạc lõng giữa cái thế giới đông đúc này thật nặng nề làm sao. 😶", "result": "lonely"}
+{"time": "2026-06-21T19:36:16.127380", "type": "feedback", "text": "Đêm nay thành phố lên đèn rực rỡ, nhưng sao mình vẫn cứ thấy trơ trọi một mình giữa dòng người vội vã thế này.", "correct": "lonely", "feedback_count": 3486}
+{"time": "2026-06-21T19:36:16.633290", "type": "feedback", "text": "Chẳng có ai nhắn tin, lướt feed chỉ thấy người ta khoe hạnh phúc, tủi thân ghê.", "correct": "lonely", "feedback_count": 3487}
+{"time": "2026-06-21T19:36:17.139042", "type": "feedback", "text": "Giá như lúc này có một người ngồi cạnh lặng im, chỉ cần thế thôi cũng đủ xua đi cái trống trải vô hình đang bủa vây.", "correct": "lonely", "feedback_count": 3488}
+{"time": "2026-06-21T19:36:17.596800", "type": "feedback", "text": "Mọi người đi đâu hết rồi, group chat im ắng đến đáng sợ.", "correct": "lonely", "feedback_count": 3489}
+{"time": "2026-06-21T19:36:18.179085", "type": "feedback", "text": "Tương lai rộng mở thật đấy, nhưng liệu có ý nghĩa gì khi chẳng có lấy một tri kỷ để sẻ chia thành quả sau này?", "correct": "lonely", "feedback_count": 3490}
+{"time": "2026-06-21T19:36:18.742755", "type": "feedback", "text": "Nằm dài giữa căn phòng vắng lặng, thở dài tự hỏi tại sao kết nối giữa người với người lại mong manh đến thế.", "correct": "lonely", "feedback_count": 3491}
+{"time": "2026-06-21T19:36:19.206397", "type": "feedback", "text": "Chẳng còn ai để tâm sự, cảm giác lạc lõng giữa cái thế giới đông đúc này thật nặng nề làm sao. 😶", "correct": "lonely", "feedback_count": 3492}
+{"time": "2026-06-21T19:36:19.222920", "type": "predict", "text": "Đêm nay thành phố lên đèn rực rỡ, nhưng sao mình vẫn cứ thấy trơ trọi một mình giữa dòng người vội vã thế này.", "result": "lonely"}
+{"time": "2026-06-21T19:36:19.233144", "type": "predict", "text": "Chẳng có ai nhắn tin, lướt feed chỉ thấy người ta khoe hạnh phúc, tủi thân ghê.", "result": "lonely"}
+{"time": "2026-06-21T19:36:19.269835", "type": "predict", "text": "Giá như lúc này có một người ngồi cạnh lặng im, chỉ cần thế thôi cũng đủ xua đi cái trống trải vô hình đang bủa vây.", "result": "lonely"}
+{"time": "2026-06-21T19:36:19.310134", "type": "predict", "text": "Mọi người đi đâu hết rồi, group chat im ắng đến đáng sợ.", "result": "lonely"}
+{"time": "2026-06-21T19:36:19.380045", "type": "predict", "text": "Tương lai rộng mở thật đấy, nhưng liệu có ý nghĩa gì khi chẳng có lấy một tri kỷ để sẻ chia thành quả sau này?", "result": "lonely"}
+{"time": "2026-06-21T19:36:19.392771", "type": "predict", "text": "Nằm dài giữa căn phòng vắng lặng, thở dài tự hỏi tại sao kết nối giữa người với người lại mong manh đến thế.", "result": "lonely"}
+{"time": "2026-06-21T19:36:19.419826", "type": "predict", "text": "Chẳng còn ai để tâm sự, cảm giác lạc lõng giữa cái thế giới đông đúc này thật nặng nề làm sao. 😶", "result": "lonely"}
+{"time": "2026-06-21T19:36:48.072714", "type": "predict", "text": "deadline dí sát nút, tim đập thình thịch không thở nổi nữa rồi trời ơi!", "result": "stressed"}
+{"time": "2026-06-21T19:36:48.078785", "type": "predict", "text": "Liệu mình có kịp hoàn thành dự án này trước khi sếp quay lại không?", "result": "sad"}
+{"time": "2026-06-21T19:36:48.084344", "type": "predict", "text": "Tình trạng tắc đường kinh khủng thế này làm sao mình đến công ty đúng giờ được đây?", "result": "stressed"}
+{"time": "2026-06-21T19:36:48.089916", "type": "predict", "text": "Chỉ còn 30 phút nữa là đóng link bài thi, tay run quá, chữ nghĩa bay đâu mất tiêu huhu 😰.", "result": "sad"}
+{"time": "2026-06-21T19:36:48.095540", "type": "predict", "text": "Dồn dập chạy deadline cả tuần qua, đầu óc căng như dây đàn, chỉ muốn gục ngã.", "result": "stressed"}
+{"time": "2026-06-21T19:36:48.100722", "type": "predict", "text": "Mưa bão thế này sao đi công tác kịp, lòng như lửa đốt vì đống hồ sơ tồn đọng.", "result": "stressed"}
+{"time": "2026-06-21T19:36:48.363593", "type": "feedback", "text": "deadline dí sát nút, tim đập thình thịch không thở nổi nữa rồi trời ơi!", "correct": "stressed", "feedback_count": 3493}
+{"time": "2026-06-21T19:36:48.647669", "type": "feedback", "text": "Tình trạng tắc đường kinh khủng thế này làm sao mình đến công ty đúng giờ được đây?", "correct": "stressed", "feedback_count": 3494}
+{"time": "2026-06-21T19:36:48.899564", "type": "feedback", "text": "Chỉ còn 30 phút nữa là đóng link bài thi, tay run quá, chữ nghĩa bay đâu mất tiêu huhu 😰.", "correct": "stressed", "feedback_count": 3495}
+{"time": "2026-06-21T19:36:49.165097", "type": "feedback", "text": "Dồn dập chạy deadline cả tuần qua, đầu óc căng như dây đàn, chỉ muốn gục ngã.", "correct": "stressed", "feedback_count": 3496}
+{"time": "2026-06-21T19:36:49.455333", "type": "feedback", "text": "Mưa bão thế này sao đi công tác kịp, lòng như lửa đốt vì đống hồ sơ tồn đọng.", "correct": "stressed", "feedback_count": 3497}
+{"time": "2026-06-21T19:36:49.461148", "type": "predict", "text": "deadline dí sát nút, tim đập thình thịch không thở nổi nữa rồi trời ơi!", "result": "stressed"}
+{"time": "2026-06-21T19:36:49.466855", "type": "predict", "text": "Liệu mình có kịp hoàn thành dự án này trước khi sếp quay lại không?", "result": "stressed"}
+{"time": "2026-06-21T19:36:49.472594", "type": "predict", "text": "Tình trạng tắc đường kinh khủng thế này làm sao mình đến công ty đúng giờ được đây?", "result": "stressed"}
+{"time": "2026-06-21T19:36:49.478284", "type": "predict", "text": "Chỉ còn 30 phút nữa là đóng link bài thi, tay run quá, chữ nghĩa bay đâu mất tiêu huhu 😰.", "result": "stressed"}
+{"time": "2026-06-21T19:36:49.483959", "type": "predict", "text": "Dồn dập chạy deadline cả tuần qua, đầu óc căng như dây đàn, chỉ muốn gục ngã.", "result": "stressed"}
+{"time": "2026-06-21T19:36:49.490360", "type": "predict", "text": "Mưa bão thế này sao đi công tác kịp, lòng như lửa đốt vì đống hồ sơ tồn đọng.", "result": "stressed"}
+{"time": "2026-06-21T19:37:22.679390", "type": "predict", "text": "Mình đang dồn toàn bộ tâm trí để hoàn thiện bản draft bài luận cuối kỳ này.", "result": "stressed"}
+{"time": "2026-06-21T19:37:22.687991", "type": "predict", "text": "Mưa rơi ngoài hiên, mình vẫn đang miệt mài giải nốt mớ code lỗi từ chiều đến giờ.", "result": "stressed"}
+{"time": "2026-06-21T19:37:22.693467", "type": "predict", "text": "Từng ngụm trà nóng giúp mình giữ vững sự tỉnh táo để hoàn thành xong hết đống báo cáo kinh doanh này.", "result": "stressed"}
+{"time": "2026-06-21T19:37:22.698210", "type": "predict", "text": "Đang cắm cúi đọc tài liệu nghiên cứu chuyên sâu, k làm phiền nha.", "result": "focused"}
+{"time": "2026-06-21T19:37:22.705864", "type": "predict", "text": "Ae trong team tập trung cao độ nhé, sprint tuần này áp lực hơn mọi khi đấy ✍️.", "result": "focused"}
+{"time": "2026-06-21T19:37:22.712931", "type": "predict", "text": "Liệu mình có thể hoàn thành việc chỉnh sửa video này trước khi mặt trời mọc không nhỉ?", "result": "focused"}
+{"time": "2026-06-21T19:37:22.718180", "type": "predict", "text": "Chỉ còn 3 trang nữa là xong cuốn sách chuyên ngành khó nhằn này, cố lên nào.", "result": "stressed"}
+{"time": "2026-06-21T19:37:22.725373", "type": "predict", "text": "Đang fix bug khẩn cấp, mọi người thông cảm mình sẽ phản hồi sau khi xong việc nhé.", "result": "focused"}
+{"time": "2026-06-21T19:37:23.028799", "type": "feedback", "text": "Mình đang dồn toàn bộ tâm trí để hoàn thiện bản draft bài luận cuối kỳ này.", "correct": "focused", "feedback_count": 3498}
+{"time": "2026-06-21T19:37:23.330472", "type": "feedback", "text": "Mưa rơi ngoài hiên, mình vẫn đang miệt mài giải nốt mớ code lỗi từ chiều đến giờ.", "correct": "focused", "feedback_count": 3499}
+{"time": "2026-06-21T19:37:23.592333", "type": "feedback", "text": "Từng ngụm trà nóng giúp mình giữ vững sự tỉnh táo để hoàn thành xong hết đống báo cáo kinh doanh này.", "correct": "focused", "feedback_count": 3500}
+{"time": "2026-06-21T19:37:23.858162", "type": "feedback", "text": "Đang cắm cúi đọc tài liệu nghiên cứu chuyên sâu, k làm phiền nha.", "correct": "focused", "feedback_count": 3501}
+{"time": "2026-06-21T19:37:24.154704", "type": "feedback", "text": "Chỉ còn 3 trang nữa là xong cuốn sách chuyên ngành khó nhằn này, cố lên nào.", "correct": "focused", "feedback_count": 3502}
+{"time": "2026-06-21T19:37:24.163823", "type": "predict", "text": "Mình đang dồn toàn bộ tâm trí để hoàn thiện bản draft bài luận cuối kỳ này.", "result": "focused"}
+{"time": "2026-06-21T19:37:24.169895", "type": "predict", "text": "Mưa rơi ngoài hiên, mình vẫn đang miệt mài giải nốt mớ code lỗi từ chiều đến giờ.", "result": "focused"}
+{"time": "2026-06-21T19:37:24.175805", "type": "predict", "text": "Từng ngụm trà nóng giúp mình giữ vững sự tỉnh táo để hoàn thành xong hết đống báo cáo kinh doanh này.", "result": "focused"}
+{"time": "2026-06-21T19:37:24.181463", "type": "predict", "text": "Đang cắm cúi đọc tài liệu nghiên cứu chuyên sâu, k làm phiền nha.", "result": "focused"}
+{"time": "2026-06-21T19:37:24.187185", "type": "predict", "text": "Ae trong team tập trung cao độ nhé, sprint tuần này áp lực hơn mọi khi đấy ✍️.", "result": "focused"}
+{"time": "2026-06-21T19:37:24.193382", "type": "predict", "text": "Liệu mình có thể hoàn thành việc chỉnh sửa video này trước khi mặt trời mọc không nhỉ?", "result": "focused"}
+{"time": "2026-06-21T19:37:24.199781", "type": "predict", "text": "Chỉ còn 3 trang nữa là xong cuốn sách chuyên ngành khó nhằn này, cố lên nào.", "result": "focused"}
+{"time": "2026-06-21T19:37:24.205841", "type": "predict", "text": "Đang fix bug khẩn cấp, mọi người thông cảm mình sẽ phản hồi sau khi xong việc nhé.", "result": "focused"}
+{"time": "2026-06-21T19:37:57.006108", "type": "predict", "text": "Vô tình thấy lại tấm ảnh cũ thời còn đi học, nghèo mà vui.", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:57.014848", "type": "predict", "text": "Ngày đó mẹ hay nấu món này mỗi khi con đi thi về, giờ vị xưa đâu rồi?", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:57.019964", "type": "predict", "text": "Hồi bé chỉ ước nhanh lớn để kiếm tiền, giờ nhìn lại thấy thương chính mình ghê 😌.", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:57.025959", "type": "predict", "text": "Mấy nay cứ nhớ mãi sân bóng trường cấp 3, cái thời còn chạy nhảy không biết mệt mỏi.", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:57.031047", "type": "predict", "text": "Bỗng nhiên thèm cảm giác được ngồi đợi mẹ đón ngoài cổng trường vào những buổi chiều mưa tầm tã năm nào.", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:57.036785", "type": "predict", "text": "Gửi các ae trong nhóm: ai còn giữ mấy clip quay hồi đại học gửi t xin lại với, xem mà thấy nhớ quãng thời gian đó quá.", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:57.339501", "type": "feedback", "text": "Vô tình thấy lại tấm ảnh cũ thời còn đi học, nghèo mà vui.", "correct": "nostalgic", "feedback_count": 3503}
+{"time": "2026-06-21T19:37:57.683586", "type": "feedback", "text": "Ngày đó mẹ hay nấu món này mỗi khi con đi thi về, giờ vị xưa đâu rồi?", "correct": "nostalgic", "feedback_count": 3504}
+{"time": "2026-06-21T19:37:57.992756", "type": "feedback", "text": "Hồi bé chỉ ước nhanh lớn để kiếm tiền, giờ nhìn lại thấy thương chính mình ghê 😌.", "correct": "nostalgic", "feedback_count": 3505}
+{"time": "2026-06-21T19:37:58.365867", "type": "feedback", "text": "Mấy nay cứ nhớ mãi sân bóng trường cấp 3, cái thời còn chạy nhảy không biết mệt mỏi.", "correct": "nostalgic", "feedback_count": 3506}
+{"time": "2026-06-21T19:37:58.754493", "type": "feedback", "text": "Bỗng nhiên thèm cảm giác được ngồi đợi mẹ đón ngoài cổng trường vào những buổi chiều mưa tầm tã năm nào.", "correct": "nostalgic", "feedback_count": 3507}
+{"time": "2026-06-21T19:37:59.151298", "type": "feedback", "text": "Gửi các ae trong nhóm: ai còn giữ mấy clip quay hồi đại học gửi t xin lại với, xem mà thấy nhớ quãng thời gian đó quá.", "correct": "nostalgic", "feedback_count": 3508}
+{"time": "2026-06-21T19:37:59.159908", "type": "predict", "text": "Vô tình thấy lại tấm ảnh cũ thời còn đi học, nghèo mà vui.", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:59.166782", "type": "predict", "text": "Ngày đó mẹ hay nấu món này mỗi khi con đi thi về, giờ vị xưa đâu rồi?", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:59.176653", "type": "predict", "text": "Hồi bé chỉ ước nhanh lớn để kiếm tiền, giờ nhìn lại thấy thương chính mình ghê 😌.", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:59.184192", "type": "predict", "text": "Mấy nay cứ nhớ mãi sân bóng trường cấp 3, cái thời còn chạy nhảy không biết mệt mỏi.", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:59.192147", "type": "predict", "text": "Bỗng nhiên thèm cảm giác được ngồi đợi mẹ đón ngoài cổng trường vào những buổi chiều mưa tầm tã năm nào.", "result": "nostalgic"}
+{"time": "2026-06-21T19:37:59.199426", "type": "predict", "text": "Gửi các ae trong nhóm: ai còn giữ mấy clip quay hồi đại học gửi t xin lại với, xem mà thấy nhớ quãng thời gian đó quá.", "result": "nostalgic"}
+{"time": "2026-06-21T19:38:36.315156", "type": "predict", "text": "Tại sao thằng cha trọng tài lại mù quáng không thổi phạt tình huống đó ngay trước mắt tôi?", "result": "angry"}
+{"time": "2026-06-21T19:38:36.340093", "type": "predict", "text": "Thật không thể tin nổi, tôi vừa bị lừa sạch số tiền tiết kiệm cả năm trời vì cái app lừa đảo chết tiệt này!", "result": "angry"}
+{"time": "2026-06-21T19:38:36.352503", "type": "predict", "text": "Đề thi quái quỷ gì mà nằm ngoài kiến thức ôn tập vậy, các người đang cố tình làm khó sinh viên đúng không?", "result": "angry"}
+{"time": "2026-06-21T19:38:36.361860", "type": "predict", "text": "Nắng nóng kinh khủng thế này mà cái điều hòa lại hỏng, cuộc đời đúng là đang chống lại tôi mà! 💢", "result": "angry"}
+{"time": "2026-06-21T19:38:36.371213", "type": "predict", "text": "Đứa nào vừa tự ý xóa file báo cáo quan trọng của tao trong server chung đấy, ra mặt ngay!", "result": "angry"}
+{"time": "2026-06-21T19:38:36.387625", "type": "predict", "text": "Thằng cha hàng xóm lại bắt đầu tra tấn lỗ tai bằng cái loa kẹo kéo lúc 2 giờ sáng, thật là vô học hết chỗ nói.", "result": "angry"}
+{"time": "2026-06-21T19:38:36.456353", "type": "predict", "text": "Mất cả buổi sáng đợi taxi mà lũ tài xế cứ hủy chuyến liên tục, dịch vụ làm ăn kiểu gì vậy không biết?", "result": "angry"}
+{"time": "2026-06-21T19:38:36.866800", "type": "feedback", "text": "Tại sao thằng cha trọng tài lại mù quáng không thổi phạt tình huống đó ngay trước mắt tôi?", "correct": "angry", "feedback_count": 3509}
+{"time": "2026-06-21T19:38:37.293423", "type": "feedback", "text": "Thật không thể tin nổi, tôi vừa bị lừa sạch số tiền tiết kiệm cả năm trời vì cái app lừa đảo chết tiệt này!", "correct": "angry", "feedback_count": 3510}
+{"time": "2026-06-21T19:38:37.825995", "type": "feedback", "text": "Đề thi quái quỷ gì mà nằm ngoài kiến thức ôn tập vậy, các người đang cố tình làm khó sinh viên đúng không?", "correct": "angry", "feedback_count": 3511}
+{"time": "2026-06-21T19:38:38.170364", "type": "feedback", "text": "Đứa nào vừa tự ý xóa file báo cáo quan trọng của tao trong server chung đấy, ra mặt ngay!", "correct": "angry", "feedback_count": 3512}
+{"time": "2026-06-21T19:38:38.647121", "type": "feedback", "text": "Thằng cha hàng xóm lại bắt đầu tra tấn lỗ tai bằng cái loa kẹo kéo lúc 2 giờ sáng, thật là vô học hết chỗ nói.", "correct": "angry", "feedback_count": 3513}
+{"time": "2026-06-21T19:38:39.050938", "type": "feedback", "text": "Mất cả buổi sáng đợi taxi mà lũ tài xế cứ hủy chuyến liên tục, dịch vụ làm ăn kiểu gì vậy không biết?", "correct": "angry", "feedback_count": 3514}
+{"time": "2026-06-21T19:38:39.062797", "type": "predict", "text": "Tại sao thằng cha trọng tài lại mù quáng không thổi phạt tình huống đó ngay trước mắt tôi?", "result": "angry"}
+{"time": "2026-06-21T19:38:39.070653", "type": "predict", "text": "Thật không thể tin nổi, tôi vừa bị lừa sạch số tiền tiết kiệm cả năm trời vì cái app lừa đảo chết tiệt này!", "result": "angry"}
+{"time": "2026-06-21T19:38:39.079045", "type": "predict", "text": "Đề thi quái quỷ gì mà nằm ngoài kiến thức ôn tập vậy, các người đang cố tình làm khó sinh viên đúng không?", "result": "angry"}
+{"time": "2026-06-21T19:38:39.085124", "type": "predict", "text": "Nắng nóng kinh khủng thế này mà cái điều hòa lại hỏng, cuộc đời đúng là đang chống lại tôi mà! 💢", "result": "angry"}
+{"time": "2026-06-21T19:38:39.092835", "type": "predict", "text": "Đứa nào vừa tự ý xóa file báo cáo quan trọng của tao trong server chung đấy, ra mặt ngay!", "result": "angry"}
+{"time": "2026-06-21T19:38:39.100429", "type": "predict", "text": "Thằng cha hàng xóm lại bắt đầu tra tấn lỗ tai bằng cái loa kẹo kéo lúc 2 giờ sáng, thật là vô học hết chỗ nói.", "result": "angry"}
+{"time": "2026-06-21T19:38:39.107939", "type": "predict", "text": "Mất cả buổi sáng đợi taxi mà lũ tài xế cứ hủy chuyến liên tục, dịch vụ làm ăn kiểu gì vậy không biết?", "result": "angry"}
+{"time": "2026-06-21T19:39:28.687749", "type": "predict", "text": "Ôi trời ơi, cuối cùng dự án khởi nghiệp của mình đã gọi vốn thành công, vui muốn xỉu luôn á!", "result": "happy"}
+{"time": "2026-06-21T19:39:28.695817", "type": "predict", "text": "Hôm nay trời nắng đẹp quá, đi phượt lên Đà Lạt cùng hội bạn đúng là quyết định sáng suốt nhất năm nay.", "result": "happy"}
+{"time": "2026-06-21T19:39:28.702085", "type": "predict", "text": "Đạt điểm 10 tuyệt đối cho bài kiểm tra cuối kỳ, cảm giác sung sướng không thốt nên lời!", "result": "focused"}
+{"time": "2026-06-21T19:39:28.707534", "type": "predict", "text": "Cả nhà ơi, hôm nay tớ được thăng chức lên quản lý rồi, tối nay qua nhà tớ mở tiệc ăn mừng lớn nhen.", "result": "happy"}
+{"time": "2026-06-21T19:39:28.713471", "type": "predict", "text": "Chạy bộ buổi sáng khiến tinh thần phấn chấn lạ thường, yêu đời đến mức chỉ muốn cười thật tươi với mọi người.", "result": "happy"}
+{"time": "2026-06-21T19:39:28.719092", "type": "predict", "text": "Ước mơ mua được căn hộ đầu đời sắp thành hiện thực rồi, lòng mình cứ nhảy cẫng lên vì phấn khích.", "result": "happy"}
+{"time": "2026-06-21T19:39:28.725119", "type": "predict", "text": "Haha, hôm nay bốc thăm trúng thưởng được con iPhone mới nè, đúng là ngày may mắn nhất trong đời luôn ấy 😊.", "result": "happy"}
+{"time": "2026-06-21T19:39:28.730986", "type": "predict", "text": "Cảm ơn vì đã cùng tôi tạo nên kỷ niệm tuyệt vời tại bãi biển xanh ngắt này, thật sự là quá hạnh phúc.", "result": "happy"}
+{"time": "2026-06-21T19:39:28.737321", "type": "predict", "text": "Thắng trận chung kết bóng đá rồi, cả sân vận động như bùng nổ trong sự vỡ òa của niềm vui chiến thắng.", "result": "sad"}
+{"time": "2026-06-21T19:39:29.015085", "type": "feedback", "text": "Ôi trời ơi, cuối cùng dự án khởi nghiệp của mình đã gọi vốn thành công, vui muốn xỉu luôn á!", "correct": "happy", "feedback_count": 3515}
+{"time": "2026-06-21T19:39:29.321082", "type": "feedback", "text": "Đạt điểm 10 tuyệt đối cho bài kiểm tra cuối kỳ, cảm giác sung sướng không thốt nên lời!", "correct": "happy", "feedback_count": 3516}
+{"time": "2026-06-21T19:39:29.753217", "type": "feedback", "text": "Cả nhà ơi, hôm nay tớ được thăng chức lên quản lý rồi, tối nay qua nhà tớ mở tiệc ăn mừng lớn nhen.", "correct": "happy", "feedback_count": 3517}
+{"time": "2026-06-21T19:39:30.158263", "type": "feedback", "text": "Ước mơ mua được căn hộ đầu đời sắp thành hiện thực rồi, lòng mình cứ nhảy cẫng lên vì phấn khích.", "correct": "happy", "feedback_count": 3518}
+{"time": "2026-06-21T19:39:30.481506", "type": "feedback", "text": "Haha, hôm nay bốc thăm trúng thưởng được con iPhone mới nè, đúng là ngày may mắn nhất trong đời luôn ấy 😊.", "correct": "happy", "feedback_count": 3519}
+{"time": "2026-06-21T19:39:30.814880", "type": "feedback", "text": "Cảm ơn vì đã cùng tôi tạo nên kỷ niệm tuyệt vời tại bãi biển xanh ngắt này, thật sự là quá hạnh phúc.", "correct": "happy", "feedback_count": 3520}
+{"time": "2026-06-21T19:39:30.827269", "type": "predict", "text": "Ôi trời ơi, cuối cùng dự án khởi nghiệp của mình đã gọi vốn thành công, vui muốn xỉu luôn á!", "result": "happy"}
+{"time": "2026-06-21T19:39:30.836352", "type": "predict", "text": "Hôm nay trời nắng đẹp quá, đi phượt lên Đà Lạt cùng hội bạn đúng là quyết định sáng suốt nhất năm nay.", "result": "happy"}
+{"time": "2026-06-21T19:39:30.849919", "type": "predict", "text": "Đạt điểm 10 tuyệt đối cho bài kiểm tra cuối kỳ, cảm giác sung sướng không thốt nên lời!", "result": "happy"}
+{"time": "2026-06-21T19:39:30.864390", "type": "predict", "text": "Cả nhà ơi, hôm nay tớ được thăng chức lên quản lý rồi, tối nay qua nhà tớ mở tiệc ăn mừng lớn nhen.", "result": "happy"}
+{"time": "2026-06-21T19:39:30.881092", "type": "predict", "text": "Chạy bộ buổi sáng khiến tinh thần phấn chấn lạ thường, yêu đời đến mức chỉ muốn cười thật tươi với mọi người.", "result": "happy"}
+{"time": "2026-06-21T19:39:30.926919", "type": "predict", "text": "Ước mơ mua được căn hộ đầu đời sắp thành hiện thực rồi, lòng mình cứ nhảy cẫng lên vì phấn khích.", "result": "happy"}
+{"time": "2026-06-21T19:39:30.938801", "type": "predict", "text": "Haha, hôm nay bốc thăm trúng thưởng được con iPhone mới nè, đúng là ngày may mắn nhất trong đời luôn ấy 😊.", "result": "happy"}
+{"time": "2026-06-21T19:39:30.948112", "type": "predict", "text": "Cảm ơn vì đã cùng tôi tạo nên kỷ niệm tuyệt vời tại bãi biển xanh ngắt này, thật sự là quá hạnh phúc.", "result": "happy"}
+{"time": "2026-06-21T19:39:30.964336", "type": "predict", "text": "Thắng trận chung kết bóng đá rồi, cả sân vận động như bùng nổ trong sự vỡ òa của niềm vui chiến thắng.", "result": "sad"}
+{"time": "2026-06-21T19:40:12.288457", "type": "predict", "text": "Hôm nay dự án bị sếp hủy đột ngột, mình thấy trống rỗng quá.", "result": "sad"}
+{"time": "2026-06-21T19:40:12.296850", "type": "predict", "text": "Tại sao mọi nỗ lực của tôi trong suốt tháng qua lại đổ sông đổ biển thế này?", "result": "angry"}
+{"time": "2026-06-21T19:40:12.303856", "type": "predict", "text": "Chú chó cưng vừa mất, nhà cửa bỗng nhiên yên ắng đến đáng sợ. 😔", "result": "sad"}
+{"time": "2026-06-21T19:40:12.310315", "type": "predict", "text": "Thất bại trong kỳ thi cuối khóa khiến mình chẳng muốn làm gì cả.", "result": "sad"}
+{"time": "2026-06-21T19:40:12.321242", "type": "predict", "text": "Chán nản quá, vừa mất ví tiền lại còn bị lỡ chuyến xe cuối cùng.", "result": "sad"}
+{"time": "2026-06-21T19:40:12.330974", "type": "predict", "text": "Lệ tràn mi khi biết kết quả cuộc phỏng vấn không như ý muốn.", "result": "sad"}
+{"time": "2026-06-21T19:40:12.337168", "type": "predict", "text": "Mn ơi, tớ buồn vì dự định đi du lịch phải hủy bỏ ngay phút chót :(", "result": "stressed"}
+{"time": "2026-06-21T19:40:12.346728", "type": "predict", "text": "Giai điệu bản nhạc này nghe thật ảm đạm, nó khiến tâm trạng mình chùng xuống hẳn.", "result": "happy"}
+{"time": "2026-06-21T19:40:12.356042", "type": "predict", "text": "Lại thêm một khoản nợ phải trả, cuộc sống sao mà bế tắc và nặng nề đến thế.", "result": "angry"}
+{"time": "2026-06-21T19:40:12.362085", "type": "predict", "text": "Mưa rơi lã chã ngoài hiên, lòng mình cũng đang nhuốm màu ủ rũ vì mọi thứ đổ vỡ.", "result": "sad"}
+{"time": "2026-06-21T19:40:12.778751", "type": "feedback", "text": "Chú chó cưng vừa mất, nhà cửa bỗng nhiên yên ắng đến đáng sợ. 😔", "correct": "sad", "feedback_count": 3521}
+{"time": "2026-06-21T19:40:13.111957", "type": "feedback", "text": "Thất bại trong kỳ thi cuối khóa khiến mình chẳng muốn làm gì cả.", "correct": "sad", "feedback_count": 3522}
+{"time": "2026-06-21T19:40:13.581817", "type": "feedback", "text": "Lệ tràn mi khi biết kết quả cuộc phỏng vấn không như ý muốn.", "correct": "sad", "feedback_count": 3523}
+{"time": "2026-06-21T19:40:14.007249", "type": "feedback", "text": "Mn ơi, tớ buồn vì dự định đi du lịch phải hủy bỏ ngay phút chót :(", "correct": "sad", "feedback_count": 3524}
+{"time": "2026-06-21T19:40:14.346903", "type": "feedback", "text": "Giai điệu bản nhạc này nghe thật ảm đạm, nó khiến tâm trạng mình chùng xuống hẳn.", "correct": "sad", "feedback_count": 3525}
+{"time": "2026-06-21T19:40:14.655911", "type": "feedback", "text": "Lại thêm một khoản nợ phải trả, cuộc sống sao mà bế tắc và nặng nề đến thế.", "correct": "stressed", "feedback_count": 3526}
+{"time": "2026-06-21T19:40:15.191001", "type": "feedback", "text": "Mưa rơi lã chã ngoài hiên, lòng mình cũng đang nhuốm màu ủ rũ vì mọi thứ đổ vỡ.", "correct": "sad", "feedback_count": 3527}
+{"time": "2026-06-21T19:40:15.203958", "type": "predict", "text": "Hôm nay dự án bị sếp hủy đột ngột, mình thấy trống rỗng quá.", "result": "sad"}
+{"time": "2026-06-21T19:40:15.242790", "type": "predict", "text": "Tại sao mọi nỗ lực của tôi trong suốt tháng qua lại đổ sông đổ biển thế này?", "result": "stressed"}
+{"time": "2026-06-21T19:40:15.283437", "type": "predict", "text": "Chú chó cưng vừa mất, nhà cửa bỗng nhiên yên ắng đến đáng sợ. 😔", "result": "sad"}
+{"time": "2026-06-21T19:40:15.302954", "type": "predict", "text": "Thất bại trong kỳ thi cuối khóa khiến mình chẳng muốn làm gì cả.", "result": "sad"}
+{"time": "2026-06-21T19:40:15.329209", "type": "predict", "text": "Chán nản quá, vừa mất ví tiền lại còn bị lỡ chuyến xe cuối cùng.", "result": "sad"}
+{"time": "2026-06-21T19:40:15.337517", "type": "predict", "text": "Lệ tràn mi khi biết kết quả cuộc phỏng vấn không như ý muốn.", "result": "sad"}
+{"time": "2026-06-21T19:40:15.345770", "type": "predict", "text": "Mn ơi, tớ buồn vì dự định đi du lịch phải hủy bỏ ngay phút chót :(", "result": "sad"}
+{"time": "2026-06-21T19:40:15.354434", "type": "predict", "text": "Giai điệu bản nhạc này nghe thật ảm đạm, nó khiến tâm trạng mình chùng xuống hẳn.", "result": "sad"}
+{"time": "2026-06-21T19:40:15.364362", "type": "predict", "text": "Lại thêm một khoản nợ phải trả, cuộc sống sao mà bế tắc và nặng nề đến thế.", "result": "stressed"}
+{"time": "2026-06-21T19:40:15.400833", "type": "predict", "text": "Mưa rơi lã chã ngoài hiên, lòng mình cũng đang nhuốm màu ủ rũ vì mọi thứ đổ vỡ.", "result": "sad"}
+{"time": "2026-06-21T19:40:48.075777", "type": "predict", "text": "Cảm giác tim đập liên hồi khi anh ấy vừa bước vào căn phòng này thật khó tả.", "result": "romantic"}
+{"time": "2026-06-21T19:40:48.103637", "type": "predict", "text": "Đang chạy deadline mà chỉ cần liếc nhìn tấm ảnh người yêu để bàn là lại thấy bừng bừng cảm hứng!", "result": "energetic"}
+{"time": "2026-06-21T19:40:48.119425", "type": "predict", "text": "Crush ơi, tối nay mình cùng nghe bài này dưới ánh nến nhé? Lãng mạn quá đi mất thôi!", "result": "romantic"}
+{"time": "2026-06-21T19:40:48.136597", "type": "predict", "text": "Nhật ký: Nhìn nụ cười của em khi chúng mình dạo phố, thế giới bỗng trở nên thật rực rỡ và tràn đầy khát khao yêu đương.", "result": "romantic"}
+{"time": "2026-06-21T19:40:48.147749", "type": "predict", "text": "Mấy đứa ơi, bài nhạc này làm tớ nhớ tới lần đầu hẹn hò với anh ấy kinh khủng, tình cảm cứ dâng trào mãi không thôi! 😍", "result": "romantic"}
+{"time": "2026-06-21T19:40:48.160746", "type": "predict", "text": "Liệu có giai điệu nào diễn tả được sự nồng nhiệt mà em dành cho anh trong buổi tối kỷ niệm tuyệt vời này không?", "result": "romantic"}
+{"time": "2026-06-21T19:40:48.176637", "type": "predict", "text": "Chỉ cần nắm chặt tay người ấy giữa phố đông, tâm hồn tôi lại bùng nổ những xúc cảm yêu đương mãnh liệt như thuở ban đầu.", "result": "romantic"}
+{"time": "2026-06-21T19:40:48.228212", "type": "predict", "text": "Gửi vợ yêu: Anh sẽ mãi yêu em như cách chúng mình đã yêu nhau trong bản tình ca bất hủ của đêm nay.", "result": "romantic"}
+{"time": "2026-06-21T19:40:48.784082", "type": "feedback", "text": "Cảm giác tim đập liên hồi khi anh ấy vừa bước vào căn phòng này thật khó tả.", "correct": "romantic", "feedback_count": 3528}
+{"time": "2026-06-21T19:40:49.258000", "type": "feedback", "text": "Đang chạy deadline mà chỉ cần liếc nhìn tấm ảnh người yêu để bàn là lại thấy bừng bừng cảm hứng!", "correct": "energetic", "feedback_count": 3529}
+{"time": "2026-06-21T19:40:49.635027", "type": "feedback", "text": "Crush ơi, tối nay mình cùng nghe bài này dưới ánh nến nhé? Lãng mạn quá đi mất thôi!", "correct": "romantic", "feedback_count": 3530}
+{"time": "2026-06-21T19:40:50.500417", "type": "feedback", "text": "Nhật ký: Nhìn nụ cười của em khi chúng mình dạo phố, thế giới bỗng trở nên thật rực rỡ và tràn đầy khát khao yêu đương.", "correct": "romantic", "feedback_count": 3531}
+{"time": "2026-06-21T19:40:51.082289", "type": "feedback", "text": "Liệu có giai điệu nào diễn tả được sự nồng nhiệt mà em dành cho anh trong buổi tối kỷ niệm tuyệt vời này không?", "correct": "romantic", "feedback_count": 3532}
+{"time": "2026-06-21T19:40:51.627252", "type": "feedback", "text": "Chỉ cần nắm chặt tay người ấy giữa phố đông, tâm hồn tôi lại bùng nổ những xúc cảm yêu đương mãnh liệt như thuở ban đầu.", "correct": "romantic", "feedback_count": 3533}
+{"time": "2026-06-21T19:40:52.319291", "type": "feedback", "text": "Gửi vợ yêu: Anh sẽ mãi yêu em như cách chúng mình đã yêu nhau trong bản tình ca bất hủ của đêm nay.", "correct": "romantic", "feedback_count": 3534}
+{"time": "2026-06-21T19:40:52.342199", "type": "predict", "text": "Cảm giác tim đập liên hồi khi anh ấy vừa bước vào căn phòng này thật khó tả.", "result": "romantic"}
+{"time": "2026-06-21T19:40:52.398468", "type": "predict", "text": "Đang chạy deadline mà chỉ cần liếc nhìn tấm ảnh người yêu để bàn là lại thấy bừng bừng cảm hứng!", "result": "energetic"}
+{"time": "2026-06-21T19:40:52.420688", "type": "predict", "text": "Crush ơi, tối nay mình cùng nghe bài này dưới ánh nến nhé? Lãng mạn quá đi mất thôi!", "result": "romantic"}
+{"time": "2026-06-21T19:40:52.434723", "type": "predict", "text": "Nhật ký: Nhìn nụ cười của em khi chúng mình dạo phố, thế giới bỗng trở nên thật rực rỡ và tràn đầy khát khao yêu đương.", "result": "romantic"}
+{"time": "2026-06-21T19:40:52.480606", "type": "predict", "text": "Mấy đứa ơi, bài nhạc này làm tớ nhớ tới lần đầu hẹn hò với anh ấy kinh khủng, tình cảm cứ dâng trào mãi không thôi! 😍", "result": "romantic"}
+{"time": "2026-06-21T19:40:52.613534", "type": "predict", "text": "Liệu có giai điệu nào diễn tả được sự nồng nhiệt mà em dành cho anh trong buổi tối kỷ niệm tuyệt vời này không?", "result": "romantic"}
+{"time": "2026-06-21T19:40:52.633231", "type": "predict", "text": "Chỉ cần nắm chặt tay người ấy giữa phố đông, tâm hồn tôi lại bùng nổ những xúc cảm yêu đương mãnh liệt như thuở ban đầu.", "result": "romantic"}
+{"time": "2026-06-21T19:40:52.645225", "type": "predict", "text": "Gửi vợ yêu: Anh sẽ mãi yêu em như cách chúng mình đã yêu nhau trong bản tình ca bất hủ của đêm nay.", "result": "romantic"}
+{"time": "2026-06-21T19:42:09.673599", "type": "predict", "text": "Chạy bộ nhanh hơn nữa nào, nhịp tim đang đập liên hồi theo tiếng nhạc EDM bùng nổ này!", "result": "energetic"}
+{"time": "2026-06-21T19:42:09.685367", "type": "predict", "text": "Cả hội xả hết năng lượng trên sàn nhảy thôi, party xuyên màn đêm luôn nhé ae!", "result": "energetic"}
+{"time": "2026-06-21T19:42:09.692539", "type": "predict", "text": "Liệu chúng ta có thể nhảy múa cuồng nhiệt dưới cơn mưa rào mùa hạ đang xối xả rơi không?", "result": "energetic"}
+{"time": "2026-06-21T19:42:09.699439", "type": "predict", "text": "Chú cún nhà mình đang lao vút đi, nó phấn khích đến mức không thể đứng yên một chỗ!", "result": "energetic"}
+{"time": "2026-06-21T19:42:09.705521", "type": "predict", "text": "Yeah, chuyến phượt xuyên Việt bắt đầu, ga lăng hết cỡ, vít ga cho kịp bình minh nhé!", "result": "energetic"}
+{"time": "2026-06-21T19:42:09.718575", "type": "predict", "text": "Đã đến lúc bứt phá giới hạn bản thân, thực hiện cú nhảy ghi điểm quyết định ngay bây giờ!", "result": "energetic"}
+{"time": "2026-06-21T19:42:09.732992", "type": "predict", "text": "Alo cả nhà, dồn hết sức lực để hoàn thành dự án gấp này trước khi đồng hồ điểm mười hai giờ!", "result": "stressed"}
+{"time": "2026-06-21T19:42:10.077760", "type": "feedback", "text": "Chạy bộ nhanh hơn nữa nào, nhịp tim đang đập liên hồi theo tiếng nhạc EDM bùng nổ này!", "correct": "energetic", "feedback_count": 3535}
+{"time": "2026-06-21T19:42:10.493908", "type": "feedback", "text": "Cả hội xả hết năng lượng trên sàn nhảy thôi, party xuyên màn đêm luôn nhé ae!", "correct": "energetic", "feedback_count": 3536}
+{"time": "2026-06-21T19:42:10.896887", "type": "feedback", "text": "Liệu chúng ta có thể nhảy múa cuồng nhiệt dưới cơn mưa rào mùa hạ đang xối xả rơi không?", "correct": "energetic", "feedback_count": 3537}
+{"time": "2026-06-21T19:42:11.247412", "type": "feedback", "text": "Yeah, chuyến phượt xuyên Việt bắt đầu, ga lăng hết cỡ, vít ga cho kịp bình minh nhé!", "correct": "energetic", "feedback_count": 3538}
+{"time": "2026-06-21T19:42:11.550924", "type": "feedback", "text": "Đã đến lúc bứt phá giới hạn bản thân, thực hiện cú nhảy ghi điểm quyết định ngay bây giờ!", "correct": "energetic", "feedback_count": 3539}
+{"time": "2026-06-21T19:42:11.572816", "type": "predict", "text": "Chạy bộ nhanh hơn nữa nào, nhịp tim đang đập liên hồi theo tiếng nhạc EDM bùng nổ này!", "result": "energetic"}
+{"time": "2026-06-21T19:42:11.592786", "type": "predict", "text": "Cả hội xả hết năng lượng trên sàn nhảy thôi, party xuyên màn đêm luôn nhé ae!", "result": "energetic"}
+{"time": "2026-06-21T19:42:11.629076", "type": "predict", "text": "Liệu chúng ta có thể nhảy múa cuồng nhiệt dưới cơn mưa rào mùa hạ đang xối xả rơi không?", "result": "energetic"}
+{"time": "2026-06-21T19:42:11.636858", "type": "predict", "text": "Chú cún nhà mình đang lao vút đi, nó phấn khích đến mức không thể đứng yên một chỗ!", "result": "energetic"}
+{"time": "2026-06-21T19:42:11.652039", "type": "predict", "text": "Yeah, chuyến phượt xuyên Việt bắt đầu, ga lăng hết cỡ, vít ga cho kịp bình minh nhé!", "result": "energetic"}
+{"time": "2026-06-21T19:42:11.672812", "type": "predict", "text": "Đã đến lúc bứt phá giới hạn bản thân, thực hiện cú nhảy ghi điểm quyết định ngay bây giờ!", "result": "energetic"}
+{"time": "2026-06-21T19:42:11.687514", "type": "predict", "text": "Alo cả nhà, dồn hết sức lực để hoàn thành dự án gấp này trước khi đồng hồ điểm mười hai giờ!", "result": "stressed"}
+{"time": "2026-06-21T19:45:37.921096", "type": "predict", "text": "toi rat hanh phuc hom nay", "result": "energetic"}
+{"time": "2026-06-21T19:47:40.868250", "type": "predict", "text": "Chiều nay nằm đọc sách cạnh cửa sổ, gió nhẹ hiu hiu làm tâm trí tớ phẳng lặng lạ kỳ.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.874286", "type": "predict", "text": "Chỉ cần ngồi đây ngắm chú mèo cuộn tròn ngủ quên trên chiếc thảm mềm, mọi âu lo tan biến.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.878613", "type": "predict", "text": "Nắng tắt dần trên mặt hồ yên ả, cảm giác bình an bao trùm không gian tĩnh lặng này thật dễ chịu.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.882818", "type": "predict", "text": "Đi dạo trong rừng thông vắng, không khí trong lành khiến nhịp thở trở nên chậm rãi và thanh thản đến tận cùng.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.887291", "type": "predict", "text": "Cuối tuần rồi, chẳng phải bận tâm chuyện sổ sách hay deadline, cứ thong dong tận hưởng sự tĩnh mịch này thôi.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.891681", "type": "predict", "text": "Có bao giờ cậu cảm thấy thế giới xung quanh mình bỗng chốc trở nên êm đềm như một bản nhạc không lời nhẹ nhàng trôi qua chưa? 🍃", "result": "lonely"}
+{"time": "2026-06-21T19:47:40.895965", "type": "predict", "text": "Chiều nay nằm đọc sách cạnh cửa sổ, gió nhẹ hiu hiu làm tâm trí tớ phẳng lặng lạ kỳ.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.899963", "type": "predict", "text": "Chỉ cần ngồi đây ngắm chú mèo cuộn tròn ngủ quên trên chiếc thảm mềm, mọi âu lo tan biến.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.904069", "type": "predict", "text": "Nắng tắt dần trên mặt hồ yên ả, cảm giác bình an bao trùm không gian tĩnh lặng này thật dễ chịu.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.908116", "type": "predict", "text": "Đi dạo trong rừng thông vắng, không khí trong lành khiến nhịp thở trở nên chậm rãi và thanh thản đến tận cùng.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.911860", "type": "predict", "text": "Cuối tuần rồi, chẳng phải bận tâm chuyện sổ sách hay deadline, cứ thong dong tận hưởng sự tĩnh mịch này thôi.", "result": "relaxed"}
+{"time": "2026-06-21T19:47:40.915697", "type": "predict", "text": "Có bao giờ cậu cảm thấy thế giới xung quanh mình bỗng chốc trở nên êm đềm như một bản nhạc không lời nhẹ nhàng trôi qua chưa? 🍃", "result": "lonely"}
+{"time": "2026-06-21T19:49:10.597792", "type": "predict", "text": "Ngồi trong phòng tập gym vắng tanh, mình ước có ai đó ở đây cùng tập.", "result": "lonely"}
+{"time": "2026-06-21T19:49:10.608248", "type": "predict", "text": "Chẳng có lấy một người bạn nào để đi dạo trong công viên tối nay cả.", "result": "lonely"}
+{"time": "2026-06-21T19:49:10.628315", "type": "predict", "text": "Đã khuya rồi, sao không thấy ai online trả lời tin nhắn của mình nhỉ?", "result": "lonely"}
+{"time": "2026-06-21T19:49:10.653325", "type": "predict", "text": "Chú cún nhỏ đang ngủ, mình thì vẫn ngồi lặng lẽ ngắm nhìn phố xá ngoài cửa sổ.", "result": "lonely"}
+{"time": "2026-06-21T19:49:10.658281", "type": "predict", "text": "liệu có ai thực sự cần mình xuất hiện trong bữa tối gia đình hôm nay không?", "result": "lonely"}
+{"time": "2026-06-21T19:49:10.662880", "type": "predict", "text": "Chỉ muốn tìm một người cùng chia sẻ tách cà phê, sao khó quá ☕.", "result": "lonely"}
+{"time": "2026-06-21T19:49:10.667668", "type": "predict", "text": "Cả thế giới này như ngừng lại, chỉ còn mỗi mình đối diện với bức tường trống trải.", "result": "lonely"}
+{"time": "2026-06-21T19:49:11.017118", "type": "feedback", "text": "Ngồi trong phòng tập gym vắng tanh, mình ước có ai đó ở đây cùng tập.", "correct": "lonely", "feedback_count": 3540}
+{"time": "2026-06-21T19:49:11.377327", "type": "feedback", "text": "Chẳng có lấy một người bạn nào để đi dạo trong công viên tối nay cả.", "correct": "lonely", "feedback_count": 3541}
+{"time": "2026-06-21T19:49:11.725824", "type": "feedback", "text": "Đã khuya rồi, sao không thấy ai online trả lời tin nhắn của mình nhỉ?", "correct": "lonely", "feedback_count": 3542}
+{"time": "2026-06-21T19:49:12.090880", "type": "feedback", "text": "liệu có ai thực sự cần mình xuất hiện trong bữa tối gia đình hôm nay không?", "correct": "lonely", "feedback_count": 3543}
+{"time": "2026-06-21T19:49:12.513841", "type": "feedback", "text": "Chỉ muốn tìm một người cùng chia sẻ tách cà phê, sao khó quá ☕.", "correct": "lonely", "feedback_count": 3544}
+{"time": "2026-06-21T19:49:12.875020", "type": "feedback", "text": "Cả thế giới này như ngừng lại, chỉ còn mỗi mình đối diện với bức tường trống trải.", "correct": "lonely", "feedback_count": 3545}
+{"time": "2026-06-21T19:49:12.879535", "type": "predict", "text": "Ngồi trong phòng tập gym vắng tanh, mình ước có ai đó ở đây cùng tập.", "result": "lonely"}
+{"time": "2026-06-21T19:49:12.883720", "type": "predict", "text": "Chẳng có lấy một người bạn nào để đi dạo trong công viên tối nay cả.", "result": "lonely"}
+{"time": "2026-06-21T19:49:12.887783", "type": "predict", "text": "Đã khuya rồi, sao không thấy ai online trả lời tin nhắn của mình nhỉ?", "result": "lonely"}
+{"time": "2026-06-21T19:49:12.891532", "type": "predict", "text": "Chú cún nhỏ đang ngủ, mình thì vẫn ngồi lặng lẽ ngắm nhìn phố xá ngoài cửa sổ.", "result": "lonely"}
+{"time": "2026-06-21T19:49:12.895228", "type": "predict", "text": "liệu có ai thực sự cần mình xuất hiện trong bữa tối gia đình hôm nay không?", "result": "lonely"}
+{"time": "2026-06-21T19:49:12.898916", "type": "predict", "text": "Chỉ muốn tìm một người cùng chia sẻ tách cà phê, sao khó quá ☕.", "result": "lonely"}
+{"time": "2026-06-21T19:49:12.902537", "type": "predict", "text": "Cả thế giới này như ngừng lại, chỉ còn mỗi mình đối diện với bức tường trống trải.", "result": "lonely"}
+{"time": "2026-06-21T19:54:42.637191", "type": "predict", "text": "Deadline dí sát nút rồi, tim đập nhanh quá, không biết kịp xong báo cáo không đây!", "result": "stressed"}
+{"time": "2026-06-21T19:54:42.644934", "type": "predict", "text": "Hôm nay tiền nhà đến hạn mà lương chưa thấy đâu, đầu óc quay cuồng cả ngày vì nợ nần.", "result": "stressed"}
+{"time": "2026-06-21T19:54:42.650012", "type": "predict", "text": "Chạy bộ 5km mà nhịp tim tăng vọt, cảm giác lồng ngực cứ thắt chặt lại thật khó thở.", "result": "stressed"}
+{"time": "2026-06-21T19:54:42.654754", "type": "predict", "text": "Mọi người ơi, ai giúp mình fix cái bug này gấp với, hệ thống sắp sập đến nơi rồi!!!", "result": "lonely"}
+{"time": "2026-06-21T19:54:42.658849", "type": "predict", "text": "Tối nay phải nấu ăn tiếp đãi đối tác quan trọng mà bếp núc vẫn bừa bộn quá, áp lực kinh khủng.", "result": "stressed"}
+{"time": "2026-06-21T19:54:42.662862", "type": "predict", "text": "Con cái ốm đau, việc công ty chất đống, sao cuộc sống lại dồn dập đến mức nghẹt thở thế này cơ chứ.", "result": "stressed"}
+{"time": "2026-06-21T19:54:42.666713", "type": "predict", "text": "Deadline dí sát nút rồi, tim đập nhanh quá, không biết kịp xong báo cáo không đây!", "result": "stressed"}
+{"time": "2026-06-21T19:54:42.670406", "type": "predict", "text": "Hôm nay tiền nhà đến hạn mà lương chưa thấy đâu, đầu óc quay cuồng cả ngày vì nợ nần.", "result": "stressed"}
+{"time": "2026-06-21T19:54:42.674151", "type": "predict", "text": "Chạy bộ 5km mà nhịp tim tăng vọt, cảm giác lồng ngực cứ thắt chặt lại thật khó thở.", "result": "stressed"}
+{"time": "2026-06-21T19:54:42.677671", "type": "predict", "text": "Mọi người ơi, ai giúp mình fix cái bug này gấp với, hệ thống sắp sập đến nơi rồi!!!", "result": "lonely"}
+{"time": "2026-06-21T19:54:42.681148", "type": "predict", "text": "Tối nay phải nấu ăn tiếp đãi đối tác quan trọng mà bếp núc vẫn bừa bộn quá, áp lực kinh khủng.", "result": "stressed"}
+{"time": "2026-06-21T19:54:42.692449", "type": "predict", "text": "Con cái ốm đau, việc công ty chất đống, sao cuộc sống lại dồn dập đến mức nghẹt thở thế này cơ chứ.", "result": "stressed"}
+{"time": "2026-06-21T19:58:44.975013", "type": "predict", "text": "Mình đang dồn toàn bộ tâm trí vào dự án này, không được phép lơ là lúc này.", "result": "focused"}
+{"time": "2026-06-21T19:58:44.996478", "type": "predict", "text": "Đã chuẩn bị xong tài liệu rồi, giờ chỉ cần chốt nốt bản báo cáo cuối cùng là xong việc.", "result": "focused"}
+{"time": "2026-06-21T19:58:45.016946", "type": "predict", "text": "Mưa rơi ngoài cửa sổ nhưng mình vẫn đang miệt mài đọc hết tập tiểu thuyết chuyên ngành này.", "result": "focused"}
+{"time": "2026-06-21T19:58:45.021705", "type": "predict", "text": "Ae trong team tập trung cao độ nhé, deadline sát nút rồi, cố gắng đẩy nhanh tiến độ thôi!", "result": "stressed"}
+{"time": "2026-06-21T19:58:45.026448", "type": "predict", "text": "Đang trong luồng làm việc (flow) nên đừng ai làm phiền mình nhé, cần giải quyết đống code này xong trước tối.", "result": "focused"}
+{"time": "2026-06-21T19:58:45.030906", "type": "predict", "text": "Liệu mình có thể hoàn thành xong đống thủ tục giấy tờ phức tạp này trước khi đồng hồ điểm 12h đêm không nhỉ?", "result": "stressed"}
+{"time": "2026-06-21T19:58:45.035441", "type": "predict", "text": "Chỉ còn 3 tiếng để ôn tập cho bài thi quan trọng ngày mai, tắt hết thông báo mạng xã hội thôi.", "result": "stressed"}
+{"time": "2026-06-21T19:58:45.041612", "type": "predict", "text": "3 ngày nữa đi du lịch rồi, giờ phải làm cho xong KPI này để còn thảnh thơi mà tận hưởng chuyến đi ✍️.", "result": "nostalgic"}
+{"time": "2026-06-21T19:58:45.375762", "type": "feedback", "text": "Mình đang dồn toàn bộ tâm trí vào dự án này, không được phép lơ là lúc này.", "correct": "focused", "feedback_count": 3546}
+{"time": "2026-06-21T19:58:45.756252", "type": "feedback", "text": "Mưa rơi ngoài cửa sổ nhưng mình vẫn đang miệt mài đọc hết tập tiểu thuyết chuyên ngành này.", "correct": "focused", "feedback_count": 3547}
+{"time": "2026-06-21T19:58:46.101876", "type": "feedback", "text": "Ae trong team tập trung cao độ nhé, deadline sát nút rồi, cố gắng đẩy nhanh tiến độ thôi!", "correct": "stressed", "feedback_count": 3548}
+{"time": "2026-06-21T19:58:46.463059", "type": "feedback", "text": "Đang trong luồng làm việc (flow) nên đừng ai làm phiền mình nhé, cần giải quyết đống code này xong trước tối.", "correct": "focused", "feedback_count": 3549}
+{"time": "2026-06-21T19:58:46.761246", "type": "feedback", "text": "Liệu mình có thể hoàn thành xong đống thủ tục giấy tờ phức tạp này trước khi đồng hồ điểm 12h đêm không nhỉ?", "correct": "stressed", "feedback_count": 3550}
+{"time": "2026-06-21T19:58:47.048915", "type": "feedback", "text": "3 ngày nữa đi du lịch rồi, giờ phải làm cho xong KPI này để còn thảnh thơi mà tận hưởng chuyến đi ✍️.", "correct": "focused", "feedback_count": 3551}
+{"time": "2026-06-21T19:58:47.053279", "type": "predict", "text": "Mình đang dồn toàn bộ tâm trí vào dự án này, không được phép lơ là lúc này.", "result": "focused"}
+{"time": "2026-06-21T19:58:47.057360", "type": "predict", "text": "Đã chuẩn bị xong tài liệu rồi, giờ chỉ cần chốt nốt bản báo cáo cuối cùng là xong việc.", "result": "focused"}
+{"time": "2026-06-21T19:58:47.061296", "type": "predict", "text": "Mưa rơi ngoài cửa sổ nhưng mình vẫn đang miệt mài đọc hết tập tiểu thuyết chuyên ngành này.", "result": "focused"}
+{"time": "2026-06-21T19:58:47.065624", "type": "predict", "text": "Ae trong team tập trung cao độ nhé, deadline sát nút rồi, cố gắng đẩy nhanh tiến độ thôi!", "result": "stressed"}
+{"time": "2026-06-21T19:58:47.069831", "type": "predict", "text": "Đang trong luồng làm việc (flow) nên đừng ai làm phiền mình nhé, cần giải quyết đống code này xong trước tối.", "result": "focused"}
+{"time": "2026-06-21T19:58:47.074172", "type": "predict", "text": "Liệu mình có thể hoàn thành xong đống thủ tục giấy tờ phức tạp này trước khi đồng hồ điểm 12h đêm không nhỉ?", "result": "stressed"}
+{"time": "2026-06-21T19:58:47.078091", "type": "predict", "text": "Chỉ còn 3 tiếng để ôn tập cho bài thi quan trọng ngày mai, tắt hết thông báo mạng xã hội thôi.", "result": "stressed"}
+{"time": "2026-06-21T19:58:47.081879", "type": "predict", "text": "3 ngày nữa đi du lịch rồi, giờ phải làm cho xong KPI này để còn thảnh thơi mà tận hưởng chuyến đi ✍️.", "result": "focused"}
+{"time": "2026-06-21T20:04:31.828305", "type": "predict", "text": "Ngắm bức ảnh đen trắng thời thơ ấu trong ngăn tủ cũ, thấy lòng mình chùng xuống lạ kỳ.", "result": "relaxed"}
+{"time": "2026-06-21T20:04:31.834441", "type": "predict", "text": "Mưa rơi, tự nhiên nhớ ghê gớm những chiều chạy chân trần thả diều trên triền đê ngày đó.", "result": "nostalgic"}
+{"time": "2026-06-21T20:04:31.838700", "type": "predict", "text": "Mn ơi, có ai còn nhớ cái quán trà đá đầu ngõ hồi đại học năm nhất không?", "result": "nostalgic"}
+{"time": "2026-06-21T20:04:31.842802", "type": "predict", "text": "Thật lòng muốn quay lại khoảnh khắc gia đình mình quây quần bên mâm cơm cũ quá à.", "result": "nostalgic"}
+{"time": "2026-06-21T20:04:31.846610", "type": "predict", "text": "Dạo quanh fb thấy mấy tấm hình chụp cùng cún cưng đã mất, nhớ nó quay quắt.", "result": "nostalgic"}
+{"time": "2026-06-21T20:04:31.850335", "type": "predict", "text": "Chẳng hiểu sao hôm nay lại thèm cái cảm giác bình yên của buổi chiều hè năm 2010 thế 🍃", "result": "angry"}
+{"time": "2026-06-21T20:04:31.854072", "type": "predict", "text": "Ngắm bức ảnh đen trắng thời thơ ấu trong ngăn tủ cũ, thấy lòng mình chùng xuống lạ kỳ.", "result": "relaxed"}
+{"time": "2026-06-21T20:04:31.857678", "type": "predict", "text": "Mưa rơi, tự nhiên nhớ ghê gớm những chiều chạy chân trần thả diều trên triền đê ngày đó.", "result": "nostalgic"}
+{"time": "2026-06-21T20:04:31.861071", "type": "predict", "text": "Mn ơi, có ai còn nhớ cái quán trà đá đầu ngõ hồi đại học năm nhất không?", "result": "nostalgic"}
+{"time": "2026-06-21T20:04:31.865333", "type": "predict", "text": "Thật lòng muốn quay lại khoảnh khắc gia đình mình quây quần bên mâm cơm cũ quá à.", "result": "nostalgic"}
+{"time": "2026-06-21T20:04:31.869149", "type": "predict", "text": "Dạo quanh fb thấy mấy tấm hình chụp cùng cún cưng đã mất, nhớ nó quay quắt.", "result": "nostalgic"}
+{"time": "2026-06-21T20:04:31.873118", "type": "predict", "text": "Chẳng hiểu sao hôm nay lại thèm cái cảm giác bình yên của buổi chiều hè năm 2010 thế 🍃", "result": "angry"}
+{"time": "2026-06-21T20:10:00.274519", "type": "predict", "text": "Tại sao đồng nghiệp lại dám tự ý xóa sạch dữ liệu dự án của tôi ngay trước buổi thuyết trình quan trọng như vậy được nhỉ?", "result": "angry"}
+{"time": "2026-06-21T20:10:00.281392", "type": "predict", "text": "Thật không thể chấp nhận nổi cái thái độ lồi lõm của nhân viên phục vụ quán ăn này, tôi sẽ report thẳng tay!", "result": "angry"}
+{"time": "2026-06-21T20:10:00.287229", "type": "predict", "text": "Đứa nào ném cục đá vào cửa kính nhà tao đấy, ra mặt ngay đừng có hèn hạ như thế!", "result": "angry"}
+{"time": "2026-06-21T20:10:00.292745", "type": "predict", "text": "Mất bao công chăm sóc cái cây cảnh quý mà giờ thấy hàng xóm vặt trụi sạch lá, tức không chịu nổi!", "result": "angry"}
+{"time": "2026-06-21T20:10:00.297408", "type": "predict", "text": "Cả cái tương lai phía trước bị hủy hoại chỉ vì sự ích kỷ rẻ tiền của gã đó, sao lão có thể ác độc đến mức ấy!", "result": "angry"}
+{"time": "2026-06-21T20:10:00.303352", "type": "predict", "text": "dm bọn cty lừa đảo, hứa trả lương đúng hạn mà giờ lặn mất tăm 😡", "result": "angry"}
+{"time": "2026-06-21T20:10:00.308049", "type": "predict", "text": "Tao đã nói bao nhiêu lần rồi mà thằng nhóc vẫn cố tình làm vỡ bình hoa, cấm không cho vào nhà nữa!", "result": "angry"}
+{"time": "2026-06-21T20:10:00.312634", "type": "predict", "text": "Tại sao đồng nghiệp lại dám tự ý xóa sạch dữ liệu dự án của tôi ngay trước buổi thuyết trình quan trọng như vậy được nhỉ?", "result": "angry"}
+{"time": "2026-06-21T20:10:00.317297", "type": "predict", "text": "Thật không thể chấp nhận nổi cái thái độ lồi lõm của nhân viên phục vụ quán ăn này, tôi sẽ report thẳng tay!", "result": "angry"}
+{"time": "2026-06-21T20:10:00.321864", "type": "predict", "text": "Đứa nào ném cục đá vào cửa kính nhà tao đấy, ra mặt ngay đừng có hèn hạ như thế!", "result": "angry"}
+{"time": "2026-06-21T20:10:00.326094", "type": "predict", "text": "Mất bao công chăm sóc cái cây cảnh quý mà giờ thấy hàng xóm vặt trụi sạch lá, tức không chịu nổi!", "result": "angry"}
+{"time": "2026-06-21T20:10:00.330231", "type": "predict", "text": "Cả cái tương lai phía trước bị hủy hoại chỉ vì sự ích kỷ rẻ tiền của gã đó, sao lão có thể ác độc đến mức ấy!", "result": "angry"}
+{"time": "2026-06-21T20:10:00.335082", "type": "predict", "text": "dm bọn cty lừa đảo, hứa trả lương đúng hạn mà giờ lặn mất tăm 😡", "result": "angry"}
+{"time": "2026-06-21T20:10:00.339304", "type": "predict", "text": "Tao đã nói bao nhiêu lần rồi mà thằng nhóc vẫn cố tình làm vỡ bình hoa, cấm không cho vào nhà nữa!", "result": "angry"}
+{"time": "2026-06-21T20:15:38.878383", "type": "predict", "text": "Cuối cùng cũng nhận được thư mời nhập học, mình đang nhảy cẫng lên vì sung sướng đây!", "result": "happy"}
+{"time": "2026-06-21T20:15:38.885168", "type": "predict", "text": "Cả đội vừa hoàn thành xong deadline siêu sớm, mọi người chuẩn bị ăn mừng lớn thôi nào!", "result": "happy"}
+{"time": "2026-06-21T20:15:38.889542", "type": "predict", "text": "Có ai hiểu cảm giác được crush hồi đáp tình cảm lúc này nó rạng rỡ đến nhường nào không?", "result": "romantic"}
+{"time": "2026-06-21T20:15:38.894640", "type": "predict", "text": "Chốt deal thành công mỹ mãn, hôm nay đúng là ngày may mắn nhất của đời tớ luôn á.", "result": "happy"}
+{"time": "2026-06-21T20:15:38.898762", "type": "predict", "text": "Mẹ vừa gọi điện báo tin bà nội đã khỏe hẳn, niềm vui này thực sự không gì sánh bằng.", "result": "happy"}
+{"time": "2026-06-21T20:15:38.902647", "type": "predict", "text": "Mọi người ơi, kế hoạch khởi nghiệp chúng mình được duyệt rồi, mở tiệc ăn mừng tối nay luôn đi!", "result": "happy"}
+{"time": "2026-06-21T20:15:38.906451", "type": "predict", "text": "Nhật ký ngày 20: Tớ vừa tự tay làm xong món bánh kem tặng cậu, nhìn nụ cười của cậu tớ thấy hạnh phúc quá.", "result": "happy"}
+{"time": "2026-06-21T20:15:38.910646", "type": "predict", "text": "Wow, kết quả thi đạt điểm tuyệt đối, cảm giác này đúng là muốn hét lên cho cả thế giới biết!", "result": "focused"}
+{"time": "2026-06-21T20:15:38.914626", "type": "predict", "text": "tuii đậu phỏng vấn rùi mấy ní ơii, sướng run người lun ahaha 😆", "result": "lonely"}
+{"time": "2026-06-21T20:15:38.918353", "type": "predict", "text": "Cuối cùng cũng nhận được thư mời nhập học, mình đang nhảy cẫng lên vì sung sướng đây!", "result": "happy"}
+{"time": "2026-06-21T20:15:38.922119", "type": "predict", "text": "Cả đội vừa hoàn thành xong deadline siêu sớm, mọi người chuẩn bị ăn mừng lớn thôi nào!", "result": "happy"}
+{"time": "2026-06-21T20:15:38.925837", "type": "predict", "text": "Có ai hiểu cảm giác được crush hồi đáp tình cảm lúc này nó rạng rỡ đến nhường nào không?", "result": "romantic"}
+{"time": "2026-06-21T20:15:38.930197", "type": "predict", "text": "Chốt deal thành công mỹ mãn, hôm nay đúng là ngày may mắn nhất của đời tớ luôn á.", "result": "happy"}
+{"time": "2026-06-21T20:15:38.934275", "type": "predict", "text": "Mẹ vừa gọi điện báo tin bà nội đã khỏe hẳn, niềm vui này thực sự không gì sánh bằng.", "result": "happy"}
+{"time": "2026-06-21T20:15:38.938310", "type": "predict", "text": "Mọi người ơi, kế hoạch khởi nghiệp chúng mình được duyệt rồi, mở tiệc ăn mừng tối nay luôn đi!", "result": "happy"}
+{"time": "2026-06-21T20:15:38.942276", "type": "predict", "text": "Nhật ký ngày 20: Tớ vừa tự tay làm xong món bánh kem tặng cậu, nhìn nụ cười của cậu tớ thấy hạnh phúc quá.", "result": "happy"}
+{"time": "2026-06-21T20:15:38.945834", "type": "predict", "text": "Wow, kết quả thi đạt điểm tuyệt đối, cảm giác này đúng là muốn hét lên cho cả thế giới biết!", "result": "focused"}
+{"time": "2026-06-21T20:15:38.949241", "type": "predict", "text": "tuii đậu phỏng vấn rùi mấy ní ơii, sướng run người lun ahaha 😆", "result": "lonely"}
+{"time": "2026-06-21T20:21:31.930443", "type": "predict", "text": "Hôm nay dự án bị sếp hủy đột ngột, mình thấy trống rỗng và hụt hẫng quá.", "result": "sad"}
+{"time": "2026-06-21T20:21:31.936330", "type": "predict", "text": "Chẳng còn tâm trí nào để ôn thi nữa, kết quả môn này coi như xong rồi.", "result": "focused"}
+{"time": "2026-06-21T20:21:31.940793", "type": "predict", "text": "Mưa rơi lạnh lẽo, chú cún cưng vừa mất khiến lòng mình nặng trĩu khó tả.", "result": "sad"}
+{"time": "2026-06-21T20:21:31.944656", "type": "predict", "text": "Tại sao mọi nỗ lực của em cuối cùng lại đổi lấy thất bại cay đắng này?", "result": "stressed"}
+{"time": "2026-06-21T20:21:31.948542", "type": "predict", "text": "Chấn thương này nặng quá, giấc mơ thi đấu mùa giải năm nay khép lại rồi.", "result": "stressed"}
+{"time": "2026-06-21T20:21:31.952458", "type": "predict", "text": "mọi thứ sụp đổ hết r tr ơi, t chẳng còn muốn làm gì nữa hết 😔", "result": "stressed"}
+{"time": "2026-06-21T20:21:31.956178", "type": "predict", "text": "Ngày buồn nhất, đơn xin việc của tôi bị từ chối lần thứ năm liên tiếp.", "result": "angry"}
+{"time": "2026-06-21T20:21:31.959942", "type": "predict", "text": "Thật không ngờ sự tin tưởng của mình lại bị phản bội một cách phũ phàng.", "result": "angry"}
+{"time": "2026-06-21T20:21:31.963617", "type": "predict", "text": "Nhìn kết quả xét nghiệm này, bao nhiêu hy vọng về sức khỏe đều tan biến.", "result": "focused"}
+{"time": "2026-06-21T20:21:31.967685", "type": "predict", "text": "Mọi công sức cày cuốc suốt nửa năm trời giờ chẳng còn lại chút ý nghĩa.", "result": "stressed"}
+{"time": "2026-06-21T20:21:31.971350", "type": "predict", "text": "Hôm nay dự án bị sếp hủy đột ngột, mình thấy trống rỗng và hụt hẫng quá.", "result": "sad"}
+{"time": "2026-06-21T20:21:31.975311", "type": "predict", "text": "Chẳng còn tâm trí nào để ôn thi nữa, kết quả môn này coi như xong rồi.", "result": "focused"}
+{"time": "2026-06-21T20:21:31.979217", "type": "predict", "text": "Mưa rơi lạnh lẽo, chú cún cưng vừa mất khiến lòng mình nặng trĩu khó tả.", "result": "sad"}
+{"time": "2026-06-21T20:21:31.983566", "type": "predict", "text": "Tại sao mọi nỗ lực của em cuối cùng lại đổi lấy thất bại cay đắng này?", "result": "stressed"}
+{"time": "2026-06-21T20:21:31.987488", "type": "predict", "text": "Chấn thương này nặng quá, giấc mơ thi đấu mùa giải năm nay khép lại rồi.", "result": "stressed"}
+{"time": "2026-06-21T20:21:31.991657", "type": "predict", "text": "mọi thứ sụp đổ hết r tr ơi, t chẳng còn muốn làm gì nữa hết 😔", "result": "stressed"}
+{"time": "2026-06-21T20:21:31.996152", "type": "predict", "text": "Ngày buồn nhất, đơn xin việc của tôi bị từ chối lần thứ năm liên tiếp.", "result": "angry"}
+{"time": "2026-06-21T20:21:32.000382", "type": "predict", "text": "Thật không ngờ sự tin tưởng của mình lại bị phản bội một cách phũ phàng.", "result": "angry"}
+{"time": "2026-06-21T20:21:32.004213", "type": "predict", "text": "Nhìn kết quả xét nghiệm này, bao nhiêu hy vọng về sức khỏe đều tan biến.", "result": "focused"}
+{"time": "2026-06-21T20:21:32.007843", "type": "predict", "text": "Mọi công sức cày cuốc suốt nửa năm trời giờ chẳng còn lại chút ý nghĩa.", "result": "stressed"}
+{"time": "2026-06-21T20:26:52.636035", "type": "predict", "text": "Hẹn em dưới tán phượng vĩ chiều nay để trao chiếc nhẫn này nhé.", "result": "focused"}
+{"time": "2026-06-21T20:26:52.642606", "type": "predict", "text": "Chỉ cần nhìn thấy anh cười, bao nhiêu deadline áp lực cũng tan biến hết.", "result": "stressed"}
+{"time": "2026-06-21T20:26:52.647269", "type": "predict", "text": "Em yêu à, chúng mình cùng xây dựng tương lai tại nơi đầy nắng nhé?", "result": "romantic"}
+{"time": "2026-06-21T20:26:52.651650", "type": "predict", "text": "Chạm vào tay người thương, con tim em bỗng đập loạn nhịp lạ thường! <3", "result": "romantic"}
+{"time": "2026-06-21T20:26:52.655626", "type": "predict", "text": "Nè cưng, mai tụi mình cùng nghe chung bản nhạc tình ca này nha?", "result": "romantic"}
+{"time": "2026-06-21T20:26:52.659675", "type": "predict", "text": "Ngắm hoàng hôn cùng em khiến mọi âu lo thi cử dường như bay mất.", "result": "focused"}
+{"time": "2026-06-21T20:26:52.664215", "type": "predict", "text": "Mãi bên nhau như cặp đôi chim sẻ này, anh nguyện thề cùng em.", "result": "romantic"}
+{"time": "2026-06-21T20:26:52.667830", "type": "predict", "text": "Hôm nay chính là ngày đặc biệt để em nói rằng em rất yêu anh.", "result": "romantic"}
+{"time": "2026-06-21T20:26:52.671497", "type": "predict", "text": "Hẹn em dưới tán phượng vĩ chiều nay để trao chiếc nhẫn này nhé.", "result": "focused"}
+{"time": "2026-06-21T20:26:52.675134", "type": "predict", "text": "Chỉ cần nhìn thấy anh cười, bao nhiêu deadline áp lực cũng tan biến hết.", "result": "stressed"}
+{"time": "2026-06-21T20:26:52.679097", "type": "predict", "text": "Em yêu à, chúng mình cùng xây dựng tương lai tại nơi đầy nắng nhé?", "result": "romantic"}
+{"time": "2026-06-21T20:26:52.682812", "type": "predict", "text": "Chạm vào tay người thương, con tim em bỗng đập loạn nhịp lạ thường! <3", "result": "romantic"}
+{"time": "2026-06-21T20:26:52.686400", "type": "predict", "text": "Nè cưng, mai tụi mình cùng nghe chung bản nhạc tình ca này nha?", "result": "romantic"}
+{"time": "2026-06-21T20:26:52.689985", "type": "predict", "text": "Ngắm hoàng hôn cùng em khiến mọi âu lo thi cử dường như bay mất.", "result": "focused"}
+{"time": "2026-06-21T20:26:52.693776", "type": "predict", "text": "Mãi bên nhau như cặp đôi chim sẻ này, anh nguyện thề cùng em.", "result": "romantic"}
+{"time": "2026-06-21T20:26:52.697618", "type": "predict", "text": "Hôm nay chính là ngày đặc biệt để em nói rằng em rất yêu anh.", "result": "romantic"}
+{"time": "2026-06-21T20:32:32.148916", "type": "predict", "text": "Quẩy lên anh em ơi, nhạc đang căng cực, chuẩn bị vào sàn thôi!", "result": "energetic"}
+{"time": "2026-06-21T20:32:32.155650", "type": "predict", "text": "Đã hoàn thành KPI tháng trong hai ngày, tôi đang tràn trề sức sống để bắt đầu dự án mới ngay lập tức.", "result": "focused"}
+{"time": "2026-06-21T20:32:32.160133", "type": "predict", "text": "Chạy bộ 10km sáng nay thật sự làm nhịp tim mình tăng vọt, sảng khoái quá đi mất.", "result": "happy"}
+{"time": "2026-06-21T20:32:32.164177", "type": "predict", "text": "Cả đội đang hò hét tưng bừng ở sân vận động, không khí cuồng nhiệt này đúng là thứ mình cần lúc này.", "result": "focused"}
+{"time": "2026-06-21T20:32:32.169774", "type": "predict", "text": "Máu lửa lên mọi người, nhạc dồn dập thế này mà không nhún nhảy thì phí cả đêm nay.", "result": "stressed"}
+{"time": "2026-06-21T20:32:32.173822", "type": "predict", "text": "Đang dồn toàn lực tập HIIT, cơ bắp nóng ran, nhịp độ cực nhanh, cảm giác thật bùng nổ.", "result": "energetic"}
+{"time": "2026-06-21T20:32:32.177841", "type": "predict", "text": "Thắng đậm chứng khoán, tiền về tài khoản, tâm trạng cực kì hưng phấn, triển khai kế hoạch đầu tư tiếp thôi!", "result": "focused"}
+{"time": "2026-06-21T20:32:32.181591", "type": "predict", "text": "Quẩy lên anh em ơi, nhạc đang căng cực, chuẩn bị vào sàn thôi!", "result": "energetic"}
+{"time": "2026-06-21T20:32:32.186407", "type": "predict", "text": "Đã hoàn thành KPI tháng trong hai ngày, tôi đang tràn trề sức sống để bắt đầu dự án mới ngay lập tức.", "result": "focused"}
+{"time": "2026-06-21T20:32:32.190110", "type": "predict", "text": "Chạy bộ 10km sáng nay thật sự làm nhịp tim mình tăng vọt, sảng khoái quá đi mất.", "result": "happy"}
+{"time": "2026-06-21T20:32:32.194040", "type": "predict", "text": "Cả đội đang hò hét tưng bừng ở sân vận động, không khí cuồng nhiệt này đúng là thứ mình cần lúc này.", "result": "focused"}
+{"time": "2026-06-21T20:32:32.198410", "type": "predict", "text": "Máu lửa lên mọi người, nhạc dồn dập thế này mà không nhún nhảy thì phí cả đêm nay.", "result": "stressed"}
+{"time": "2026-06-21T20:32:32.201999", "type": "predict", "text": "Đang dồn toàn lực tập HIIT, cơ bắp nóng ran, nhịp độ cực nhanh, cảm giác thật bùng nổ.", "result": "energetic"}
+{"time": "2026-06-21T20:32:32.205768", "type": "predict", "text": "Thắng đậm chứng khoán, tiền về tài khoản, tâm trạng cực kì hưng phấn, triển khai kế hoạch đầu tư tiếp thôi!", "result": "focused"}
+{"time": "2026-06-21T20:37:54.124518", "type": "predict", "text": "Mưa rơi nhẹ nhàng bên ô cửa sổ, tâm hồn mình bỗng dưng tĩnh lặng đến lạ thường.", "result": "focused"}
+{"time": "2026-06-21T20:37:54.204735", "type": "predict", "text": "Cuối tuần rồi, nằm dài trên ghế sofa đọc vài trang sách mà thấy bình yên quá.", "result": "relaxed"}
+{"time": "2026-06-21T20:37:54.210796", "type": "predict", "text": "Chẳng còn áp lực nợ nần hay deadline, cứ thong thả thế này có phải là hạnh phúc giản đơn không nhỉ?", "result": "focused"}
+{"time": "2026-06-21T20:37:54.220575", "type": "predict", "text": "Chuyến đi Đà Lạt mùa này khí hậu thật dễ chịu, mọi thứ xung quanh cứ êm đềm trôi 🍃.", "result": "focused"}
+{"time": "2026-06-21T20:37:54.230458", "type": "predict", "text": "Gia đình quây quần bên ấm trà nóng, không khí hôm nay thật sự rất nhẹ bẫng.", "result": "relaxed"}
+{"time": "2026-06-21T20:37:54.237885", "type": "predict", "text": "k, đã về tới nhà an toàn, giờ là lúc thả lỏng cơ thể để chuẩn bị chìm vào giấc ngủ.", "result": "focused"}
+{"time": "2026-06-21T20:37:54.242319", "type": "predict", "text": "Mưa rơi nhẹ nhàng bên ô cửa sổ, tâm hồn mình bỗng dưng tĩnh lặng đến lạ thường.", "result": "focused"}
+{"time": "2026-06-21T20:37:54.246337", "type": "predict", "text": "Cuối tuần rồi, nằm dài trên ghế sofa đọc vài trang sách mà thấy bình yên quá.", "result": "relaxed"}
+{"time": "2026-06-21T20:37:54.250130", "type": "predict", "text": "Chẳng còn áp lực nợ nần hay deadline, cứ thong thả thế này có phải là hạnh phúc giản đơn không nhỉ?", "result": "focused"}
+{"time": "2026-06-21T20:37:54.253948", "type": "predict", "text": "Chuyến đi Đà Lạt mùa này khí hậu thật dễ chịu, mọi thứ xung quanh cứ êm đềm trôi 🍃.", "result": "focused"}
+{"time": "2026-06-21T20:37:54.257597", "type": "predict", "text": "Gia đình quây quần bên ấm trà nóng, không khí hôm nay thật sự rất nhẹ bẫng.", "result": "relaxed"}
+{"time": "2026-06-21T20:37:54.263638", "type": "predict", "text": "k, đã về tới nhà an toàn, giờ là lúc thả lỏng cơ thể để chuẩn bị chìm vào giấc ngủ.", "result": "focused"}
+{"time": "2026-06-21T20:43:33.211500", "type": "predict", "text": "Căn phòng này quá rộng so với một người, ước gì có ai đó trò chuyện cùng mình lúc này.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.223715", "type": "predict", "text": "Mọi người đi ăn tiệc cả rồi, chả ai rep tin nhắn, cảm giác lạc lõng thật đấy.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.231763", "type": "predict", "text": "Liệu thành công rực rỡ trong tương lai có ý nghĩa gì khi chẳng có người thân thiết để sẻ chia?", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.240903", "type": "predict", "text": "Tự nhiên thấy trống rỗng ghê, kiểu như cả thế giới này đang quay lưng với mình vậy 😶.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.253917", "type": "predict", "text": "Ngồi cafe một mình nhìn dòng người qua lại, chợt thấy bản thân sao mà tách biệt hoàn toàn với phố thị tấp nập quá.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.261997", "type": "predict", "text": "Đêm nay yên ắng đến đáng sợ, mình chỉ muốn có một ai đó xuất hiện để phá tan sự tĩnh mịch này.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.269829", "type": "predict", "text": "Khum ai online để tâm sự cả, cảm thấy như mình đang tồn tại một mình giữa thế giới ảo đông đúc này.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.276643", "type": "predict", "text": "Căn phòng này quá rộng so với một người, ước gì có ai đó trò chuyện cùng mình lúc này.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.281844", "type": "predict", "text": "Mọi người đi ăn tiệc cả rồi, chả ai rep tin nhắn, cảm giác lạc lõng thật đấy.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.287826", "type": "predict", "text": "Liệu thành công rực rỡ trong tương lai có ý nghĩa gì khi chẳng có người thân thiết để sẻ chia?", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.295351", "type": "predict", "text": "Tự nhiên thấy trống rỗng ghê, kiểu như cả thế giới này đang quay lưng với mình vậy 😶.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.301713", "type": "predict", "text": "Ngồi cafe một mình nhìn dòng người qua lại, chợt thấy bản thân sao mà tách biệt hoàn toàn với phố thị tấp nập quá.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.305879", "type": "predict", "text": "Đêm nay yên ắng đến đáng sợ, mình chỉ muốn có một ai đó xuất hiện để phá tan sự tĩnh mịch này.", "result": "lonely"}
+{"time": "2026-06-21T20:43:33.313112", "type": "predict", "text": "Khum ai online để tâm sự cả, cảm thấy như mình đang tồn tại một mình giữa thế giới ảo đông đúc này.", "result": "lonely"}
+{"time": "2026-06-21T21:05:43.109438", "type": "track_play", "track_id": "2197944", "name": "Velvet Sky", "artist": "Top Flow", "tags": ["ambient", "lofi", "piano", "vocoder", "sad"], "emotion": "", "source": "online", "tag_arm": 1}
+{"time": "2026-06-21T21:06:33.857399", "type": "track_like", "track_id": "2197944", "name": "Velvet Sky", "artist": "Top Flow", "tags": ["ambient", "lofi", "piano", "vocoder", "sad"], "emotion": "", "source": "online", "tag_arm": 1}
+{"time": "2026-06-21T21:07:32.997501", "type": "track_play", "track_id": "1366989", "name": "Nephed - Plachut zvezdy", "artist": "Tunguska Electronic Music Society", "tags": ["ambient", "electronic", "lofi", "nature", "neutral", "sonar"], "emotion": "", "source": "online", "tag_arm": 1}
