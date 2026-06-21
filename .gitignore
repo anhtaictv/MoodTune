@@ -4,6 +4,7 @@ backend/spotify_tokens.json
 # Python
 __pycache__/
 *.pyc
+.pytest_cache/
 
 # Logs
 *.log
