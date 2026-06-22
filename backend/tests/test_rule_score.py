@@ -2,18 +2,24 @@
 Test cho Rule Scorer (emotion_mlp.rule_score) và xử lý phủ định (_is_negated).
 Chỉ nhắm vào phần logic cố định (không phụ thuộc trạng thái online learning) -
 LEXICON tĩnh, NEGATIONS, scoring - để bắt sớm các regression như lỗi v3.6
-(phủ định không áp dụng cho bigram, không nhận diện phủ định nhiều từ).
+(phủ định không áp dụng cho bigram, không nhận diện phủ định nhiều từ) và
+lỗi "vocab chết" trước v4.0 (cụm cảm xúc 3-5 từ trong LEXICON không bao giờ
+được tokenizer/rule_score cũ nhận diện thành 1 cụm).
 """
 import numpy as np
 import pytest
 
-from emotion_mlp import rule_score, _is_negated
-from lexicon import EMOTIONS
+import emotion_mlp
+from emotion_mlp import rule_score, _is_negated, _tokenize
+from lexicon import EMOTIONS, NEGATIONS
 
 N = len(EMOTIONS)
 HAPPY = EMOTIONS.index("happy")
 SAD = EMOTIONS.index("sad")
 FOCUSED = EMOTIONS.index("focused")
+ANGRY = EMOTIONS.index("angry")
+STRESSED = EMOTIONS.index("stressed")
+ENERGETIC = EMOTIONS.index("energetic")
 
 
 def is_uniform(scores):
@@ -115,3 +121,43 @@ class TestRuleScoreNegation:
         scores = rule_score("tập trung học bài không phải sở thích của tôi")
         assert np.argmax(scores) == FOCUSED
         assert not is_uniform(scores)
+
+
+class TestWordSegmentationModel3:
+    """Regression cho v4.0 (Model 3): trước đây _tokenize()/rule_score() chỉ
+    thử ghép đúng 2 từ liền kề (bigram-only) -> các cụm cảm xúc dài hơn trong
+    LEXICON (3-5 từ, ví dụ "không thể chấp nhận được" dưới "angry") có
+    embedding/entry sẵn nhưng KHÔNG BAO GIỜ được nhận diện thành 1 cụm -
+    "vocab chết". Generalize sang longest-match N-gram sửa lỗi này."""
+
+    @pytest.mark.parametrize("text,expected", [
+        ("không thể chấp nhận được", ANGRY),       # 5 từ
+        ("ghét cay ghét đắng", ANGRY),              # 4 từ
+        ("tràn đầy năng lượng", ENERGETIC),         # 4 từ
+        ("áp lực nặng", STRESSED),                  # 3 từ
+        ("quá tải tinh thần", STRESSED),            # 4 từ
+    ])
+    def test_long_phrase_now_matches(self, text, expected):
+        scores = rule_score(text)
+        assert np.argmax(scores) == expected
+        assert not is_uniform(scores)
+
+    def test_long_phrase_tokenizes_as_single_token(self):
+        # Nhánh MLP phải nhìn thấy đúng 1 token cho cả cụm, không bị tách
+        # thành các âm tiết rời rạc rồi rơi mất (id=None) như tokenizer cũ.
+        toks = _tokenize("không thể chấp nhận được")
+        assert len(toks) == 1
+        text, tid = toks[0]
+        assert text == "không thể chấp nhận được"
+        assert tid is not None
+
+    def test_negation_cancels_long_phrase(self):
+        scores = rule_score("tôi không hề tràn đầy năng lượng")
+        assert is_uniform(scores)
+
+    def test_all_negations_are_registered_in_vocab(self):
+        # v4.0: NEGATIONS phải có mặt trong VOCAB_IDX một cách CHẮC CHẮN
+        # (đăng ký thẳng lúc khởi động), không còn phụ thuộc việc từ đó có
+        # "tình cờ" xuất hiện gần một từ cảm xúc trong feedback hay chưa.
+        for neg in NEGATIONS:
+            assert neg in emotion_mlp.VOCAB_IDX, f"{neg!r} chưa có trong VOCAB_IDX"

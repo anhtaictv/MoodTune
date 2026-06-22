@@ -2,7 +2,7 @@
 
 # MoodTune
 
-**Phiên bản hiện tại: `v3.8`** — xem mục [Lịch sử phiên bản](#lịch-sử-phiên-bản) ở cuối trang để biết chi tiết từng bản.
+**Phiên bản hiện tại: `v4.0`** — xem mục [Lịch sử phiên bản](#lịch-sử-phiên-bản) ở cuối trang để biết chi tiết từng bản.
 
 Gợi ý nhạc theo cảm xúc: người dùng nhập một đoạn văn bản, backend dùng một AI engine (rule-based lexicon + MLP có self-attention, học online từ feedback) để đoán cảm xúc, rồi tìm nhạc phù hợp qua Jamendo API (free, không cần đăng nhập).
 
@@ -53,6 +53,7 @@ Cũng có thể xem trực tiếp trong app bằng cách bấm vào tag phiên b
 
 | Phiên bản | Tên | Nội dung chính |
 | --- | --- | --- |
+| `v4.0` | Word Segmentation (Model 3) | Tổng quát hoá tokenizer của AI Engine từ "bigram-only" sang **longest-match N-gram** (tối đa 5 từ) — sửa lỗi "vocab chết": 54/591 cụm cảm xúc 3-5 từ trong `LEXICON` (ví dụ `"không thể chấp nhận được"`) có embedding sẵn nhưng tokenizer/rule scorer cũ không bao giờ nhận diện được. Đăng ký toàn bộ từ phủ định (`NEGATIONS`) vào vocab một cách chắc chắn (trước đây chỉ "tình cờ" lọt vào qua online learning). Thêm script `teach_model3.py` để dạy lại model trên các cụm vừa "sống lại", đã verify an toàn trên bản copy weights (không đổi kiến trúc Embedding/Attention/Leaky ReLU, tương thích `weights.npz` cũ qua tự vá `expand_vocab`). ([báo cáo](BaoCao_MoodTune_v4.0.md)) |
 | `v3.8` | Giao diện đa theme | Thêm bộ chọn giao diện ngay trong app với 3 theme: `Tối · Midnight` (mặc định), `Sáng · Aurora` (nền trắng, sương màu pastel cam-tím-xanh-hồng trôi nhẹ liên tục, tự tắt animation khi hệ điều hành bật giảm chuyển động, card nổi bằng shadow) và `Rực rỡ · Sunset` (gradient hoàng hôn chuyển động nhẹ, card kính mờ/glass) — áp dụng ngay, tự nhớ qua `localStorage`. Bỏ anti-pattern gradient-text ở logo/heading, chuẩn hoá lại màu chữ/nền để đạt độ tương phản WCAG AA ở cả 3 theme, và sơ đồ tri thức AI (canvas) giờ đọc màu theo theme đang chọn thay vì hardcode cố định xanh-tím. ([báo cáo](BaoCao_MoodTune_v3.8.md)) |
 | `v3.7` | Vận hành production ổn định hơn | Thêm app icon/favicon/PWA manifest và presence widget (số người online/đang nghe/tổng truy cập — số thật, đếm trực tiếp từ session); bật lại Audio Feature Engine (vá lỗi `tempo` array của `librosa` mới) và chuyển sang `waitress` thay Flask dev server; tự vá lệch Embedding/VOCAB sau restart; thêm rate-limit + admin key cho `/api/learn`. Không đổi kiến trúc model, tương thích ngược 100% với weights hiện có. ([báo cáo](BaoCao_MoodTune_v3.7.md)) |
 | `v3.6` | Chuẩn hoá nhận diện phủ định & cụm từ cảm xúc | Sửa Rule Scorer: phủ định chưa được kiểm tra trong vòng lặp bigram, và `NEGATIONS` cũ chỉ nhận diện phủ định 1 từ (`không`, `chẳng`...) — các cụm 2-3 từ như `"không hề"`, `"chẳng bao giờ"` bị bỏ sót. Không đổi kiến trúc model, tương thích ngược 100% với weights hiện có. ([báo cáo](BaoCao_MoodTune_v3.6.md)) |

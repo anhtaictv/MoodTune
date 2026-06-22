@@ -1,16 +1,23 @@
 """
-MoodTune Emotion Engine - Hybrid AI Model (v2.5 - Leaky ReLU + Adaptive L2)
+MoodTune Emotion Engine - Hybrid AI Model (v4.0 - Word Segmentation / Model 3)
 ============================================================================
 Kiến trúc 2 tầng:
 
 1. RULE SCORER:
    - Từ điển cảm xúc với weighted scoring (nhanh, chính xác với từ khoá)
-   - Bigram boost ×1.5 (cụm 2 từ ăn điểm gấp 1.5)
+   - N-gram boost ×1.5 (cụm 2..MAX_LEXICON_PHRASE_LEN từ ăn điểm gấp 1.5 —
+     tổng quát hoá từ bigram-only trước v4.0, xem rule_score())
    - Negation handling: từ/cụm phủ định 1-3 từ ("không", "không hề",
-     "chẳng bao giờ"...) đứng ngay trước unigram HOẶC bigram → đảo dấu
+     "chẳng bao giờ"...) đứng ngay trước unigram HOẶC cụm dài hơn → đảo dấu
      điểm (×-0.6)
 
 2. ATTENTION MLP LEARNER (numpy thuần, không dùng framework):
+   - Word Segmentation longest-match (v4.0): _tokenize() ghép cụm DÀI NHẤT
+     có sẵn trong VOCAB_IDX trước khi rơi về từ đơn, không còn giới hạn 2 từ
+     như bản cũ — sửa "vocab chết" (cụm cảm xúc 3-5 từ trong LEXICON có
+     embedding nhưng tokenizer cũ không bao giờ tạo ra được token đó).
+   - NEGATIONS được đăng ký thẳng vào VOCAB từ đầu (v4.0) — Attention có cơ
+     hội tự học pattern phủ định qua dữ liệu, không chỉ phụ thuộc rule cứng.
    - Embedding(VOCAB_SIZE, d=32) -> Self-Attention(Q,K,V) -> mean-pool
      -> Dense(d->64, Leaky ReLU) -> Dense(64->10, Softmax)
    - Attention(Q,K,V) = Softmax(Q K^T / sqrt(d_k)) V, forward+backward thủ công
@@ -62,6 +69,18 @@ for emo, words in LEXICON.items():
             VOCAB_IDX[w] = len(VOCAB)
             VOCAB.append(w)
 
+# Đăng ký NEGATIONS như "function token" (v4.0 - Model 3): trước đây các từ
+# phủ định ("không", "chẳng hề", "không bao giờ"...) chỉ vào được VOCAB một
+# cách tình cờ NẾU từng xuất hiện gần một từ cảm xúc trong feedback (qua
+# add_vocab_words() trong learn()) - không đảm bảo đầy đủ, và embedding học
+# được không mang ngữ nghĩa "đây là token phủ định" nhất quán. Đăng ký thẳng
+# từ đầu để Attention luôn có cơ hội tự học pattern phủ định qua dữ liệu,
+# không chỉ phụ thuộc 100% vào rule_score()/_is_negated().
+for w in NEGATIONS:
+    if w not in VOCAB_IDX:
+        VOCAB_IDX[w] = len(VOCAB)
+        VOCAB.append(w)
+
 DYNAMIC_VOCAB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dynamic_vocab.json")
 DYNAMIC_LEXICON_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dynamic_lexicon.json")
 
@@ -108,6 +127,15 @@ _n_dynamic_phrases = sum(len(p) for p in DYNAMIC_LEXICON.values())
 print(f"[Init] Vocab={VOCAB_SIZE} (+{len(DYNAMIC_VOCAB)} dynamic word, "
       f"+{_n_dynamic_phrases} dynamic phrase) | Classes={N}")
 
+# Độ dài cụm dài nhất hiện có trong VOCAB (tính theo số từ) — dùng cho
+# longest-match segmentation ở _tokenize() (v4.0 - Model 3). Trước đây
+# _tokenize() chỉ thử ghép đúng 2 từ (bigram-only) nên các cụm cảm xúc dài
+# hơn trong LEXICON (vd 5 từ "không thể chấp nhận được") không bao giờ được
+# nhận diện thành 1 token - "vocab chết", có embedding nhưng chưa từng được
+# forward/backward chạm tới. Cụm mới học runtime qua add_lexicon_phrases()
+# luôn ≤2 từ nên không cần tính lại giá trị này sau khi module đã load.
+MAX_PHRASE_LEN = max((len(w.split()) for w in VOCAB if " " in w), default=1)
+
 
 # ─── TIỀN XỬ LÝ ─────────────────────────────────────────────────
 def preprocess(text):
@@ -127,6 +155,16 @@ def preprocess(text):
 # dùng để giới hạn cửa sổ quét lùi trong _is_negated().
 NEGATION_MAX_LEN = max(len(p.split()) for p in NEGATIONS)
 
+# Độ dài cụm dài nhất trong LEXICON (v4.0 - Model 3): trước đây rule_score()
+# chỉ thử ghép đúng 2 từ liền kề (bigram-only) nên các cụm cảm xúc dài hơn
+# (vd 5 từ "không thể chấp nhận được" trong LEXICON["angry"]) không bao giờ
+# khớp được - dù tác giả lexicon đã cố tình viết cụm đó. ~9% (54/591) entry
+# trong LEXICON dài hơn 2 từ và đều rơi vào tình trạng này trước v4.0.
+MAX_LEXICON_PHRASE_LEN = max(
+    (len(p.split()) for words in LEXICON.values() for p in words if " " in p),
+    default=2,
+)
+
 
 def _is_negated(words, idx):
     """True nếu từ/cụm bắt đầu ở vị trí idx bị phủ định bởi 1..N từ đứng
@@ -144,16 +182,17 @@ def rule_score(text):
     scores = np.zeros(N)
     words = t.split()
 
-    # Bigram matching (cụm 2 từ) — cũng bị phủ định nếu có từ/cụm phủ định
-    # đứng ngay trước cụm (trước đây chỉ unigram mới được xét phủ định,
-    # nên "không tập trung" vẫn cộng điểm dương cho "focused")
-    for i in range(len(words)-1):
-        phrase = words[i]+" "+words[i+1]
-        negated = _is_negated(words, i)
-        for ei, emo in enumerate(EMOTIONS):
-            if phrase in LEXICON[emo]:
-                val = LEXICON[emo][phrase] * 1.5  # bigram boost
-                scores[ei] += (-0.6 * val) if negated else val
+    # N-gram matching (cụm 2..MAX_LEXICON_PHRASE_LEN từ) — tổng quát hoá từ
+    # bigram-only (trước v4.0). Cũng bị phủ định nếu có từ/cụm phủ định đứng
+    # ngay trước cụm (từ v3.6: áp dụng phủ định cho cả cụm, không chỉ unigram)
+    for length in range(2, MAX_LEXICON_PHRASE_LEN + 1):
+        for i in range(len(words) - length + 1):
+            phrase = " ".join(words[i:i+length])
+            negated = _is_negated(words, i)
+            for ei, emo in enumerate(EMOTIONS):
+                if phrase in LEXICON[emo]:
+                    val = LEXICON[emo][phrase] * 1.5  # phrase boost (giữ hệ số bigram cũ)
+                    scores[ei] += (-0.6 * val) if negated else val
 
     # Unigram + xử lý phủ định
     for i, w in enumerate(words):
@@ -172,27 +211,38 @@ def rule_score(text):
     return e / e.sum()
 
 
-# ─── TOKEN SEQUENCE CHO ATTENTION MLP (Ý tưởng 3) ────────────────
+# ─── TOKEN SEQUENCE CHO ATTENTION MLP (Ý tưởng 3 + Word Segmentation v4.0) ─
 def _tokenize(text, max_len=24):
     """Chuyển câu -> danh sách (token_str, token_id_or_None), GIỮ THỨ TỰ từ
-    trong câu (khác Bag-of-Words vốn mất thông tin trật tự). Ưu tiên match
-    bigram trước, sau đó unigram; token OOV (chưa có trong VOCAB_IDX) vẫn
-    được giữ lại với id=None để phục vụ Knowledge Graph (Ý tưởng 3,
-    nangcap2.txt)."""
+    trong câu (khác Bag-of-Words vốn mất thông tin trật tự).
+
+    Word segmentation bằng longest-match (v4.0 - Model 3): tại mỗi vị trí,
+    thử ghép cụm DÀI NHẤT có sẵn trong VOCAB_IDX trước (từ MAX_PHRASE_LEN từ
+    giảm dần xuống 2), rồi mới rơi về từ đơn. Tổng quát hoá so với bản cũ
+    (chỉ thử đúng 2 từ/bigram) - sửa được các cụm cảm xúc 3-5 từ trong
+    LEXICON (vd "không thể chấp nhận được") mà tokenizer cũ không bao giờ
+    chạm tới dù embedding của chúng đã tồn tại trong VOCAB từ đầu.
+
+    Token OOV (chưa có trong VOCAB_IDX) vẫn được giữ lại với id=None để
+    phục vụ Knowledge Graph (Ý tưởng 3, nangcap2.txt)."""
     t = preprocess(text)
     words = t.split()
     tokens = []
     i = 0
     while i < len(words) and len(tokens) < max_len:
-        if i < len(words) - 1:
-            bigram = words[i] + " " + words[i+1]
-            if bigram in VOCAB_IDX:
-                tokens.append((bigram, VOCAB_IDX[bigram]))
-                i += 2
-                continue
-        w = words[i]
-        tokens.append((w, VOCAB_IDX.get(w)))
-        i += 1
+        matched = False
+        max_try = min(MAX_PHRASE_LEN, len(words) - i)
+        for length in range(max_try, 1, -1):
+            phrase = " ".join(words[i:i+length])
+            if phrase in VOCAB_IDX:
+                tokens.append((phrase, VOCAB_IDX[phrase]))
+                i += length
+                matched = True
+                break
+        if not matched:
+            w = words[i]
+            tokens.append((w, VOCAB_IDX.get(w)))
+            i += 1
     return tokens
 
 

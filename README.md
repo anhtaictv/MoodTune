@@ -2,7 +2,7 @@
 
 # MoodTune
 
-**Current version: `v3.8`** — see [Version history](#version-history) below for the full changelog.
+**Current version: `v4.0`** — see [Version history](#version-history) below for the full changelog.
 
 Mood-based music recommendation: the user types a piece of text, the backend uses an AI engine (rule-based lexicon + a self-attention MLP that learns online from feedback) to infer the emotion, then looks up matching tracks via the Jamendo API (free, no login required).
 
@@ -53,6 +53,7 @@ Also viewable in the app itself by clicking the version tag next to the logo. Ea
 
 | Version | Name | Highlights |
 | --- | --- | --- |
+| `v4.0` | Word Segmentation (Model 3) | Generalized the AI engine's tokenizer from "bigram-only" to **longest-match N-gram** (up to 5 words) — fixed a "dead vocab" bug: 54/591 multi-word (3-5 word) emotion phrases in `LEXICON` (e.g. `"không thể chấp nhận được"`) had embeddings but were never reachable by the old tokenizer/rule scorer. Registered all negation words (`NEGATIONS`) into the vocab deterministically (previously they only entered "by accident" through online learning). Added `teach_model3.py` to retrain on the newly-reachable phrases, verified safely against a copy of the live weights (no architecture change — embedding/attention/Leaky ReLU untouched, backward-compatible with the existing `weights.npz` via the existing `expand_vocab` self-heal). ([report](BaoCao_MoodTune_v4.0.md)) |
 | `v3.8` | Multi-theme UI | Added an in-app theme picker with 3 themes: `Tối · Midnight` (default), `Sáng · Aurora` (light, slow-drifting pastel-mist background, auto-disables the animation under reduced-motion, shadow-elevated cards) and `Rực rỡ · Sunset` (slow-drifting sunset gradient, frosted-glass cards) — applies instantly, remembered via `localStorage`. Removed the gradient-text anti-pattern on the logo/headings, re-tokenized colors so every theme hits WCAG AA contrast, and the AI knowledge-graph canvas now reads its beam/bubble colors from the active theme instead of hardcoded green/violet. ([report](BaoCao_MoodTune_v3.8.md)) |
 | `v3.7` | Production reliability pass | Added the app icon/favicon/PWA manifest and a presence widget (online/listening/total visits — real counts straight from active sessions); re-enabled the audio feature engine (fixed a `tempo`-as-array bug from a newer `librosa`) and switched from the Flask dev server to `waitress`; auto-heals an Embedding/VOCAB size mismatch after restarts; added rate-limiting + an admin-key bypass for `/api/learn`. No architecture change, fully backward-compatible with existing weights. ([report](BaoCao_MoodTune_v3.7.md)) |
 | `v3.6` | Vietnamese negation & phrase fixes | Fixed the rule scorer: negation wasn't checked inside bigrams, and only single-word negations (`không`, `chẳng`...) were recognized — multi-word forms like `"không hề"`, `"chẳng bao giờ"` slipped through. No architecture change, fully backward-compatible with existing weights. ([report](BaoCao_MoodTune_v3.6.md)) |
