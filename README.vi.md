@@ -1,19 +1,69 @@
-[🇬🇧 English version](README.md)
+<div align="center">
+  <img src="MoodTune.png" alt="MoodTune" width="120" />
 
-# MoodTune
+  # MoodTune
 
-**Phiên bản hiện tại: `v4.0`** — xem mục [Lịch sử phiên bản](#lịch-sử-phiên-bản) ở cuối trang để biết chi tiết từng bản.
+  **Ứng dụng gợi ý nhạc theo cảm xúc, phân tích văn bản tiếng Việt bằng AI tự xây dựng**
 
-Gợi ý nhạc theo cảm xúc: người dùng nhập một đoạn văn bản, backend dùng một AI engine (rule-based lexicon + MLP có self-attention, học online từ feedback) để đoán cảm xúc, rồi tìm nhạc phù hợp qua Jamendo API (free, không cần đăng nhập).
+  [![Version](https://img.shields.io/badge/phiên_bản-v4.0-blue?style=flat-square)](https://github.com/anhtaictv/moodtune/releases)
+  [![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+  [![Flask](https://img.shields.io/badge/Flask-2.x-000000?style=flat-square&logo=flask)](https://flask.palletsprojects.com)
+  [![NumPy](https://img.shields.io/badge/NumPy-only-013243?style=flat-square&logo=numpy)](https://numpy.org)
 
-## Cấu trúc
+  [🌐 Xem Demo](https://anhtaictv.me) · [🇬🇧 English version](README.md)
+</div>
 
-- `backend/` — Flask API (Python). Engine cảm xúc (`emotion_mlp.py`, `lexicon.py`), Thompson Sampling bandit để học gu nhạc (`bandit.py`), tìm nhạc Jamendo + audio feature analysis (`audio_features.py`), entrypoint `app.py`.
-- `frontend/` — single-page app (HTML/CSS/JS thuần, không build step) trong `index.html`.
+---
 
-## Chạy backend
+## Tổng quan
 
-Yêu cầu Python 3.x.
+MoodTune phân tích một đoạn văn bản tiếng Việt, đoán cảm xúc của người dùng bằng AI engine tự xây dựng, rồi trả về các bài nhạc phù hợp từ Jamendo API — miễn phí, không cần đăng nhập.
+
+AI engine được viết **hoàn toàn bằng NumPy thuần** (không PyTorch, không TensorFlow): kết hợp rule scorer trên lexicon cảm xúc tiếng Việt và một MLP có self-attention, học online từ feedback người dùng.
+
+## Tính năng
+
+- **Nhận diện cảm xúc** — 10 class theo mô hình Valence-Arousal (GEMS/Circumplex)
+- **MLP Self-Attention** — Embedding + Q/K/V attention tự viết bằng NumPy; hiểu thứ tự từ và phủ định
+- **Online learning** — model cập nhật ngay từng feedback (thích / không thích / bỏ qua)
+- **Thompson Sampling Bandit** — học gu nhạc cá nhân qua nhiều phiên
+- **Audio re-ranking** — BPM, spectral centroid, MFCC qua librosa để tinh chỉnh kết quả
+- **Giao diện đa theme** — Tối (Midnight), Sáng (Aurora), Rực rỡ (Sunset); nhớ qua localStorage
+- **PWA** — cài được như app, hỗ trợ offline với nội dung đã cache
+- **Không phụ thuộc ML framework** — toàn bộ AI chạy trên NumPy + Python stdlib
+
+## Công nghệ sử dụng
+
+| Tầng | Công nghệ |
+|---|---|
+| Backend | Python 3, Flask, Waitress |
+| AI Engine | NumPy (tự viết MLP, attention, bandit) |
+| Music API | Jamendo |
+| Frontend | HTML / CSS / JS thuần (không build step) |
+| Process manager | PM2 |
+| Reverse proxy | IIS / Nginx |
+
+## Cấu trúc dự án
+
+```
+moodtune/
+├── backend/
+│   ├── app.py                  # Entrypoint Flask
+│   ├── emotion_mlp.py          # MLP Self-Attention + online learning
+│   ├── lexicon.py              # Lexicon cảm xúc & rule scorer
+│   ├── bandit.py               # Thompson Sampling bandit
+│   ├── audio_features.py       # Re-ranking BPM / spectral / MFCC
+│   ├── weights.npz             # Trọng số model đã huấn luyện
+│   ├── dynamic_vocab.json      # Vocab mở rộng runtime
+│   ├── requirements.txt
+│   └── ecosystem.config.js     # Config PM2
+└── frontend/
+    └── index.html              # Single-page app
+```
+
+## Chạy nhanh
+
+**Backend**
 
 ```bash
 cd backend
@@ -21,48 +71,57 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Backend chạy ở `http://localhost:5005`, API base path là `/api` (xem `/api/health` để kiểm tra).
+Chạy tại `http://localhost:5005`. Kiểm tra `/api/health` để xác nhận.
 
-Biến môi trường (đều có giá trị mặc định, không bắt buộc set khi chạy local):
+**Frontend**
 
-| Biến | Mặc định | Ý nghĩa |
-| --- | --- | --- |
-| `MOODTUNE_SECRET_KEY` | `moodtune_secret_2024` | Flask `secret_key`. Nên set giá trị riêng khi deploy thật. |
-| `MOODTUNE_FRONTEND` | `https://anhtaictv.me` | Origin của frontend, dùng để cấu hình CORS. |
-| `JAMENDO_CLIENT_ID` | `cf31dbfd` | Client ID gọi Jamendo API. |
+Mở `frontend/index.html` bằng trình duyệt (hoặc qua static server trên port 5500). Khi chạy ở `localhost` / `file://`, frontend tự gọi thẳng `http://localhost:5005/api`.
 
-Để chạy bằng pm2 (production), dùng config có sẵn:
+**Production (PM2)**
 
 ```bash
 pm2 start backend/ecosystem.config.js
 ```
 
-## Chạy frontend
+## Biến môi trường
 
-Mở trực tiếp `frontend/index.html` bằng trình duyệt (hoặc qua `http://localhost:5500` bằng static server tuỳ ý). Khi chạy ở `localhost`/`file://`, frontend tự gọi thẳng backend tại `http://localhost:5005/api` — không cần cấu hình thêm.
+Tất cả đều có giá trị mặc định — không bắt buộc khi chạy local.
 
-Khi deploy production, frontend gọi `/api` (relative path), nên cần một reverse proxy (IIS/Nginx) trỏ `/api` sang backend Flask. Cấu hình IIS mẫu xem `frontend/web.config`.
+| Biến | Mặc định | Ý nghĩa |
+|---|---|---|
+| `MOODTUNE_SECRET_KEY` | `moodtune_secret_2024` | Flask secret key. Nên đổi khi deploy thật. |
+| `MOODTUNE_FRONTEND` | `https://anhtaictv.me` | Origin frontend để cấu hình CORS. |
+| `JAMENDO_CLIENT_ID` | `cf31dbfd` | Client ID gọi Jamendo API. |
+
+## Deploy Production
+
+Frontend gọi `/api` (relative path). Cần cấu hình reverse proxy (IIS hoặc Nginx) trỏ `/api` → backend Flask port 5005. Xem `frontend/web.config` để biết cấu hình IIS mẫu.
 
 ## Dữ liệu model
 
-`weights.npz`, `weights_meta.json`, `weights_replay.json`, `dynamic_vocab.json` trong `backend/` là trạng thái đã học của model (vocab, trọng số MLP, replay buffer cho online learning). `feedback_log.jsonl` lưu lịch sử predict/feedback/hành vi nghe nhạc, dùng để bandit học gu nhạc và thống kê `/api/stats`.
+| File | Nội dung |
+|---|---|
+| `weights.npz` | Trọng số MLP + embedding matrix |
+| `weights_meta.json` | Metadata vocabulary |
+| `weights_replay.json` | Replay buffer cho online learning |
+| `dynamic_vocab.json` | Vocab mở rộng trong runtime |
 
 ## Lịch sử phiên bản
 
-Cũng có thể xem trực tiếp trong app bằng cách bấm vào tag phiên bản cạnh logo. Mỗi báo cáo `vX.X` dưới đây có bản đầy đủ (sơ đồ kiến trúc, so sánh trước/sau, kết quả kiểm thử).
+Bấm vào tag phiên bản trên UI để xem changelog trong app. Báo cáo đầy đủ từng phiên bản (sơ đồ kiến trúc, so sánh trước/sau, kết quả kiểm thử) được link bên dưới.
 
 | Phiên bản | Tên | Nội dung chính |
-| --- | --- | --- |
-| `v4.0` | Word Segmentation (Model 3) | Tổng quát hoá tokenizer của AI Engine từ "bigram-only" sang **longest-match N-gram** (tối đa 5 từ) — sửa lỗi "vocab chết": 54/591 cụm cảm xúc 3-5 từ trong `LEXICON` (ví dụ `"không thể chấp nhận được"`) có embedding sẵn nhưng tokenizer/rule scorer cũ không bao giờ nhận diện được. Đăng ký toàn bộ từ phủ định (`NEGATIONS`) vào vocab một cách chắc chắn (trước đây chỉ "tình cờ" lọt vào qua online learning). Thêm script `teach_model3.py` để dạy lại model trên các cụm vừa "sống lại", đã verify an toàn trên bản copy weights (không đổi kiến trúc Embedding/Attention/Leaky ReLU, tương thích `weights.npz` cũ qua tự vá `expand_vocab`). ([báo cáo](BaoCao_MoodTune_v4.0.md)) |
-| `v3.8` | Giao diện đa theme | Thêm bộ chọn giao diện ngay trong app với 3 theme: `Tối · Midnight` (mặc định), `Sáng · Aurora` (nền trắng, sương màu pastel cam-tím-xanh-hồng trôi nhẹ liên tục, tự tắt animation khi hệ điều hành bật giảm chuyển động, card nổi bằng shadow) và `Rực rỡ · Sunset` (gradient hoàng hôn chuyển động nhẹ, card kính mờ/glass) — áp dụng ngay, tự nhớ qua `localStorage`. Bỏ anti-pattern gradient-text ở logo/heading, chuẩn hoá lại màu chữ/nền để đạt độ tương phản WCAG AA ở cả 3 theme, và sơ đồ tri thức AI (canvas) giờ đọc màu theo theme đang chọn thay vì hardcode cố định xanh-tím. ([báo cáo](BaoCao_MoodTune_v3.8.md)) |
-| `v3.7` | Vận hành production ổn định hơn | Thêm app icon/favicon/PWA manifest và presence widget (số người online/đang nghe/tổng truy cập — số thật, đếm trực tiếp từ session); bật lại Audio Feature Engine (vá lỗi `tempo` array của `librosa` mới) và chuyển sang `waitress` thay Flask dev server; tự vá lệch Embedding/VOCAB sau restart; thêm rate-limit + admin key cho `/api/learn`. Không đổi kiến trúc model, tương thích ngược 100% với weights hiện có. ([báo cáo](BaoCao_MoodTune_v3.7.md)) |
-| `v3.6` | Chuẩn hoá nhận diện phủ định & cụm từ cảm xúc | Sửa Rule Scorer: phủ định chưa được kiểm tra trong vòng lặp bigram, và `NEGATIONS` cũ chỉ nhận diện phủ định 1 từ (`không`, `chẳng`...) — các cụm 2-3 từ như `"không hề"`, `"chẳng bao giờ"` bị bỏ sót. Không đổi kiến trúc model, tương thích ngược 100% với weights hiện có. ([báo cáo](BaoCao_MoodTune_v3.6.md)) |
-| `v3.5` | Chuẩn hoá theo Valence-Arousal | Rút từ 15 → 10 "cảm xúc đơn giản" để bám theo mô hình khoa học Valence-Arousal (GEMS/Circumplex); đổi tên nội bộ các cảm xúc sang tiếng Anh (`vui_ve` → `happy`,...). ([báo cáo](BaoCao_MoodTune_v3.5.md)) |
-| `v3.1` | Thêm cảm xúc mới | Thêm 3 cảm xúc — Tự tin 💪, Biết ơn 🙏, Tức giận 😡 — nâng tổng số từ 12 lên 15 class. ([báo cáo](BaoCao_MoodTune_v3.1.md)) |
-| `v3.0` | RLUF Bandit & Sơ đồ tri thức | Tự cài Thompson Sampling Multi-Armed Bandit (NumPy thuần, `bandit.py`) học gu nhạc từ Like/Dislike/Bỏ qua, cùng Sơ đồ tri thức cảm xúc tương tác (Canvas 2D) dựa trên trọng số attention của model. ([báo cáo](BaoCao_MoodTune_v3.0.md)) |
-| `v2.5` | Adaptive Learning | Đổi ReLU → Leaky ReLU ở lớp ẩn (chống "chết nơ-ron" khi online learning liên tục) và thêm Adaptive L2 (hệ số weight decay tăng theo số lần feedback); thêm modal changelog trong app. ([báo cáo](BaoCao_MoodTune_v2.5.md)) |
-| `v2.0` | Self-Attention | Thay Bag-of-Words bằng Embedding Layer + Self-Attention (Q,K,V) tự viết bằng NumPy, giữ đúng thứ tự từ (và phủ định) trong câu. Thêm Dynamic Vocab/Weight Expansion, Audio Feature Engine (BPM/Spectral Centroid/MFCC qua librosa) để re-rank nhạc, và Kho nhạc Local (Hybrid Online/Offline). ([báo cáo](BaoCao_MoodTune_v2.0.md)) |
-| `v1.1` | Hoàn thiện giao diện | Hiển thị số phiên bản trên UI; hoàn thiện gợi ý cá nhân hoá, gợi ý theo giờ trong ngày, lịch sử phân tích. ([báo cáo](BaoCao_MoodTune_v1.1.md)) |
-| `v1.0` | Phiên bản nền tảng | Rule Scorer + MLP Hybrid Engine (NumPy thuần, không dùng framework ML), tích hợp Jamendo API, feedback & online learning cơ bản. |
+|---|---|---|
+| `v4.0` | Word Segmentation | Tổng quát hoá tokenizer sang **longest-match N-gram** (tối đa 5 từ); sửa lỗi "vocab chết" với 54 cụm từ không được nhận diện. ([báo cáo](BaoCao_MoodTune_v4.0.md)) |
+| `v3.8` | Giao diện đa theme | 3 theme: Midnight / Aurora / Sunset; đạt WCAG AA ở cả 3 theme; sơ đồ tri thức theo theme. ([báo cáo](BaoCao_MoodTune_v3.8.md)) |
+| `v3.7` | Production ổn định | PWA manifest, presence widget, Waitress server, rate limiting, tự vá lệch vocab. ([báo cáo](BaoCao_MoodTune_v3.7.md)) |
+| `v3.6` | Sửa phủ định | Sửa rule scorer nhận diện phủ định nhiều từ (`"không hề"`, `"chẳng bao giờ"`, ...). ([báo cáo](BaoCao_MoodTune_v3.6.md)) |
+| `v3.5` | Valence-Arousal | Rút về 10 class cảm xúc theo mô hình GEMS/Circumplex. ([báo cáo](BaoCao_MoodTune_v3.5.md)) |
+| `v3.1` | Thêm cảm xúc | Tự tin 💪, Biết ơn 🙏, Tức giận 😡 — từ 12 lên 15 class. ([báo cáo](BaoCao_MoodTune_v3.1.md)) |
+| `v3.0` | Bandit + Sơ đồ tri thức | Thompson Sampling bandit học gu nhạc; sơ đồ tri thức Canvas 2D tương tác. ([báo cáo](BaoCao_MoodTune_v3.0.md)) |
+| `v2.5` | Adaptive Learning | ReLU → Leaky ReLU; L2 adaptive; modal changelog trong app. ([báo cáo](BaoCao_MoodTune_v2.5.md)) |
+| `v2.0` | Self-Attention | Embedding + self-attention (Q,K,V) NumPy; audio feature engine; dynamic vocab. ([báo cáo](BaoCao_MoodTune_v2.0.md)) |
+| `v1.1` | Hoàn thiện UI | Badge phiên bản; gợi ý cá nhân hoá & theo giờ; lịch sử phân tích. ([báo cáo](BaoCao_MoodTune_v1.1.md)) |
+| `v1.0` | Nền tảng | Rule scorer + MLP hybrid, Jamendo API, online learning cơ bản. |
 
-Hai tài liệu khác mô tả hệ thống theo chiều rộng thay vì theo từng phiên bản: `BaoCao_MoodTune_TongQuan.md` (kiến trúc tổng quan) và `BaoCao_MoodTune_DacTrung_AIEngine_API.md` (đặc trưng AI Engine & API).
+Tài liệu bổ sung: [`BaoCao_MoodTune_TongQuan.md`](BaoCao_MoodTune_TongQuan.md) (kiến trúc tổng quan) và [`BaoCao_MoodTune_DacTrung_AIEngine_API.md`](BaoCao_MoodTune_DacTrung_AIEngine_API.md) (AI Engine & API chi tiết).
