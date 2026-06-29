@@ -107,13 +107,16 @@ Tất cả đều có giá trị mặc định — không bắt buộc khi chạ
 
 | Phiên bản | Nội dung |
 |---|---|
-| `v4.0` | Word Segmentation — longest-match N-gram tokenizer, sửa "vocab chết" |
+| `v4.0` | Word Segmentation — longest-match N-gram tokenizer, sửa "vocab chết" cho 54 cụm từ |
 | `v3.8` | Giao diện đa theme: Midnight / Aurora / Sunset |
 | `v3.7` | Production: PWA, presence widget, Waitress, rate limiting |
 | `v3.6` | Sửa rule scorer phủ định nhiều từ (`"không hề"`, `"chẳng bao giờ"`) |
-| `v3.5` | Rút về 10 class Valence-Arousal (GEMS/Circumplex) |
-| `v3.0` | Thompson Sampling bandit + sơ đồ tri thức Canvas 2D |
-| `v2.0` | Self-Attention (Q/K/V NumPy), audio features, dynamic vocab |
-| `v1.0` | Rule scorer + MLP hybrid, Jamendo API, online learning |
+| `v3.5` | Rút về 10 class Valence-Arousal (GEMS/Circumplex), chuẩn hoá emotion system |
+| `v3.1` | Mở rộng 12 → 15 class: thêm tự_tin 💪, biết_ơn 🙏, tức_giận 😡 |
+| `v3.0` | Thompson Sampling bandit (RLUF) + sơ đồ tri thức Canvas 2D tương tác |
+| `v2.5` | Leaky ReLU + Adaptive L2 Regularization theo feedback_count |
+| `v2.0` | Self-Attention (Q/K/V NumPy), audio features (BPM/MFCC), dynamic vocab |
+| `v1.1` | Hybrid Rule+MLP hoàn chỉnh, online learning, Jamendo API, secret_key env |
+| `v1.0` | Phiên bản đầu tiên — rule scorer + MLP cơ bản |
 
 Báo cáo chi tiết từng phiên bản: xem các file `BaoCao_MoodTune_v*.md` trong repo.

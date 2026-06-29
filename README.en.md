@@ -111,9 +111,12 @@ All have safe defaults — none are required for local development.
 | `v3.8` | Multi-theme UI: Midnight / Aurora / Sunset |
 | `v3.7` | Production: PWA, presence widget, Waitress server, rate limiting |
 | `v3.6` | Rule scorer fix for multi-word negations (`"không hề"`, `"chẳng bao giờ"`) |
-| `v3.5` | Reduced to 10-class Valence-Arousal model (GEMS/Circumplex) |
-| `v3.0` | Thompson Sampling bandit + interactive Canvas 2D knowledge graph |
-| `v2.0` | Self-Attention (Q/K/V in NumPy), audio features, dynamic vocab expansion |
-| `v1.0` | Rule scorer + MLP hybrid, Jamendo API, basic online learning |
+| `v3.5` | Reduced to 10-class Valence-Arousal (GEMS/Circumplex), standardized emotion system |
+| `v3.1` | Expanded 12 → 15 classes: added confident 💪, grateful 🙏, angry 😡 |
+| `v3.0` | Thompson Sampling bandit (RLUF) + interactive Canvas 2D knowledge graph |
+| `v2.5` | Leaky ReLU + Adaptive L2 regularization (scaled by feedback_count) |
+| `v2.0` | Self-Attention (Q/K/V in NumPy), audio features (BPM/MFCC), dynamic vocab |
+| `v1.1` | Full Hybrid Rule+MLP, online learning, Jamendo API, secret_key env var |
+| `v1.0` | Initial release — rule scorer + basic MLP |
 
 Full per-version writeups (architecture diagrams, before/after comparisons, test results) are in the `BaoCao_MoodTune_v*.md` files in this repo.
