@@ -5,7 +5,7 @@
 
   **Ứng dụng gợi ý nhạc theo cảm xúc, phân tích văn bản tiếng Việt bằng AI tự xây dựng**
 
-  [![Version](https://img.shields.io/badge/phiên_bản-v4.0-blue?style=flat-square)](https://github.com/anhtaictv/moodtune/releases)
+  [![Version](https://img.shields.io/badge/phiên_bản-v4.0-blue?style=flat-square)](https://github.com/anhtaictv/MoodTunes/releases)
   [![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
   [![Flask](https://img.shields.io/badge/Flask-2.x-000000?style=flat-square&logo=flask)](https://flask.palletsprojects.com)
   [![NumPy](https://img.shields.io/badge/NumPy-only-013243?style=flat-square&logo=numpy)](https://numpy.org)
