@@ -1,0 +1,5 @@
+# Checkout LF ở mọi máy (kể cả runner Windows có core.autocrlf=true) để deploy
+# so hash khớp với file đang chạy trên server.
+* text=auto eol=lf
+*.npz binary
+*.png binary
