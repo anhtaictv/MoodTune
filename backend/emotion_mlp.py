@@ -45,7 +45,10 @@ import json
 import os
 import random
 import re
+import subprocess
 import sys
+import threading
+import time
 import unicodedata
 
 # Ép stdout/stderr dùng UTF-8 để print tiếng Việt không crash trên Windows (cp1252)
@@ -606,13 +609,82 @@ def _contextual_boost(text, scores):
     return modified / total if total > 0 else modified
 
 
+# ─── TF-IDF CLASSIFIER (v5.0) ────────────────────────────────────
+# Khi đã có tfidf_model.npz: combined = W_RULE*rule + W_MLP*mlp + (1-W_RULE-W_MLP)*tfidf.
+# Trọng số chọn bằng 5-fold CV (rule+TF-IDF 82.4% / không dấu 75.7%, so với
+# rule đơn thuần 65.5% / 32.7%). MLP vẫn học online để giữ graph_tokens/attention.
+W_RULE = 0.35
+W_MLP = 0.0
+# Gom feedback rồi train lại 1 lần (train trong tiến trình riêng, ~10-20s)
+TFIDF_RETRAIN_DELAY = 60
+# gemini_teacher.py dạy liên tục (<60s/câu) sẽ reset timer mãi -> ép train sau tối đa 10 phút
+TFIDF_RETRAIN_MAX_WAIT = 600
+TFIDF_TRAIN_TIMEOUT = 600
+_HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+class _TfidfRetrainer:
+    """Debounce + chạy train_tfidf.py bằng subprocess (sklearn không vào RAM backend)."""
+
+    def __init__(self, on_done):
+        self._on_done = on_done
+        self._lock = threading.Lock()
+        self._timer = None
+        self._first_pending = None
+        self._running = False
+
+    def schedule(self, delay=TFIDF_RETRAIN_DELAY):
+        with self._lock:
+            now = time.time()
+            if self._timer is not None:
+                self._timer.cancel()
+            else:
+                self._first_pending = now
+            delay = min(delay, max(0, self._first_pending + TFIDF_RETRAIN_MAX_WAIT - now))
+            self._timer = threading.Timer(delay, self._run)
+            self._timer.daemon = True
+            self._timer.start()
+
+    def _run(self):
+        with self._lock:
+            self._timer = None
+            busy = self._running
+            self._running = True
+        if busy:
+            # Lần train trước chưa xong -> thử lại sau, không chạy song song
+            self.schedule()
+            return
+        try:
+            res = subprocess.run([sys.executable, os.path.join(_HERE, "train_tfidf.py")],
+                                 cwd=_HERE, capture_output=True, text=True,
+                                 encoding="utf-8", errors="replace", timeout=TFIDF_TRAIN_TIMEOUT)
+            if res.returncode == 0:
+                print(res.stdout.strip()[-500:])
+                self._on_done()
+            else:
+                print(f"[TF-IDF] train lỗi (exit {res.returncode}): {res.stderr.strip()[-500:]}")
+        except Exception as e:  # thread nền: lỗi gì cũng chỉ log, không được giết retrainer
+            print(f"[TF-IDF] không chạy được train_tfidf.py: {e!r}")
+        finally:
+            with self._lock:
+                self._running = False
+
+
 # ─── HYBRID ENGINE ───────────────────────────────────────────────
 class EmotionEngine:
     """
-    Kết hợp Rule Scorer + Attention MLP Learner.
-    alpha: trọng số cho rule (giảm dần khi có nhiều feedback → tin MLP hơn).
+    Kết hợp Rule Scorer + TF-IDF classifier (v5.0) + Attention MLP Learner.
+    alpha: trọng số rule khi CHƯA có model TF-IDF (fallback về blend rule+MLP cũ).
     """
     def __init__(self, weights_path="weights"):
+        from text_classifier import MODEL_FILE
+        self.tfidf_path = os.path.join(os.path.dirname(os.path.abspath(weights_path + ".npz")), MODEL_FILE)
+        self.tfidf = None
+        self._load_tfidf()
+        self._retrainer = _TfidfRetrainer(self._load_tfidf)
+        if self.tfidf is None:
+            self._retrainer.schedule(delay=0)
+
         self.mlp = AttentionMLP(lr=0.02, d=64, hidden=128)
         self.weights_path = weights_path
         self.feedback_count = 0
@@ -649,6 +721,25 @@ class EmotionEngine:
     def vocab_size(self):
         return len(VOCAB)
 
+    def _load_tfidf(self):
+        if not os.path.exists(self.tfidf_path):
+            return
+        from text_classifier import TfidfEmotionModel, FEATURE_VERSION
+        try:
+            model = TfidfEmotionModel.load(self.tfidf_path)
+        except Exception as e:  # file hỏng/ghi dở: giữ model cũ, KHÔNG làm crash backend
+            print(f"[Engine] Không load được {self.tfidf_path}: {e!r} - giữ model hiện tại")
+            return
+        if model.n_classes != N or model.feature_version != FEATURE_VERSION:
+            # Model cũ train với bộ cảm xúc/tiền xử lý khác -> bỏ, train lại
+            print(f"[Engine] {self.tfidf_path} lệch phiên bản (classes={model.n_classes}, "
+                  f"features=v{model.feature_version}) - bỏ qua, chờ train lại")
+            if self.tfidf is None and hasattr(self, "_retrainer"):
+                self._retrainer.schedule(delay=0)
+            return
+        self.tfidf = model
+        print(f"[Engine] TF-IDF model loaded ({model.coef.shape[1]} features)")
+
     def _calc_alpha(self):
         """Alpha giảm mượt theo số feedback (sigmoid-like), chặn ở [0.35, 0.85].
         Càng nhiều feedback → càng tin MLP hơn rule."""
@@ -684,7 +775,12 @@ class EmotionEngine:
         mlp  = self.mlp.predict(ids)
 
         # Hybrid blend + contextual boost (sad/lonely/nostalgic)
-        combined = self.alpha * rule + (1 - self.alpha) * mlp
+        tfidf_model = self.tfidf  # đọc 1 lần: thread retrain có thể thay giữa chừng
+        tfidf = tfidf_model.predict_proba(text) if tfidf_model is not None else None
+        if tfidf is not None:
+            combined = W_RULE * rule + W_MLP * mlp + (1 - W_RULE - W_MLP) * tfidf
+        else:
+            combined = self.alpha * rule + (1 - self.alpha) * mlp
         combined = _contextual_boost(text, combined)
         idx = int(np.argmax(combined))
         emo = EMOTIONS[idx]
@@ -717,6 +813,7 @@ class EmotionEngine:
             "all_scores": {EMOTIONS[i]: float(combined[i]) for i in range(N)},
             "rule_scores": {EMOTIONS[i]: float(rule[i]) for i in range(N)},
             "mlp_scores":  {EMOTIONS[i]: float(mlp[i]) for i in range(N)},
+            "tfidf_scores": None if tfidf is None else {EMOTIONS[i]: float(tfidf[i]) for i in range(N)},
             "alpha": self.alpha,
             "graph_tokens": graph_tokens,
         }
@@ -763,6 +860,9 @@ class EmotionEngine:
         self.mlp.update_l2(self.feedback_count)  # Adaptive L2 (v2.5)
         self.save()
         self._save_replay()
+        # app.py ghi feedback vào feedback_log.jsonl ngay sau learn(); train lại
+        # sau TFIDF_RETRAIN_DELAY giây nên chắc chắn đã đọc được câu vừa dạy.
+        self._retrainer.schedule()
         print(f"[Learn] '{text}' -> {correct_emotion} | alpha={self.alpha:.2f} | l2={self.mlp.l2:.6f} | replay={len(self.replay)}")
 
     def pretrain(self, data, epochs=200):

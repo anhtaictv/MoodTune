@@ -43,3 +43,7 @@ dist_check.txt
 retrain_*.txt
 debug_*.js
 teach.html
+
+# Model TF-IDF train trên server từ feedback_log (train_tfidf.py)
+backend/tfidf_model.npz
+backend/tfidf_model.npz.tmp.npz

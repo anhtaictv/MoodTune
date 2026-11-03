@@ -289,7 +289,7 @@ def _prune_sessions():
 def health():
     resp = jsonify({
         "status": "ok",
-        "model": "EmotionMLP-Hybrid",
+        "model": "Rule+TFIDF-Hybrid" if engine.tfidf is not None else "EmotionMLP-Hybrid",
         "music_api": "jamendo_free",
         "frontend": FRONTEND_URL,
         "feedback_count": engine.feedback_count,
