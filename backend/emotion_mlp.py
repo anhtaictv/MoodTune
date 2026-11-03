@@ -39,6 +39,7 @@ Kiến trúc 2 tầng:
    - Càng nhiều feedback → càng tin MLP (alpha giảm về 0.35)
 """
 
+import collections
 import numpy as np
 import json
 import os
@@ -60,6 +61,12 @@ except Exception:
 from lexicon import EMOTIONS, EMOTION_META, LEXICON, NEGATIONS
 
 N = len(EMOTIONS)
+
+# Cap replay buffer THEO TỪNG CẢM XÚC (không phải FIFO toàn cục) — một đợt
+# dạy dồn dập chỉ nhắm 1-2 cảm xúc (vd gemini_teacher.py --emotions happy)
+# từng đẩy sạch mẫu replay của các cảm xúc khác ra khỏi buffer 500-mẫu FIFO
+# cũ, gây quên lây lan sang những lớp không liên quan (xem safe_teach.py).
+REPLAY_PER_CLASS = 50
 
 # ─── VOCAB (tĩnh từ lexicon + động từ dynamic_vocab.json) ───────
 VOCAB = []
@@ -657,8 +664,16 @@ class EmotionEngine:
                 self.replay = []
 
     def _save_replay(self):
-        # giới hạn 500 mẫu gần nhất để file không phình to
-        self.replay = self.replay[-500:]
+        # Cap theo từng cảm xúc (REPLAY_PER_CLASS mẫu gần nhất/lớp) thay vì
+        # FIFO chung, để một đợt dạy tập trung vào 1-2 cảm xúc không đẩy mất
+        # mẫu của các cảm xúc khác ra khỏi buffer.
+        by_label = collections.defaultdict(list)
+        for t, l in self.replay:
+            by_label[l].append([t, l])
+        capped = []
+        for l, items in by_label.items():
+            capped.extend(items[-REPLAY_PER_CLASS:])
+        self.replay = capped
         with open(self.replay_path, "w", encoding="utf-8") as f:
             json.dump(self.replay, f, ensure_ascii=False)
 
