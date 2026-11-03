@@ -270,11 +270,6 @@ def _save_visit_total(total):
 
 visit_total = _load_visit_total()
 
-# Tổng lượt truy cập tăng theo mức tăng của số online hiển thị (thật + giả
-# lập gộp lại) — online tăng bao nhiêu thì cộng bấy nhiêu vào tổng, online
-# giảm thì không trừ và không cộng. Nhờ vậy mọi lượt tăng online (do người
-# thật vào hoặc do baseline dao động) đều phản ánh vào tổng lượt truy cập.
-last_online_count = None
 _last_prune_time  = 0.0
 PRUNE_INTERVAL    = 10  # seconds between expensive session scans
 
@@ -318,7 +313,7 @@ def health():
 def presence_ping():
     """Heartbeat từ frontend (gọi định kỳ + khi rời trang qua sendBeacon).
     Trả về số người đang online / đang nghe nhạc / tổng lượt truy cập."""
-    global visit_total, last_online_count
+    global visit_total
     data = request.get_json(silent=True) or {}
     session_id = (data.get("session_id") or "").strip()
     if not session_id:
@@ -330,20 +325,22 @@ def presence_ping():
             online_sessions.pop(session_id, None)
         else:
             _prune_sessions()
+            is_new_session = session_id not in online_sessions
             online_sessions[session_id] = {
                 "last_seen": time.time(),
                 "listening": bool(data.get("listening")),
             }
+            # Tổng lượt truy cập chỉ tăng khi có session THẬT mới xuất hiện
+            # (không tính lại nếu cùng session ping lặp lại), hoàn toàn tách
+            # biệt khỏi baseline giả lập nên số này luôn chính xác và giống
+            # nhau ở mọi nơi xem, không bị nhiễu bởi số ảo dao động.
+            if is_new_session:
+                visit_total += 1
+                _save_visit_total(visit_total)
         real_online    = len(online_sessions)
         real_listening = sum(1 for v in online_sessions.values() if v["listening"])
         online_count    = fake_online + real_online
         listening_count = fake_listening + real_listening
-        if last_online_count is None:
-            last_online_count = online_count
-        elif online_count > last_online_count:
-            visit_total += online_count - last_online_count
-            _save_visit_total(visit_total)
-        last_online_count = online_count
 
     return jsonify({
         "status": "ok", "online": online_count,
