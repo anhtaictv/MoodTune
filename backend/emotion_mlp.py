@@ -657,6 +657,7 @@ class _TfidfRetrainer:
         try:
             res = subprocess.run([sys.executable, os.path.join(_HERE, "train_tfidf.py")],
                                  cwd=_HERE, capture_output=True, text=True,
+                                 stdin=subprocess.DEVNULL,  # không thừa hưởng stdin của PM2
                                  encoding="utf-8", errors="replace", timeout=TFIDF_TRAIN_TIMEOUT)
             if res.returncode == 0:
                 print(res.stdout.strip()[-500:])

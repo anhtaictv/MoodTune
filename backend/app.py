@@ -1,7 +1,19 @@
+import sys
+
+# PM2 daemon được Task Scheduler "PM2 Resurrect On Boot" khởi động với priority 7
+# (BelowNormal) và mọi app con thừa hưởng mức này. Khi VS Code/SQL Server dùng hết
+# CPU, process BelowNormal gần như không được cấp CPU: backend mất >10 phút mới
+# import xong (site 502) và train_tfidf.py subprocess timeout. Tự nâng về Normal
+# TRƯỚC mọi import nặng; subprocess train sinh ra sau đó cũng thừa hưởng Normal.
+if sys.platform == "win32":
+    import ctypes
+    _NORMAL_PRIORITY_CLASS = 0x20
+    ctypes.windll.kernel32.SetPriorityClass(ctypes.windll.kernel32.GetCurrentProcess(), _NORMAL_PRIORITY_CLASS)
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
-import json, os, sys, time, random, threading
+import json, os, time, random, threading
 from datetime import datetime
 from collections import Counter
 import urllib.request, urllib.parse, urllib.error
