@@ -610,7 +610,7 @@ def _contextual_boost(text, scores):
 
 
 # ─── TF-IDF CLASSIFIER (v5.0) ────────────────────────────────────
-# Khi đã có tfidf_model.npz: combined = W_RULE*rule + W_MLP*mlp + (1-W_RULE-W_MLP)*tfidf.
+# Khi đã có tfidf_model.joblib: combined = W_RULE*rule + W_MLP*mlp + (1-W_RULE-W_MLP)*tfidf.
 # Trọng số chọn bằng 5-fold CV (rule+TF-IDF 82.4% / không dấu 75.7%, so với
 # rule đơn thuần 65.5% / 32.7%). MLP vẫn học online để giữ graph_tokens/attention.
 W_RULE = 0.35
@@ -624,7 +624,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 class _TfidfRetrainer:
-    """Debounce + chạy train_tfidf.py bằng subprocess (sklearn không vào RAM backend)."""
+    """Debounce + chạy train_tfidf.py bằng subprocess (train ~10-20s CPU, không chặn request)."""
 
     def __init__(self, on_done):
         self._on_done = on_done
@@ -739,7 +739,7 @@ class EmotionEngine:
                 self._retrainer.schedule(delay=0)
             return
         self.tfidf = model
-        print(f"[Engine] TF-IDF model loaded ({model.coef.shape[1]} features)")
+        print(f"[Engine] TF-IDF model loaded ({model.n_features} features)")
 
     def _calc_alpha(self):
         """Alpha giảm mượt theo số feedback (sigmoid-like), chặn ở [0.35, 0.85].

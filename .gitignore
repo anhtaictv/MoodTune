@@ -46,4 +46,6 @@ teach.html
 
 # Model TF-IDF train trên server từ feedback_log (train_tfidf.py)
 backend/tfidf_model.npz
+backend/tfidf_model.joblib
 backend/tfidf_model.npz.tmp.npz
+backend/tfidf_model.joblib.tmp

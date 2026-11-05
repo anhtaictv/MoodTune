@@ -1,8 +1,8 @@
 """
-Train lại TfidfEmotionModel từ seed data + feedback_log.jsonl rồi ghi tfidf_model.npz.
+Train lại TfidfEmotionModel từ seed data + feedback_log.jsonl rồi ghi tfidf_model.joblib.
 
 Chạy trong tiến trình RIÊNG (python train_tfidf.py) - app.py gọi qua subprocess
-sau khi có feedback mới, để sklearn/scipy không bao giờ nằm trong RAM backend.
+sau khi có feedback mới, để train không chiếm CPU/GIL của backend.
 """
 import json
 import os

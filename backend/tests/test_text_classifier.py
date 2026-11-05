@@ -1,14 +1,12 @@
 """
-Test cho vi_text (chuẩn hoá tiếng Việt) và text_classifier (TF-IDF + LR).
-Quan trọng nhất: inference NumPy thuần trong backend phải cho ra ĐÚNG xác suất
-như sklearn lúc train - lệch là model chạy production khác model đã đánh giá.
+Test cho vi_text (chuẩn hoá tiếng Việt) và text_classifier (TF-IDF + LR, sklearn).
 """
 import numpy as np
 import pytest
 
 from emotion_mlp import EMOTIONS
 from vi_text import normalize, strip_accents
-from text_classifier import CHANNELS, TfidfEmotionModel, _channel_text, train
+from text_classifier import TfidfEmotionModel, train
 from train_tfidf import seed_pairs
 
 N = len(EMOTIONS)
@@ -40,9 +38,9 @@ def trained(tmp_path_factory):
     pairs = seed_pairs()
     texts = [t for t, _ in pairs]
     labels = [l for _, l in pairs]
-    path = str(tmp_path_factory.mktemp("tfidf") / "model.npz")
-    clf, vecs = train(texts, labels, np.ones(len(texts)), N, path)
-    return clf, vecs, TfidfEmotionModel.load(path)
+    path = str(tmp_path_factory.mktemp("tfidf") / "model.joblib")
+    model = train(texts, labels, np.ones(len(texts)), N, path)
+    return model, TfidfEmotionModel.load(path)
 
 
 SAMPLES = [
@@ -55,17 +53,15 @@ SAMPLES = [
 
 
 @pytest.mark.parametrize("text", SAMPLES)
-def test_numpy_inference_matches_sklearn(trained, text):
-    from scipy.sparse import hstack
-    clf, vecs, model = trained
-    X = hstack([vecs[ch].transform([_channel_text(ch, text)]) for ch in CHANNELS]).tocsr()
-    expected = np.zeros(N)
-    expected[clf.classes_] = clf.predict_proba(X)[0]
-    np.testing.assert_allclose(model.predict_proba(text), expected, atol=1e-9)
+def test_saved_model_matches_trained_model(trained, text):
+    model, loaded = trained
+    p = loaded.predict_proba(text)
+    assert p.shape == (N,) and abs(p.sum() - 1) < 1e-9
+    np.testing.assert_allclose(p, model.predict_proba(text), atol=1e-12)
 
 
 def test_unaccented_input_matches_accented_prediction(trained):
-    _, _, model = trained
+    _, model = trained
     for text in ["hôm nay tôi rất vui", "buồn lắm không muốn làm gì", "tức giận điên người luôn"]:
         assert model.predict_proba(strip_accents(text)).argmax() == model.predict_proba(text).argmax()
 
@@ -78,7 +74,7 @@ def _bare_engine(path):
 
 
 def test_corrupt_model_file_does_not_crash_engine(tmp_path):
-    bad = tmp_path / "tfidf_model.npz"
+    bad = tmp_path / "tfidf_model.joblib"
     bad.write_bytes(b"PK\x03\x04 truncated")
     eng = _bare_engine(bad)
     eng._load_tfidf()
@@ -86,9 +82,9 @@ def test_corrupt_model_file_does_not_crash_engine(tmp_path):
 
 
 def test_model_with_wrong_class_count_is_rejected(trained, tmp_path):
-    _, _, model = trained
-    np.savez(tmp_path / "m.npz", x=0)  # chỉ cần path tồn tại, load() được patch bên dưới
-    eng = _bare_engine(tmp_path / "m.npz")
+    _, model = trained
+    (tmp_path / "m.joblib").write_bytes(b"")  # chỉ cần path tồn tại, load() được patch bên dưới
+    eng = _bare_engine(tmp_path / "m.joblib")
     model.n_classes = N + 1
     orig = TfidfEmotionModel.load
     try:
