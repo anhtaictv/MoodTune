@@ -22,9 +22,9 @@ jobs:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.14"
           cache: pip
@@ -58,7 +58,7 @@ jobs:
       # Runner chạy LocalSystem, còn PM2 daemon (moodtune-backend) thuộc user Administrator.
       PM2_HOME: C:\Users\Administrator\.pm2
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Deploy to C:\moodtune
         shell: powershell
